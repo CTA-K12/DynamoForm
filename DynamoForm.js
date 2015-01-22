@@ -1,5 +1,5 @@
 /**
- *  dynamoForm.js - A jquery based dynamic form field generator.
+ *  DynamoForm.js - A jquery based dynamic form field generator.
  *
  *  Author:     David Cramblett (dcramble@mesd.k12.or.us)
  *  License:    MIT
