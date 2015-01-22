@@ -2,6 +2,8 @@
 
 A jquery based dynamic form field generator with support for Select2.
 
+![DynamoForm Example](https://github.com/MESD/DynamoForm/blob/master/demo/DynamoForm.png "DynamoForm Example")
+
 ### html layout:
 
 Below is the needed html elments to turn your standard form into a dynamic
@@ -19,6 +21,8 @@ form.
 
 
 ### Example:
+
+Here is sample form
 
 ``` html
 <div class="dynamo-form">
