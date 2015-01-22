@@ -22,7 +22,7 @@ form.
 
 ### Example:
 
-Here is sample form for collecting multiple email addresses.
+Here is a sample form for collecting multiple email addresses.
 
 DynamoForm will automatically re-index the input id and name attributes each
 time the user adds or removes a form row. It's important that the id and
