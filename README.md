@@ -1,8 +1,11 @@
-### dynamoForm.js
+## DynamoForm.js
 
 A jquery based dynamic form field generator with support for Select2.
 
-**html layout:**
+### html layout:
+
+Below is the needed html elments to turn your standard form into a dynamic
+form.
 
 ``` html
 <div class="dynamo-form">
@@ -15,7 +18,7 @@ A jquery based dynamic form field generator with support for Select2.
 ```
 
 
-**Basic Example:**
+### Example:
 
 ``` html
 <div class="dynamo-form">
@@ -29,7 +32,7 @@ A jquery based dynamic form field generator with support for Select2.
 ```
 
 
-**Example with options:**
+### Example with advanced options:
 
 ``` html
 <div class="dynamo-form" data-min-rows="1" data-max-rows="4">
@@ -43,7 +46,7 @@ A jquery based dynamic form field generator with support for Select2.
 ```
 
 
-**Bootstrap Example:**
+### Bootstrap Example:
 
 ``` html
 <div class="dynamo-form" data-min-rows="1" data-max-rows="4">
