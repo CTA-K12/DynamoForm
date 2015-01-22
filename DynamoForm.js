@@ -197,7 +197,7 @@ function updateRowIndex(obj) {
  */
 function reindexAttribute(attribute, index) {
     attribute = attribute.replace(/\_\d+/, '_' + index);
-    attribute = attribute.replace(/\_\d+]$/, '_' + index + ']');
+    attribute = attribute.replace(/\d+]$/, index + ']');
 
     return attribute;
 }

@@ -24,11 +24,16 @@ form.
 
 Here is sample form for collecting multiple email addresses.
 
+DynamoForm will automatically re-index the input id and name attributes each
+time the user adds or removes a form row. It's important that the id and
+name attributes end with a `_#` or `#]` for indexing to work. Where `#`
+represents a positive integer.
+
 ``` html
 <div class="dynamo-form">
     <div class="dynamo-form-row">
         <label>Email</label>
-        <input type="text" id="user_email_1" name="user_email_1" />
+        <input type="text" id="user_email_1" name="user[email][1]" />
         <button type="button" class="dynamo-form-row-delete">Delete</button>
     </div>
     <button type="button" class="dynamo-form-row-add">Add Email</button>
@@ -41,6 +46,12 @@ Here is sample form for collecting multiple email addresses.
 You can limit the minimum and/or maximum number of addresses by specifying the
 `data-min-rows` and/or `data-max-rows` attributes on the element with class
 `dynamo-form`.
+
+If you want Dynamo to re-index your field label text as well, add an
+`data-dynamo-relabel="true"` attribute to your element holding the field label.
+It's important that the field label text end with a `[space]#` for indexing to
+work. Where `[space]` represents a space character and `#` represents a
+positive integer.
 
 ``` html
 <div class="dynamo-form" data-min-rows="1" data-max-rows="4">
@@ -56,26 +67,21 @@ You can limit the minimum and/or maximum number of addresses by specifying the
 
 ### Bootstrap Example:
 
+Here is the same email address collection form using bootstrap based form code.
+
 ``` html
-<div class="dynamo-form" data-min-rows="1" data-max-rows="4">
-  <div class="dynamo-form-row">
-    <div class="row form-group">
-      <div class="col-md-1-6">
-        <label data-dynamo-relabel="true">Email 1</label>
-      </div>
-      <div class="col-md-3-12">
-        <input type="text" id="user_email_1" name="user_email_1" />
-      </div>
-      <div class="col-md-1-6">
-        <button type="button" class="btn btn-default dynamo-form-row-delete">Delete</button>
-      </div>
-    </div><!-- /.row -->
-  </div><!-- /.dynamo-form-row -->
-  <div class="row form-group">
-    <div class="col-md-1-6"></div>
-    <div class="col-md-1-6">
-      <button type="button" class="btn btn-default dynamo-form-row-add">Add Email</button>
+<div class="dynamo-form"  data-min-rows="1" data-max-rows="4">
+  <div class="dynamo-form-row form-group">
+    <label for="email_1"  class="col-md-3 control-label" data-dynamo-relabel="true">Email 1</label>
+    <div class="col-md-6">
+      <input type="email" class="form-control" id="email_1" placeholder="Enter email addresss">
     </div>
-  </div><!-- /.row -->
-</div><!-- /.dynamo-row -->
+    <div class="col-md-1">
+      <button type="button" class="btn btn-default dynamo-form-row-delete" disabled="disabled">Delete</button>
+    </div>
+  </div>
+  <div class="col-md-offset-3 col-md-2">
+    <button type="button" class="btn btn-default dynamo-form-row-add">Add Email</button>
+  </div>
+</div>
 ```
