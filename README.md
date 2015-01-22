@@ -6,7 +6,7 @@ A jquery based dynamic form field generator with support for Select2.
 
 ### html layout:
 
-Below is the needed html elments to turn your standard form into a dynamic
+Below is the needed html elements to turn your standard form into a dynamic
 form.
 
 ``` html
@@ -22,7 +22,7 @@ form.
 
 ### Example:
 
-Here is sample form
+Here is sample form for collecting multiple email addresses.
 
 ``` html
 <div class="dynamo-form">
@@ -37,6 +37,10 @@ Here is sample form
 
 
 ### Example with advanced options:
+
+You can limit the minimum and/or maximum number of addresses by specifying the
+`data-min-rows` and/or `data-max-rows` attributes on the element with class
+`dynamo-form`.
 
 ``` html
 <div class="dynamo-form" data-min-rows="1" data-max-rows="4">
