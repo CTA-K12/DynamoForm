@@ -1,5 +1,5 @@
 /**
- *  DynamoForm.js - A jquery based dynamic form field generator.
+ *  DynamoForm.js - A jquery based dynamic formset generator.
  *
  *  Author:     David Cramblett (dcramble@mesd.k12.or.us)
  *  License:    MIT
@@ -9,17 +9,17 @@
 $(document).ready(function() {
 
     /**
-     * Add form row activity
+     * Add formset row activity
      *
-     * Add new form row when add button is clicked. A new row will be created
+     * Add new formset row when add button is clicked. A new row will be created
      * and all rows will be numerically re-indexed to ensure unique name and
-     * id attribute when form is processed server side.
+     * id attribute when formset is processed server side.
      *
      */
-    $('.dynamo-form-row-add').click(function() {
+    $('.dynamo-formset-row-add').click(function() {
 
-        // Find the parent dynamo-form
-        var dynamoForm = $(this).closest('.dynamo-form');
+        // Find the parent dynamo-formset
+        var dynamoForm = $(this).closest('.dynamo-formset');
 
         // Determine if Max Rows is specified
         var maxRows = dynamoForm.attr('data-max-rows');
@@ -27,13 +27,13 @@ $(document).ready(function() {
             // Determine if Max Rows is exceeded and return false now if
             // yes. The add row button should be disabled if max rows has
             // been reached. This check is in here as a precaution.
-            if (dynamoForm.find('.dynamo-form-row').size() >= maxRows) {
+            if (dynamoForm.find('.dynamo-formset-row').size() >= maxRows) {
                 return false;
             }
         }
 
         // Find last row
-        var lastRow = dynamoForm.find('.dynamo-form-row').last();
+        var lastRow = dynamoForm.find('.dynamo-formset-row').last();
 
         // Determine if select2 is in use and disable
         // for cloning purposes.
@@ -52,7 +52,7 @@ $(document).ready(function() {
         lastRow.clone().insertAfter(lastRow);
 
         // Clear any data that was already entered in the copied row
-        dynamoForm.find('.dynamo-form-row').last().find( 'input,select,textarea' ).each(function() {
+        dynamoForm.find('.dynamo-formset-row').last().find( 'input,select,textarea' ).each(function() {
             $(this).val( '' );
             $(this).attr( 'checked', false );
         });
@@ -61,7 +61,7 @@ $(document).ready(function() {
         if (true === select2InUse) {
             $.each(select2elements, function(index, value) {
                 lastRow.find('select#'+value).select2({width: '100%'});
-                dynamoForm.find('.dynamo-form-row').last().find('select#'+value).select2({width: '100%'});
+                dynamoForm.find('.dynamo-formset-row').last().find('select#'+value).select2({width: '100%'});
             })
         }
 
@@ -73,9 +73,9 @@ $(document).ready(function() {
         if (undefined !== maxRows) {
             // Determine if Max Rows has been met. If yes
             // remove add row button functionality.
-            if (dynamoForm.find('.dynamo-form-row').size() == maxRows) {
-                dynamoForm.find('.dynamo-form-row-add').addClass('disabled');
-                dynamoForm.find('.dynamo-form-row-add').attr('disabled', 'disabled');
+            if (dynamoForm.find('.dynamo-formset-row').size() == maxRows) {
+                dynamoForm.find('.dynamo-formset-row-add').addClass('disabled');
+                dynamoForm.find('.dynamo-formset-row-add').attr('disabled', 'disabled');
             }
         }
 
@@ -84,9 +84,9 @@ $(document).ready(function() {
         if (undefined !== minRows) {
             // Determine if Min Rows has now been exceeded.
             // If yes, restore delete button functionality.
-            if (dynamoForm.find('.dynamo-form-row').size() > minRows) {
-                dynamoForm.find('.dynamo-form-row-delete').removeClass('disabled');
-                dynamoForm.find('.dynamo-form-row-delete').removeAttr('disabled');
+            if (dynamoForm.find('.dynamo-formset-row').size() > minRows) {
+                dynamoForm.find('.dynamo-formset-row-delete').removeClass('disabled');
+                dynamoForm.find('.dynamo-formset-row-delete').removeAttr('disabled');
             }
         }
 
@@ -96,17 +96,17 @@ $(document).ready(function() {
 
 
      /**
-     * Remove form row activity
+     * Remove formset row activity
      *
-     * Remove form row when delete button is clicked. The specific row will be
+     * Remove formset row when delete button is clicked. The specific row will be
      * deleted and all rows will be numerically re-indexed to ensure unique name
      * and id attribute when form is processed server side.
      *
      */
-    $('.dynamo-form').on('click', '.dynamo-form-row-delete', function() {
+    $('.dynamo-formset').on('click', '.dynamo-formset-row-delete', function() {
 
-        // Find the parent dynamo-form
-        var dynamoForm = $(this).closest('.dynamo-form');
+        // Find the parent dynamo-formset
+        var dynamoForm = $(this).closest('.dynamo-formset');
 
         // Determine if Min Rows is specified
         var minRows = dynamoForm.attr('data-min-rows');
@@ -114,13 +114,13 @@ $(document).ready(function() {
             // Determine if Min Rows is met and return false now if
             // yes. The delete row buttons should be disabled if min rows
             // has been reached. This check is in here as a precaution.
-            if (dynamoForm.find('.dynamo-form-row').size() <= minRows) {
+            if (dynamoForm.find('.dynamo-formset-row').size() <= minRows) {
                 return false;
             }
         }
 
         // Remove row
-        $( this ).closest('.dynamo-form-row').remove();
+        $( this ).closest('.dynamo-formset-row').remove();
 
         // Update the row numbering
         updateRowIndex( dynamoForm );
@@ -129,9 +129,9 @@ $(document).ready(function() {
         if (undefined !== minRows) {
             // Determine if Min Rows has been met. If yes
             // remove delete row button functionality.
-            if (dynamoForm.find('.dynamo-form-row').size() == minRows) {
-                dynamoForm.find('.dynamo-form-row-delete').addClass('disabled');
-                dynamoForm.find('.dynamo-form-row-delete').attr('disabled', 'disabled');
+            if (dynamoForm.find('.dynamo-formset-row').size() == minRows) {
+                dynamoForm.find('.dynamo-formset-row-delete').addClass('disabled');
+                dynamoForm.find('.dynamo-formset-row-delete').attr('disabled', 'disabled');
             }
         }
 
@@ -140,9 +140,9 @@ $(document).ready(function() {
         if (undefined !== maxRows) {
             // Determine if Max Rows has now been maintained.
             // If yes, restore add row button functionality.
-            if (dynamoForm.find('.dynamo-form-row').size() < maxRows) {
-                dynamoForm.find('.dynamo-form-row-add').removeClass('disabled');
-                dynamoForm.find('.dynamo-form-row-add').removeAttr('disabled');
+            if (dynamoForm.find('.dynamo-formset-row').size() < maxRows) {
+                dynamoForm.find('.dynamo-formset-row-add').removeClass('disabled');
+                dynamoForm.find('.dynamo-formset-row-add').removeAttr('disabled');
             }
         }
 
@@ -153,16 +153,16 @@ $(document).ready(function() {
 
 
 /**
- * Re-index form rows
+ * Re-index formset rows
  *
- * Update row indexing after a form row has been added or deleted
+ * Update row indexing after a formset row has been added or deleted
  *
  */
 function updateRowIndex(obj) {
 
     var index = 1;
 
-    obj.find('.dynamo-form-row').each( function() {
+    obj.find('.dynamo-formset-row').each( function() {
 
         var dynamoFormRow = $(this);
 
