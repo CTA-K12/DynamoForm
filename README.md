@@ -4,6 +4,13 @@ A jquery based dynamic formset generator with support for Select2.
 
 ![DynamoForm Example](https://github.com/MESD/DynamoForm/blob/master/demo/DynamoForm.png "DynamoForm Example")
 
+**Status:** Beta (Jan 22, 2015)
+
+**To Do:**
+* Add prototype option for row creation (apoosed to copying last row)
+
+## Usuage
+
 ### html layout:
 
 Below is the needed html elements to turn your standard form into a dynamic
