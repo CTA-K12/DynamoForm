@@ -5,12 +5,12 @@ A jquery based Dynamic Form library.
 ### Libraries
 
 **DynamoForm-formset:**  
-Create forms with groups of fields (form-sets) which can be dynamicaly added and
-removed from a form, by the end user, as needed.
+Create forms with fields (or groups of fields which can be dynamicaly added and
+removed from a form by the end user as needed.
 
 **DynamoForm-selectize:**  
 Enable the use Brian Reavis's popular selectize.js library using html
-attributes.
+attributes without writing any javascript.
 
 ### Docs
 
