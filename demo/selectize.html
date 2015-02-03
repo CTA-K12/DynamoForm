@@ -49,13 +49,39 @@
         <label for="city"  class="col-md-3 control-label">City</label>
         <div class="col-md-6">
           <select id="city" class="form-control dynamo-selectize"
-            data-load-type="GET"
-            data-load-url="data.php?dataType=cities&search="
-            data-load-resultSet-key="cities"
-            data-load-resultSet-limit="10"
-            data-valueField="id"
-            data-labelField="name"
-            data-searchField='["name"]'
+            data-valueField="value"
+            data-labelField="text"
+            data-searchField='["text"]'
+            data-options='[
+              {
+                "value": 1,
+                "text": "Astroia"
+              },
+              {
+                "value": 2,
+                "text": "Beaverton"
+              },
+              {
+                "value": 3,
+                "text": "Clackamas"
+              },
+              {
+                "value": 4,
+                "text": "Dallas"
+              },
+              {
+                "value": 5,
+                "text": "The Dales"
+              },
+              {
+                "value": 6,
+                "text": "Hilboro"
+              },
+              {
+                "value": 7,
+                "text": "Junction City"
+              }
+            ]'
           >
           </select>
         </div>
@@ -65,14 +91,40 @@
         <label for="interests" class="col-md-3 control-label">Interests</label>
         <div class="col-md-6">
           <select id="interests" class="form-control dynamo-selectize"
-            data-load-type="GET"
-            data-load-url="data.php?dataType=interests&search="
-            data-load-resultSet-key="interests"
-            data-load-resultSet-limit="10"
-            data-valueField="id"
-            data-labelField="name"
-            data-searchField='["name"]'
+            data-valueField="value"
+            data-labelField="text"
+            data-searchField='["text"]'
             data-maxItems="4"
+            data-options='[
+              {
+                "value": 1,
+                "text": "Basketball"
+              },
+              {
+                "value": 2,
+                "text": "Books"
+              },
+              {
+                "value": 3,
+                "text": "Computers"
+              },
+              {
+                "value": 4,
+                "text": "Games"
+              },
+              {
+                "value": 5,
+                "text": "Hiking"
+              },
+              {
+                "value": 6,
+                "text": "Ice Hockey"
+              },
+              {
+                "value": 7,
+                "text": "Kickball"
+              }
+            ]'
           >
           </select>
         </div>
@@ -83,7 +135,7 @@
 
   <!-- Jquery is requierd for Selectize -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.0/js/selectize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.0/js/standalone/selectize.min.js"></script>
 
   <!-- Bootstrap is not required for Selectize. -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
