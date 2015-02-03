@@ -2,7 +2,7 @@
 
 A jquery based dynamic formset generator with support for Select2.
 
-![DynamoForm Example](https://github.com/MESD/DynamoForm/blob/master/demo/DynamoForm.png "DynamoForm Example")
+![DynamoForm Example](https://github.com/MESD/DynamoForm/blob/master/demo/DynamoForm-formset.png "DynamoForm Example")
 
 **Status:** Beta (Jan 22, 2015)
 
