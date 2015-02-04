@@ -1,15 +1,16 @@
 ## DynamoForm-selectize.js
 
 Enable the use Brian Reavis's popular selectize.js library using html
-attributes.
+attributes, without writing any javascript.
 
 ### Configuration and Usage
 
 There are three simple steps to get started:
 
-* Step1 - Enable selectize.js
-* Step2 - Enable DynamoForm-selectize.js
-* Step3 - Add attributes to your html
+* Step 1 - Enable selectize.js
+* Step 2 - Enable DynamoForm-selectize.js
+* Step 3 - Add class to your form element
+* Step 4 - Add attributes to your html
 
 #### Step 1 - Enable selectize.js
 
@@ -33,7 +34,7 @@ support for reading attribute values to control selectize behavior.
 <select class="dynamo-selectize"></select>
 ```
 
-#### Step 3 - Add attributes to your html to customize
+#### Step 4 - Add attributes to your html to customize
 
 Below is a list of attributes you can add to your form elements to enable
 selectize.js functionality. Most of these attributes match the accompanying
