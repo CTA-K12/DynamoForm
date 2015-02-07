@@ -1,24 +1,96 @@
 $(document).ready(function() {
 
-    // Enable selectize on desired select elements
+
+    // Global array to track element chaining
+    chainedChildren = [];
+
+
+
+    /**
+     * Enable selectize on desired select elements
+     *
+     * Process all elements with class 'dynamo-selectize', parsing all of the
+     * attribute options for each element and enabling the desired selectize
+     * configuration for the specific element.
+     *
+     * If chaining (element dependency) is required, disable any elements where
+     * appropriate.
+     *
+     */
     $('.dynamo-selectize').each(function(){
-        _options = buildOptionsObject($(this));
 
-       //console.log( _options );
+        // Parse the elements attribute options into the selectize format.
+        var options = buildOptionsObject($(this));
 
-       $(this).selectize(_options);
+        // Enable selectize on the element with the desired option
+        // configuration.
+        $(this).selectize(options);
+
+        // Determine if chaining is in use on element. If yes, track the element
+        // in the chainedChildren array to be processed once all elements have
+        // been initialized.
+        if ('undefined' !==  typeof $(this).attr('data-chain-parent')) {
+            chainedChildren.push($(this));
+        }
+
+    });
+
+
+
+
+    /**
+     * Proocess chained elments
+     *
+     * Child elments need to be diabled until all thier parents have values set.
+     * Child elements often need to be rebuilt with new options for data
+     * selection based on the values from the parent element.
+     */
+    $.each(chainedChildren, function() {
+        processChainedChild($(this));
+    });
+
+
+
+
+    /**
+     * Update selectize objects, if needed, when data changes.
+     *
+     * If chaining (element dependency) is in use, child elemenets may need to
+     * be enabled or disabled based on the change.
+     *
+     */
+    $('.dynamo-selectize').on('change', function() {
+
+        // Determine if chaining is in use on element.
+        if ('undefined' !==  typeof $(this).attr('data-chain-child')) {
+
+            // Parse child list
+            var children = [];
+            try {
+                children = JSON.parse($(this).attr('data-chain-child'));
+            } catch (e) {
+                // The data-chain-parent attribute is not set properly.
+                return false;
+            }
+
+            children.forEach(function(id) {
+                processChainedChild($('#' + id));
+            });
+        }
     });
 
 });
 
 
+
+
 /**
- * Selectize option processing
+ * Build Selectize option object
  *
- * A html data-[option] attribute exist for each Selectize option.
- * The data-[option] attributes are processed in way that options
- * with invalid setting data will be defaulted to the Selectize
- * designated default value, when possible.
+ * A html data-[option] attribute exist for each Selectize option. The
+ * data-[option] attributes are processed in way that options with invalid
+ * setting data will be defaulted to the Selectize designated default value,
+ * when possible.
  *
  */
 function buildOptionsObject(formElement) {
@@ -365,47 +437,140 @@ function buildOptionsObject(formElement) {
      */
     if ('undefined' !==  typeof formElement.attr('data-load-url')) {
 
-        var loadUrl = formElement.attr('data-load-url');
-
-        // data-load-type: 'GET'
-        var loadType = 'GET';
-        if ('undefined' !==  typeof formElement.attr('data-load-type')) {
-            loadType = formElement.attr('data-load-type');
-        }
-
-        // data-load-resultSet-limit: 10
-        var loadLimit = 10;
-        if ('undefined' !==  typeof formElement.attr('data-load-resultSet-limit')) {
-            loadLimit = formElement.attr('data-load-resultSet-limit');
-        }
-
-        // data-load-resultSet-key: null
-        var loadKey = null;
-        if ('undefined' !==  typeof formElement.attr('data-load-resultSet-key')) {
-            loadKey = formElement.attr('data-load-resultSet-key');
-        }
-
-        // Build load option
-        _options.load =
-            function(query, callback) {
-                if (!query.length) return callback();
-                $.ajax({
-                    url: loadUrl + encodeURIComponent(query),
-                    type: loadType,
-                    error: function() {
-                        callback();
-                    },
-                    success: function(res) {
-                        if (loadKey) {
-                            callback(res[loadKey].slice(0, loadLimit));
-                        } else {
-                            callback(res.slice(0, loadLimit));
-                        }
-                    }
-                });
-            };
+        // Build load options
+        _options.load = processLoadOptions(formElement);
     }
 
     return _options;
 
-} //END buildOptionsObject(formElement) {
+} //END buildOptionsObject(formElement)
+
+
+
+/**
+ * Process load options
+ *
+ * Build a load function for remote data fetching based on attribute values.
+ *
+ */
+function processLoadOptions(formElement) {
+
+    var loadUrl = formElement.attr('data-load-url');
+
+    // data-load-type: 'GET'
+    var loadType = 'GET';
+    if ('undefined' !==  typeof formElement.attr('data-load-type')) {
+        loadType = formElement.attr('data-load-type');
+    }
+
+    // data-load-resultSet-limit: 10
+    var loadLimit = 10;
+    if ('undefined' !==  typeof formElement.attr('data-load-resultSet-limit')) {
+        loadLimit = formElement.attr('data-load-resultSet-limit');
+    }
+
+    // data-load-resultSet-key: null
+    var loadKey = null;
+    if ('undefined' !==  typeof formElement.attr('data-load-resultSet-key')) {
+        loadKey = formElement.attr('data-load-resultSet-key');
+    }
+
+    // data-load-url-vars: null
+    var loadUrlVars = [];
+    if ('undefined' !==  typeof formElement.attr('data-load-url-vars')) {
+        try {
+            loadUrlVars = JSON.parse(formElement.attr('data-load-url-vars'));
+        } catch (e) {}
+
+        //Update URL with var data
+        $.each(loadUrlVars, function(k, v) {
+            var re = new RegExp('\\{' + k + '\\}', 'g');
+            loadUrl = loadUrl.replace(re, v);
+        });
+    }
+
+    // Build load option
+    var _load =
+        function(query, callback) {
+            if (!query.length) return callback();
+            $.ajax({
+                url: loadUrl + encodeURIComponent(query),
+                type: loadType,
+                error: function() {
+                    callback();
+                },
+                success: function(res) {
+                    if (loadKey) {
+                        callback(res[loadKey].slice(0, loadLimit));
+                    } else {
+                        callback(res.slice(0, loadLimit));
+                    }
+                }
+            });
+        };
+
+    return _load;
+}
+
+
+
+/**
+ * Process Chained Child
+ *
+ * Disable and enable child form elments that are part of a chained dependency
+ * between mutiple form elments. Additionaly, update the load url when needed.
+ *
+ */
+function processChainedChild(childElement) {
+
+    // Parse parent list
+    var parent = [];
+    try {
+        parent = JSON.parse(childElement.attr('data-chain-parent'));
+    } catch (e) {
+        // The data-chain-parent attribute is not set properly.
+        return false;
+    }
+
+    // Iterate through all parents to determine if a value has been set. If
+    // parent elements has a value, store it.
+    var parentDependencyMet = true;
+    var parentValues = {};
+    parent.forEach(function(id) {
+        if ($('#' + id).val()) {
+            // Store parent / value combination
+            parentValues[id] = $('#' + id).val();
+        }
+        else {
+            // One of the parents has no value yet. Exit, we'll attempt to
+            // enable the child again upon next parent update.
+            childElement[0].selectize.disable();
+            parentDependencyMet = false;
+        }
+    });
+
+    // Exit now if any dependcy is not met
+    if ( false === parentDependencyMet) {
+        return false;
+    }
+
+    // Ensure child is enabled
+    childElement[0].selectize.enable();
+
+    // Re-Build selectize control with new options if needed
+    if ('undefined' !==  typeof childElement.attr('data-load-url')) {
+
+        // Destroy exisiting selectize control
+        childElement[0].selectize.destroy();
+
+        // Set data-load-url-vars attribute with values from parent elements
+        childElement.attr('data-load-url-vars', JSON.stringify(parentValues));
+
+        // Build new selectize options
+        var _options = buildOptionsObject(childElement)
+
+        // Re-create selectize control with new options
+        childElement.selectize(_options);
+    }
+
+}
