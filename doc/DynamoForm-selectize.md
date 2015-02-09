@@ -10,14 +10,14 @@ There are three simple steps to get started:
 * Step 1 - Enable selectize.js
 * Step 2 - Enable DynamoForm-selectize.js
 * Step 3 - Add class to your form element
-* Step 4 - Add attributes to your html
+* Step 4 - Add attributes to your form element
 
-#### Step 1 - Enable selectize.js
+#### Step 1: Enable selectize.js
 
 Add the selectize.js library to your project. For more details see the
 [selectize.js](http://brianreavis.github.io/selectize.js/) project page.
 
-#### Step 2 - Enable DynamoForm-selectize.js
+#### Step 2: Enable DynamoForm-selectize.js
 
 Download and add the DynamoForm-selectize.js library to your project.
 
@@ -25,7 +25,7 @@ Download and add the DynamoForm-selectize.js library to your project.
 <script src="js/DynamoForm-selectize.js"></script>
 ```
 
-#### Step 3 - Add dynamo-selectize class to your form elment
+#### Step 3: Add dynamo-selectize class to your form element
 
 Add the class `dynamo-selectize` to your form element to enable selectize and
 support for reading attribute values to control selectize behavior.
@@ -34,11 +34,13 @@ support for reading attribute values to control selectize behavior.
 <select class="dynamo-selectize"></select>
 ```
 
-#### Step 4 - Add attributes to your html to customize
+#### Step 4: Add attributes to your html to customize
 
 Below is a list of attributes you can add to your form elements to enable
 selectize.js functionality. Most of these attributes match the accompanying
-selectize option of the same name. The values shown below are the defualts.
+selectize option of the same name. The values shown below are the defaults.
+Please see the [selectize.js](http://brianreavis.github.io/selectize.js/)
+project page for more details about these options.
 
 ```html
 <select class="dynamo-selectize"
@@ -77,7 +79,14 @@ selectize option of the same name. The values shown below are the defualts.
 
 ### Examples
 
-**Loading data from an array:**
+#### Loading data from an array
+
+Selectize can load data from an array if convenient for your application or
+environment. the javascript JSON.parse method is used to convert this data.
+JSON.parse expects the string data to be in proper form to be successfully
+parsed. It's important that all strings, including the object key names, be
+surrounded in double quotes. This means you will likely need to surround the
+html attribute value in single quotes.
 
 ``` html
 <select class="dynamo-selectize"
@@ -115,13 +124,118 @@ selectize option of the same name. The values shown below are the defualts.
 </select>
 ```
 
-**Loading data from a remote source:**
+#### Loading data from a remote source
+
+Selectize.js has a `load` option to specify a function for loading remote
+data. To trigger the load option be built by dynamo-selectize you must specify
+at least the`data-load-url` attribute. There are 4 attributes you can use to
+customize the remote fetch:
+
+* data-load-url : The URL to fetch data from. The users search text will be
+appended to the URL.
+
+* data-load-type : The http method to use for the fetch. Defaults to `GET`
+
+* data-load-resultSet-limit: The max number of records from remote fetch.
+Default: 10
+
+* data-load-resultSet-key: The object key under which your data can be found.
+Default: null
+
+
+      If your remote source returns multiple types of data, for instance
+      a list of beverages and a list of food items, and you only want the
+      beverage list you would specify the key name for the beverage list.
+
+```json
+/* JSON Data */
+{
+  "beverage": [
+     {
+       "value": 1,
+      "text": "Coffee"
+     },
+     {
+       "value": 2,
+       "text": "Soda"
+     },
+     {
+      "value": 3,
+      "text": "Water"
+     }
+  ],
+  "food": [
+     {
+       "value": 1,
+       "text": "Apple"
+     },
+     {
+       "value": 2,
+       "text": "Carrot"
+     },
+     {
+      "value": 3,
+      "text": "Sandwich"
+     }
+  ]
+}
+```
+
 
 ``` html
 <select class="dynamo-selectize"
+    data-load-url="data.php?dataType=beverage&search="
     data-load-type="GET"
-    data-load-url="data.php?dataType=cities&search="
-    data-load-resultSet-key="cities"
+    data-load-resultSet-key="beverage"
+    data-load-resultSet-limit="10"
+    data-valueField="value"
+    data-labelField="text"
+    data-searchField='["text"]'
+>
+</select>
+```
+
+
+#### Working with dependencies - Chaining elements
+
+You can chain form elements together to satisfy dependencies. For instance, if
+you had city select list that needs the user to select the state first, you can
+chain the state and city elements. Child elements, whose parent elements don't
+have a value set, will be disabled until all parents have a value set. The
+parent value can also be read by the child element to lookup data if needed.
+
+**Step 1**: Add a `data-chain-child` attribute to the parent(s), with a value of
+the child's `id` attribute. `data-chain-child` is a JSON array element. You can
+specify more than one child if needed.
+
+**Step 2**: Add a `data-chain-parent` attribute to the child, with a value of the
+parent's `id` attribute. `data-chain-parent` is a JSON array element. You can
+specify more than one parent if needed.
+
+, you have a couple
+options.
+
+**Optional**: If the child element needs the parents value to lookup data
+you can use variables in the `data-load-url` attribute. Place the parent
+element's id attribute between braces `{parent-id}`, e.g. `{state}`, within
+the url specification where you want the value to appear when the fetch occurs.
+
+
+``` html
+<select id="state" class="dynamo-selectize"
+    data-chain-child='["city"]'
+    data-load-type="GET"
+    data-load-url="data.php/states/"
+    data-load-resultSet-limit="10"
+    data-valueField="value"
+    data-labelField="text"
+    data-searchField='["text"]'
+>
+
+<select id="city" class="dynamo-selectize"
+    data-chain-parent='["state"]'
+    data-load-type="GET"
+    data-load-url="data.php/{state}/cities/"
     data-load-resultSet-limit="10"
     data-valueField="value"
     data-labelField="text"

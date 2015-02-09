@@ -387,56 +387,8 @@ function buildOptionsObject(formElement) {
      *  The data-load-[*] attributes define the necessary selectize options for
      *  remote data fetching. You must define the data-load-url attribute to
      *  trigger the functionality.
-     *
-     *  data-load-type:
-     *      The http method used to fetch data. Default: 'GET'
-     *
-     *  data-load-resultSet-limit:
-     *      The max number of records from remote fetch. Default: 10
-     *
-     *  data-load-resultSet-key:
-     *      The object key under which your data can be found. Default: null
-     *
-     *      If your remote source returns multiple types of data, for instance
-     *      a list of beverages and a list of food items, and you only want the
-     *      beverage list you would specify the key name for the beverage list.
-     *
-     *          {
-     *            "beverage": [
-     *               {
-     *                 "value": 1,
-     *                 "text": "Coffee"
-     *               },
-     *               {
-     *                 "value": 2,
-     *                 "text": "Soda"
-     *               },
-     *               {
-     *                "value": 3,
-     *                "text": "Water"
-     *               }
-     *            ],
-     *            "food": [
-     *               {
-     *                 "value": 1,
-     *                 "text": "Apple"
-     *               },
-     *               {
-     *                 "value": 2,
-     *                 "text": "Carrot"
-     *               },
-     *               {
-     *                "value": 3,
-     *                "text": "Sandwich"
-     *               }
-     *            ]
-     *          }
-     *
-     *
-     *
      */
     if ('undefined' !==  typeof formElement.attr('data-load-url')) {
-
         // Build load options
         _options.load = processLoadOptions(formElement);
     }
@@ -451,6 +403,60 @@ function buildOptionsObject(formElement) {
  * Process load options
  *
  * Build a load function for remote data fetching based on attribute values.
+ *
+ *  The data-load-[*] attributes define the necessary selectize options for
+ *  remote data fetching. You must define the data-load-url attribute to
+ *  trigger the functionality.
+ *
+ *  data-load-url:
+ *      The URL to fetch data from. The users search text will be appended to
+ *      the URL.
+ *
+ *  data-load-type:
+ *      The http method used to fetch data. Default: 'GET'
+ *
+ *  data-load-resultSet-limit:
+ *      The max number of records from remote fetch. Default: 10
+ *
+ *  data-load-resultSet-key:
+ *      The object key under which your data can be found. Default: null
+ *
+ *      If your remote source returns multiple types of data, for instance
+ *      a list of beverages and a list of food items, and you only want the
+ *      beverage list you would specify the key name for the beverage list.
+ *
+ *          {
+ *            "beverage": [
+ *               {
+ *                 "value": 1,
+ *                 "text": "Coffee"
+ *               },
+ *               {
+ *                 "value": 2,
+ *                 "text": "Soda"
+ *               },
+ *               {
+ *                "value": 3,
+ *                "text": "Water"
+ *               }
+ *            ],
+ *            "food": [
+ *               {
+ *                 "value": 1,
+ *                 "text": "Apple"
+ *               },
+ *               {
+ *                 "value": 2,
+ *                 "text": "Carrot"
+ *               },
+ *               {
+ *                "value": 3,
+ *                "text": "Sandwich"
+ *               }
+ *            ]
+ *          }
+ *
+ *
  *
  */
 function processLoadOptions(formElement) {
