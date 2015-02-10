@@ -3,6 +3,11 @@
 Enable the use Brian Reavis's popular selectize.js library using html
 attributes, without writing any javascript.
 
+**Status:** Beta (Feb 9, 2015)
+
+**To Do:**
+* Add custom rendering support from data attributes
+
 ### Configuration and Usage
 
 There are three simple steps to get started:
@@ -82,11 +87,11 @@ project page for more details about these options.
 #### Loading data from an array
 
 Selectize can load data from an array if convenient for your application or
-environment. the javascript JSON.parse method is used to convert this data.
-JSON.parse expects the string data to be in proper form to be successfully
+environment. The javascript JSON.parse() method is used to convert this data.
+JSON.parse() expects the string data to be in proper form to be successfully
 parsed. It's important that all strings, including the object key names, be
 surrounded in double quotes. This means you will likely need to surround the
-html attribute value in single quotes.
+html attribute value in single quotes. See example below:
 
 ``` html
 <select class="dynamo-selectize"
@@ -211,9 +216,6 @@ specify more than one child if needed.
 **Step 2**: Add a `data-chain-parent` attribute to the child, with a value of the
 parent's `id` attribute. `data-chain-parent` is a JSON array element. You can
 specify more than one parent if needed.
-
-, you have a couple
-options.
 
 **Optional**: If the child element needs the parents value to lookup data
 you can use variables in the `data-load-url` attribute. Place the parent

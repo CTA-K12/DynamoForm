@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <title>DynamoForm</title>
+
+      <!-- Bootstrap, HTML5 shim, & Respond.js are not required for dynamoForm . -->
+
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.0/css/selectize.bootstrap3.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.0/css/selectize.default.min.css">
+
+      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+      <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+      <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+
+      <!-- End optional Bootstrap, HTML5 shim, & Respond.js  -->
+
+      <!-- Styles specific to this demo -->
+      <style>
+        body {
+          padding: 50px 20px;
+        }
+      </style>
+
+  </head>
+  <body>
+    <form class="form-horizontal">
+
+      <div class="row">
+        <div class="col-md-9">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">Dynamo Formset / Selectize Demo</h3>
+            </div>
+            <div class="panel-body">
+
+              <div class="dynamo-formset"  data-min-rows="1" data-max-rows="8">
+
+                <div class="dynamo-formset-row form-group">
+                  <label for="location_1"  class="col-md-2 control-label" data-dynamo-relabel="true">Location 1</label>
+                  <div class="col-md-2">
+                    <input type="text" class="form-control" id="address_1" placeholder="Enter address">
+                  </div>
+                  <div class="col-md-2">
+                    <select id="state_1" class="form-control dynamo-selectize"
+                      data-chain-child='["city_1"]'
+                      data-valueField="value"
+                      data-labelField="text"
+                      data-searchField='["text"]'
+                      data-options='[
+                        {
+                          "value": 1,
+                          "text": "California"
+                        },
+                        {
+                          "value": 2,
+                          "text": "Idaho"
+                        },
+                        {
+                          "value": 3,
+                          "text": "Oregon"
+                        },
+                        {
+                          "value": 4,
+                          "text": "Washington"
+                        }
+                      ]'
+                    >
+                      <option value="">Choose State</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <select id="city_1" class="form-control dynamo-selectize"
+                      data-chain-parent='["state_1"]'
+                      data-valueField="value"
+                      data-labelField="text"
+                      data-searchField='["text"]'
+                      data-options='[
+                        {
+                          "value": 1,
+                          "text": "Portland"
+                        },
+                        {
+                          "value": 2,
+                          "text": "Corvallis"
+                        },
+                        {
+                          "value": 3,
+                          "text": "Seattle"
+                        },
+                        {
+                          "value": 4,
+                          "text": "Vancouver"
+                        }
+                      ]'
+                    >
+                      <option value="">Choose City</option>
+                    </select>
+                  </div>
+                  <div class="col-md-1">
+                    <button type="button" class="btn btn-default dynamo-formset-row-delete" disabled="disabled">Delete</button>
+                  </div>
+                </div>
+
+                <div class="col-md-offset-3 col-md-2">
+                  <button type="button" class="btn btn-default dynamo-formset-row-add">Add Row</button>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </body>
+
+  <!-- Jquery is requierd for DynamoForm -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+  <!-- Bootstrap is not required for DynamoForm. -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+  <!-- Selectize is requierd for DynamoForm-selectize -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.0/js/standalone/selectize.min.js"></script>
+
+  <script src="https://rawgit.com/MESD/dynamoForm/master/js/DynamoForm-formset.js"></script>
+  <script src="https://rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script>
+
+</html>

@@ -1,5 +1,5 @@
 /**
- *  DynamoForm.js - A jquery based dynamic formset generator.
+ *  DynamoForm-formset.js - A jquery based dynamic formset generator.
  *
  *  Author:     David Cramblett (dcramble@mesd.k12.or.us)
  *  License:    MIT
@@ -35,39 +35,52 @@ $(document).ready(function() {
         // Find last row
         var lastRow = dynamoForm.find('.dynamo-formset-row').last();
 
-        // Determine if select2 is in use and disable
-        // for cloning purposes.
-        var select2InUse    = false;
-        var select2elements = [];
+
+        // Determine if dynamo-selectize is in use and disable for cloning
+        // purposes.
+        var selectizeElements = {};
         lastRow.find('select').each(function() {
-            var select2enabled = $(this).siblings('.select2-container');
-            if (undefined !== select2enabled) {
-                select2InUse = true;
-                select2elements.push($(this).attr('id'));
-                $(this).select2('destroy');
+            if ($(this)[0].selectize) {
+                selectizeElements[$(this).attr('id')] = {
+                    inputOptions: $(this)[0].selectize.options,
+                    inputValue:   $(this)[0].selectize.getValue()
+                }
+                $(this)[0].selectize.destroy();
             }
         });
 
+
         // Clone last row
-        lastRow.clone().insertAfter(lastRow);
+        var newRow = lastRow.clone().insertAfter(lastRow);
 
         // Clear any data that was already entered in the copied row
-        dynamoForm.find('.dynamo-formset-row').last().find( 'input,select,textarea' ).each(function() {
+        newRow.find( 'input,select,textarea' ).each(function() {
             $(this).val( '' );
             $(this).attr( 'checked', false );
         });
 
-        //Re-enable any select2 fields if needed
-        if (true === select2InUse) {
-            $.each(select2elements, function(index, value) {
-                lastRow.find('select#'+value).select2({width: '100%'});
-                dynamoForm.find('.dynamo-formset-row').last().find('select#'+value).select2({width: '100%'});
+
+        //Re-enable any dynamo-selectize fields if needed, adding
+        // back any options and selected values to the cloned row
+        if (!$.isEmptyObject(selectizeElements)) {
+            var formElements = [];
+            $.each(selectizeElements, function(key, value) {
+                formElements.push(lastRow.find('select#'+key));
+                formElements.push(newRow.find('select#'+key));
             })
+
+            // Renable Selectize
+            initDynamoSelectize(formElements);
+
+            // Copy back options and values to cloned row
+            $.each(selectizeElements, function(key, value) {
+                lastRow.find('select#'+key)[0].selectize.addOption(value.inputOptions);
+                lastRow.find('select#'+key)[0].selectize.setValue(value.inputValue);
+            });
         }
 
         // Update the row numbering
         updateRowIndex( dynamoForm );
-
 
         // Determine if Max Rows is specified
         if (undefined !== maxRows) {
@@ -155,7 +168,7 @@ $(document).ready(function() {
 /**
  * Re-index formset rows
  *
- * Update row indexing after a formset row has been added or deleted
+ * Row indexing is updated after a formset row has been added or deleted.
  *
  */
 function updateRowIndex(obj) {
@@ -168,19 +181,44 @@ function updateRowIndex(obj) {
 
         dynamoFormRow.find('*').not('option').each( function() {
 
-            // Re-index id attributes
+            // Re-index 'id' attribute
             if ( undefined !== $(this).attr('id') ) {
                 $(this).attr('id', reindexAttribute( $(this).attr('id'), index));
             }
 
-            // Re-index name attributes
+            // Re-index 'name' attribute
             if ( undefined !== $(this).attr('name') ) {
                 $(this).attr('name', reindexAttribute($(this).attr('name'), index));
             }
 
-            // Re-index label text if requested
+            // Re-index dynamo-selectize data-chain-child / data-chain-parent
+            if ( undefined !== $(this).attr('data-chain-child') ) {
+                $(this).attr(
+                    'data-chain-child',
+                    reindexDynamoSelectizeAttribute(
+                        $(this).attr('data-chain-child'),
+                        index
+                    )
+                );
+            }
+            if ( undefined !== $(this).attr('data-chain-parent') ) {
+                $(this).attr(
+                    'data-chain-parent',
+                    reindexDynamoSelectizeAttribute(
+                        $(this).attr('data-chain-parent'),
+                        index
+                    )
+                );
+            }
+
+            // Re-index 'label text' if requested
             if ( 'true' == $(this).attr('data-dynamo-relabel') ) {
                 $(this).text(reindexText($(this).text(), index));
+
+                // Re-index 'for' attributes on labels
+                if ( undefined !== $(this).attr('for') ) {
+                    $(this).attr('for', reindexAttribute($(this).attr('for'), index));
+                }
             }
         });
 
@@ -190,7 +228,7 @@ function updateRowIndex(obj) {
 
 
 /**
- * Re-index id and name attributes
+ * Re-index id, name, and for attributes
  *
  * Check attribute for integer index pattern and update the attribute
  * when pattern is matched.
@@ -202,7 +240,6 @@ function reindexAttribute(attribute, index) {
     return attribute;
 }
 
-
 /**
  * Re-index element text
  *
@@ -213,4 +250,16 @@ function reindexText(text, index) {
     text = text.replace(/\ \d+$/, ' ' + index);
 
     return text;
+}
+
+/**
+ * Re-index dynamo-selectize attributes
+ *
+ * Check attribute for integer index pattern and update the attribute
+ * when pattern is matched.
+ */
+function reindexDynamoSelectizeAttribute(attribute, index) {
+    attribute = attribute.replace(/\_\d+\"/g, '_' + index + '"');
+
+    return attribute;
 }

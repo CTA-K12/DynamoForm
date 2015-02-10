@@ -1,13 +1,14 @@
+/**
+ *  DynamoForm-selectize.js - Enable the selectize.js library using html attributes.
+ *
+ *  Author:     David Cramblett (dcramble@mesd.k12.or.us)
+ *  License:    MIT
+ */
+
 $(document).ready(function() {
 
-
-    // Global array to track element chaining
-    chainedChildren = [];
-
-
-
     /**
-     * Enable selectize on desired select elements
+     * Enable selectize on desired form elements
      *
      * Process all elements with class 'dynamo-selectize', parsing all of the
      * attribute options for each element and enabling the desired selectize
@@ -15,41 +16,9 @@ $(document).ready(function() {
      *
      * If chaining (element dependency) is required, disable any elements where
      * appropriate.
-     *
      */
-    $('.dynamo-selectize').each(function(){
-
-        // Parse the elements attribute options into the selectize format.
-        var options = buildOptionsObject($(this));
-
-        // Enable selectize on the element with the desired option
-        // configuration.
-        $(this).selectize(options);
-
-        // Determine if chaining is in use on element. If yes, track the element
-        // in the chainedChildren array to be processed once all elements have
-        // been initialized.
-        if ('undefined' !==  typeof $(this).attr('data-chain-parent')) {
-            chainedChildren.push($(this));
-        }
-
-    });
-
-
-
-
-    /**
-     * Proocess chained elments
-     *
-     * Child elments need to be diabled until all thier parents have values set.
-     * Child elements often need to be rebuilt with new options for data
-     * selection based on the values from the parent element.
-     */
-    $.each(chainedChildren, function() {
-        processChainedChild($(this));
-    });
-
-
+    var formElements = $('.dynamo-selectize');
+    initDynamoSelectize(formElements);
 
 
     /**
@@ -59,7 +28,7 @@ $(document).ready(function() {
      * be enabled or disabled based on the change.
      *
      */
-    $('.dynamo-selectize').on('change', function() {
+    $(document).on('change', '.dynamo-selectize', function() {
 
         // Determine if chaining is in use on element.
         if ('undefined' !==  typeof $(this).attr('data-chain-child')) {
@@ -74,13 +43,56 @@ $(document).ready(function() {
             }
 
             children.forEach(function(id) {
-                processChainedChild($('#' + id));
+                processSelectizeChainedChild($('#' + id));
             });
         }
     });
 
 });
 
+
+
+
+/**
+ * Initialize Dynamo-selectize elements
+ *
+ */
+function initDynamoSelectize(formElements) {
+
+    // Array to track element chaining
+    var chainedChildren = [];
+
+    // Enable Selectize on each element
+    $.each(formElements, function() {
+
+        // Parse the elements attribute options into the selectize format.
+        var options = buildSelectizeOptionsObject($(this));
+
+        // Enable selectize on the element with the desired option
+        // configuration.
+        $(this).selectize(options);
+
+        // Determine if chaining is in use on element. If yes, track the element
+        // in the chainedChildren array to be processed once all elements have
+        // been initialized.
+        if ('undefined' !==  typeof $(this).attr('data-chain-parent')) {
+            chainedChildren.push($(this));
+        }
+    });
+
+    /**
+     * Proocess chained elments
+     *
+     * Child elments need to be diabled until all thier parents have values set.
+     * Child elements often need to be rebuilt with new options for data
+     * selection based on the values from the parent element.
+     */
+    $.each(chainedChildren, function() {
+        processSelectizeChainedChild($(this));
+    });
+
+
+}
 
 
 
@@ -93,7 +105,7 @@ $(document).ready(function() {
  * when possible.
  *
  */
-function buildOptionsObject(formElement) {
+function buildSelectizeOptionsObject(formElement) {
 
     var _options = {};
 
@@ -390,12 +402,12 @@ function buildOptionsObject(formElement) {
      */
     if ('undefined' !==  typeof formElement.attr('data-load-url')) {
         // Build load options
-        _options.load = processLoadOptions(formElement);
+        _options.load = processSelectizeLoadOptions(formElement);
     }
 
     return _options;
 
-} //END buildOptionsObject(formElement)
+} //END buildSelectizeOptionsObject(formElement)
 
 
 
@@ -403,63 +415,8 @@ function buildOptionsObject(formElement) {
  * Process load options
  *
  * Build a load function for remote data fetching based on attribute values.
- *
- *  The data-load-[*] attributes define the necessary selectize options for
- *  remote data fetching. You must define the data-load-url attribute to
- *  trigger the functionality.
- *
- *  data-load-url:
- *      The URL to fetch data from. The users search text will be appended to
- *      the URL.
- *
- *  data-load-type:
- *      The http method used to fetch data. Default: 'GET'
- *
- *  data-load-resultSet-limit:
- *      The max number of records from remote fetch. Default: 10
- *
- *  data-load-resultSet-key:
- *      The object key under which your data can be found. Default: null
- *
- *      If your remote source returns multiple types of data, for instance
- *      a list of beverages and a list of food items, and you only want the
- *      beverage list you would specify the key name for the beverage list.
- *
- *          {
- *            "beverage": [
- *               {
- *                 "value": 1,
- *                 "text": "Coffee"
- *               },
- *               {
- *                 "value": 2,
- *                 "text": "Soda"
- *               },
- *               {
- *                "value": 3,
- *                "text": "Water"
- *               }
- *            ],
- *            "food": [
- *               {
- *                 "value": 1,
- *                 "text": "Apple"
- *               },
- *               {
- *                 "value": 2,
- *                 "text": "Carrot"
- *               },
- *               {
- *                "value": 3,
- *                "text": "Sandwich"
- *               }
- *            ]
- *          }
- *
- *
- *
  */
-function processLoadOptions(formElement) {
+function processSelectizeLoadOptions(formElement) {
 
     var loadUrl = formElement.attr('data-load-url');
 
@@ -527,7 +484,7 @@ function processLoadOptions(formElement) {
  * between mutiple form elments. Additionaly, update the load url when needed.
  *
  */
-function processChainedChild(childElement) {
+function processSelectizeChainedChild(childElement) {
 
     // Parse parent list
     var parent = [];
@@ -550,6 +507,7 @@ function processChainedChild(childElement) {
         else {
             // One of the parents has no value yet. Exit, we'll attempt to
             // enable the child again upon next parent update.
+            childElement[0].selectize.setValue("");
             childElement[0].selectize.disable();
             parentDependencyMet = false;
         }
@@ -573,7 +531,7 @@ function processChainedChild(childElement) {
         childElement.attr('data-load-url-vars', JSON.stringify(parentValues));
 
         // Build new selectize options
-        var _options = buildOptionsObject(childElement)
+        var _options = buildSelectizeOptionsObject(childElement)
 
         // Re-create selectize control with new options
         childElement.selectize(_options);
