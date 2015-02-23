@@ -200,6 +200,12 @@ Default: null
 </select>
 ```
 
+**Note:**
+
+> By default the load option is not called until the user enters a search query
+> in the selectize'd input. If you would like to `preload` data when the
+> selectize'd input is initialized, use the `data-preload` attribute.
+
 
 #### Working with dependencies - Chaining elements
 

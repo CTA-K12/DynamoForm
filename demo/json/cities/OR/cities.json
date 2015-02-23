@@ -1,0 +1,20 @@
+{
+    "cities": [
+        {
+            "id": 1,
+            "city": "Bend"
+        },
+        {
+            "id": 2,
+            "city": "Corvallis"
+        },
+        {
+            "id": 3,
+            "city": "Oregon City"
+        },
+        {
+            "id": 4,
+            "city": "Portland"
+        }
+    ]
+}

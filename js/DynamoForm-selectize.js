@@ -401,8 +401,13 @@ function buildSelectizeOptionsObject(formElement) {
      *  trigger the functionality.
      */
     if ('undefined' !==  typeof formElement.attr('data-load-url')) {
+        // Determine if preload is in use
+        var requestPreload = false;
+        if('undefined' !==  typeof _options.preload) {
+            requestPreload = true;
+        }
         // Build load options
-        _options.load = processSelectizeLoadOptions(formElement);
+        _options.load = processSelectizeLoadOptions(formElement, requestPreload);
     }
 
     return _options;
@@ -416,7 +421,7 @@ function buildSelectizeOptionsObject(formElement) {
  *
  * Build a load function for remote data fetching based on attribute values.
  */
-function processSelectizeLoadOptions(formElement) {
+function processSelectizeLoadOptions(formElement, requestPreload) {
 
     var loadUrl = formElement.attr('data-load-url');
 
@@ -455,7 +460,8 @@ function processSelectizeLoadOptions(formElement) {
     // Build load option
     var _load =
         function(query, callback) {
-            if (!query.length) return callback();
+            // Don't search if query string is empty, unless pre-loading
+            if (!requestPreload && !query.length) return callback();
             $.ajax({
                 url: loadUrl + encodeURIComponent(query),
                 type: loadType,
@@ -535,6 +541,7 @@ function processSelectizeChainedChild(childElement) {
 
         // Re-create selectize control with new options
         childElement.selectize(_options);
+
     }
 
 }
