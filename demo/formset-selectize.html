@@ -49,27 +49,14 @@
                   <div class="col-md-2">
                     <select id="state_1" class="form-control dynamo-selectize"
                       data-chain-child='["city_1"]'
-                      data-valueField="value"
-                      data-labelField="text"
-                      data-searchField='["text"]'
-                      data-options='[
-                        {
-                          "value": 1,
-                          "text": "California"
-                        },
-                        {
-                          "value": 2,
-                          "text": "Idaho"
-                        },
-                        {
-                          "value": 3,
-                          "text": "Oregon"
-                        },
-                        {
-                          "value": 4,
-                          "text": "Washington"
-                        }
-                      ]'
+                      data-preload="true"
+                      data-load-type="GET"
+                      data-load-url="json/states.json?"
+                      data-load-resultSet-key="states"
+                      data-load-resultSet-limit="10"
+                      data-valueField="abbr"
+                      data-labelField="description"
+                      data-searchField='["abbr","description"]'
                     >
                       <option value="">Choose State</option>
                     </select>
@@ -77,27 +64,14 @@
                   <div class="col-md-2">
                     <select id="city_1" class="form-control dynamo-selectize"
                       data-chain-parent='["state_1"]'
-                      data-valueField="value"
-                      data-labelField="text"
-                      data-searchField='["text"]'
-                      data-options='[
-                        {
-                          "value": 1,
-                          "text": "Portland"
-                        },
-                        {
-                          "value": 2,
-                          "text": "Corvallis"
-                        },
-                        {
-                          "value": 3,
-                          "text": "Seattle"
-                        },
-                        {
-                          "value": 4,
-                          "text": "Vancouver"
-                        }
-                      ]'
+                      data-preload="focus"
+                      data-load-type="GET"
+                      data-load-url="json/cities/{state_1}/cities.json?"
+                      data-load-resultSet-key="cities"
+                      data-load-resultSet-limit="10"
+                      data-valueField="id"
+                      data-labelField="city"
+                      data-searchField='["city"]'
                     >
                       <option value="">Choose City</option>
                     </select>
@@ -130,7 +104,8 @@
   <!-- Selectize is requierd for DynamoForm-selectize -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.0/js/standalone/selectize.min.js"></script>
 
-  <script src="https://rawgit.com/MESD/dynamoForm/master/js/DynamoForm-formset.js"></script>
+  <!--<script src="https://rawgit.com/MESD/dynamoForm/master/js/DynamoForm-formset.js"></script>-->
+  <script src="../js/DynamoForm-formset.js"></script>
   <script src="https://rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script>
 
 </html>

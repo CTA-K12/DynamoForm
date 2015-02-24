@@ -183,12 +183,12 @@ function updateRowIndex(obj) {
 
             // Re-index 'id' attribute
             if ( undefined !== $(this).attr('id') ) {
-                $(this).attr('id', reindexAttribute( $(this).attr('id'), index));
+                $(this).attr('id', reindexIdentityAttribute( $(this).attr('id'), index));
             }
 
             // Re-index 'name' attribute
             if ( undefined !== $(this).attr('name') ) {
-                $(this).attr('name', reindexAttribute($(this).attr('name'), index));
+                $(this).attr('name', reindexIdentityAttribute($(this).attr('name'), index));
             }
 
             // Re-index dynamo-selectize data-chain-child / data-chain-parent
@@ -211,14 +211,25 @@ function updateRowIndex(obj) {
                 );
             }
 
-            // Re-index 'label text' if requested
+            // Re-index label text if requested
             if ( 'true' == $(this).attr('data-dynamo-relabel') ) {
                 $(this).text(reindexText($(this).text(), index));
 
                 // Re-index 'for' attributes on labels
                 if ( undefined !== $(this).attr('for') ) {
-                    $(this).attr('for', reindexAttribute($(this).attr('for'), index));
+                    $(this).attr('for', reindexIdentityAttribute($(this).attr('for'), index));
                 }
+            }
+
+            // Re-index dynamo-selectize url vairables if needed
+            if ($(this).hasClass('dynamo-selectize') && undefined !== $(this).attr('data-load-url')) {
+                $(this).attr(
+                    'data-load-url',
+                    reindexUrlVariables(
+                        $(this).attr('data-load-url'),
+                        index
+                    )
+                );
             }
         });
 
@@ -233,12 +244,13 @@ function updateRowIndex(obj) {
  * Check attribute for integer index pattern and update the attribute
  * when pattern is matched.
  */
-function reindexAttribute(attribute, index) {
+function reindexIdentityAttribute(attribute, index) {
     attribute = attribute.replace(/\_\d+/, '_' + index);
     attribute = attribute.replace(/\d+]$/, index + ']');
 
     return attribute;
 }
+
 
 /**
  * Re-index element text
@@ -252,6 +264,7 @@ function reindexText(text, index) {
     return text;
 }
 
+
 /**
  * Re-index dynamo-selectize attributes
  *
@@ -260,6 +273,19 @@ function reindexText(text, index) {
  */
 function reindexDynamoSelectizeAttribute(attribute, index) {
     attribute = attribute.replace(/\_\d+\"/g, '_' + index + '"');
+
+    return attribute;
+}
+
+
+/**
+ * Re-index dynamo-selectize url variables
+ *
+ * Check url string for variables with integer index pattern and
+ * update the variable when pattern is matched.
+ */
+function reindexUrlVariables(attribute, index) {
+    attribute = attribute.replace(/\{(\w+)\_\d+\}/g, '{' + '$1' + '_' + index + '}');
 
     return attribute;
 }
