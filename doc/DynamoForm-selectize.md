@@ -309,6 +309,7 @@ my input element. Below is the final product:
 <select id="state" class="dynamo-selectize"
     data-render-option='&#x3C;div&#x3E;&#x3C;strong&#x3E;{abbr}&#x3C;/strong&#x3E; - {description}&#x3C;/div&#x3E;'
 >
+```
 
 **Note:**
 
@@ -316,5 +317,3 @@ my input element. Below is the final product:
 > outputting the encoded version of the html. However, if your not using a
 > temperating system, you can use one of the free on-line html encoders which
 > allow you to paste in your raw html and output the encoded version.
-
-```
