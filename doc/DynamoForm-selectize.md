@@ -251,3 +251,69 @@ the url specification where you want the value to appear when the fetch occurs.
 >
 </select>
 ```
+
+
+#### Custom rendering of options list
+
+Selectize.js has support for custom rendering of options list items. To
+activate the rendering add the `data-render-option` attribute to your input
+element and set the escaped html you want to rendor as the value of the
+attribute. You can use use vairables within the html to represent the data you
+want displayed for each option. To create variables in the rendor html, place
+the data elements between braces `{data-element}`, e.g. `{name}`,
+`{description}`, etc.
+
+For example, here is a list of some json data for states:
+
+```json
+{
+    "states": [
+        {
+            "id": 1,
+            "abbr": "AK",
+            "description": "Alaska"
+        },
+        {
+            "id": 2,
+            "abbr": "CA",
+            "description": "California"
+        },
+        {
+            "id": 3,
+            "abbr": "OR",
+            "description": "Oregon"
+        },
+        {
+            "id": 4,
+            "abbr": "WA",
+            "description": "Washington"
+        }
+    ]
+}
+
+I want to display the Abbreviation (abbr) and Description (description) in my
+option list. I develop the following html to display my options:
+
+```html
+<div><strong>{abbr}</strong> - {description}</div>
+```
+
+The varible names between braces `{abbr}` and `{description}` match the
+property names from my json data above. The html needs to be encoded as html
+entities to prevent the web broswer from trying to render it in the middle of
+my input element. Below is the final product:
+
+
+``` html
+<select id="state" class="dynamo-selectize"
+    data-render-option='&#x3C;div&#x3E;&#x3C;strong&#x3E;{abbr}&#x3C;/strong&#x3E; - {description}&#x3C;/div&#x3E;'
+>
+
+**Note:**
+
+> Many html temperating systems used today have support for automatically
+> outputting the encoded version of the html. However, if your not using a
+> temperating system, you can use one of the free on-line html encoders which
+> allow you to paste in your raw html and output the encoded version.
+
+```
