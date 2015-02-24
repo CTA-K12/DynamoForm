@@ -313,7 +313,7 @@ my input element. Below is the final product:
 
 **Note:**
 
-> Many html temperating systems used today have support for automatically
-> outputting the encoded version of the html. However, if your not using a
-> temperating system, you can use one of the free on-line html encoders which
-> allow you to paste in your raw html and output the encoded version.
+> Many html templateing systems have support for automatically outputting the
+> encoded version of the html. However, if your not using a templateing system,
+> you can use one of the free on-line html encoders which allow you to paste in
+> your raw html and output the encoded version.
