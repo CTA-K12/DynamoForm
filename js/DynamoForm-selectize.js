@@ -392,6 +392,42 @@ function buildSelectizeOptionsObject(formElement) {
         }
     }
 
+    /**
+     *  data-render-option: null
+     *
+     *  The data-render-option attribute defines the html layout for custom
+     *  rendering of selectize options in the drop down list.
+     *
+     */
+    if ('undefined' !==  typeof formElement.attr('data-render-option')) {
+
+        // Load render html from data attribute
+        var rendorHtml = formElement.attr('data-render-option');
+        //console.log(rendorHtml);
+
+        // Create list of render variables to processed
+        renderVars = rendorHtml.match(/\{(\w+)\}/g);
+        //console.log(renderVars);
+
+        // Create new render object
+        _options.render = {};
+
+        // Build Render Function for Item Option
+        _options.render.option =
+            function(item, escape) {
+
+                // Don't overwrite the original html on first render pass
+                var localRenderHtml = rendorHtml;
+
+                // Replace render variables with option data
+                renderVars.forEach(function(value) {
+                    value = value.replace(/\{(\w+)\}/, '$1');
+                    localRenderHtml = localRenderHtml.replace(/\{(\w+)\}/, item[value]);
+                });
+
+                return localRenderHtml;
+            };
+    }
 
     /**
      *  data-load-url: null

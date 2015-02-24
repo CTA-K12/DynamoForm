@@ -46,7 +46,7 @@
                   <div class="col-md-2">
                     <input type="text" class="form-control" id="address_1" placeholder="Enter address">
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <select id="state_1" class="form-control dynamo-selectize"
                       data-chain-child='["city_1"]'
                       data-preload="true"
@@ -57,6 +57,7 @@
                       data-valueField="abbr"
                       data-labelField="description"
                       data-searchField='["abbr","description"]'
+                      data-render-option='&#x3C;div&#x3E;&#x3C;strong&#x3E;{abbr}&#x3C;/strong&#x3E; - {description}&#x3C;/div&#x3E;'
                     >
                       <option value="">Choose State</option>
                     </select>
@@ -104,8 +105,7 @@
   <!-- Selectize is requierd for DynamoForm-selectize -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.0/js/standalone/selectize.min.js"></script>
 
-  <!--<script src="https://rawgit.com/MESD/dynamoForm/master/js/DynamoForm-formset.js"></script>-->
-  <script src="../js/DynamoForm-formset.js"></script>
+  <script src="https://rawgit.com/MESD/dynamoForm/master/js/DynamoForm-formset.js"></script>
   <script src="https://rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script>
 
 </html>
