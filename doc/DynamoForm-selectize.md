@@ -1,6 +1,6 @@
 ## DynamoForm-selectize.js
 
-Enable the use Brian Reavis's popular selectize.js library using html
+Enable the use of Brian Reavis's popular selectize.js library using html
 attributes, without writing any javascript.
 
 **Status:** Beta (Feb 24, 2015)
@@ -14,7 +14,7 @@ There are three simple steps to get started:
 
 * Step 1 - Enable selectize.js
 * Step 2 - Enable DynamoForm-selectize.js
-* Step 3 - Add class to your form element
+* Step 3 - Add dynamo-selectize class to your form element
 * Step 4 - Add attributes to your form element
 
 #### Step 1: Enable selectize.js
@@ -98,7 +98,7 @@ html attribute value in single quotes. See example below:
     data-options='[
         {
           "value": 1,
-          "text": "Astroia"
+          "text": "Astoria"
         },
         {
           "value": 2,
@@ -114,11 +114,11 @@ html attribute value in single quotes. See example below:
         },
         {
           "value": 5,
-          "text": "The Dales"
+          "text": "The Dalles"
         },
         {
           "value": 6,
-          "text": "Hilboro"
+          "text": "Hillsboro"
         },
         {
           "value": 7,
@@ -132,7 +132,7 @@ html attribute value in single quotes. See example below:
 #### Loading data from a remote source
 
 Selectize.js has a `load` option to specify a function for loading remote
-data. To trigger the load option be built by dynamo-selectize you must specify
+data. To trigger the load option to be built by dynamo-selectize you must specify
 at least the`data-load-url` attribute. There are 4 attributes you can use to
 customize the remote fetch:
 
