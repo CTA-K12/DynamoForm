@@ -16,7 +16,7 @@ $(document).ready(function() {
      * id attribute when formset is processed server side.
      *
      */
-    $('.dynamo-formset-row-add').click(function() {
+    $('.dynamo-formset').on('click', '.dynamo-formset-row-add', function() {
 
         // Find the parent dynamo-formset
         var dynamoForm = $(this).closest('.dynamo-formset');
@@ -35,22 +35,21 @@ $(document).ready(function() {
         // Find last row
         var lastRow = dynamoForm.find('.dynamo-formset-row').last();
 
-
         // Determine if dynamo-selectize is in use and disable for cloning
         // purposes.
         var selectizeElements = {};
         lastRow.find('select').each(function() {
             if ($(this)[0].selectize) {
+                // Store current seletize options and values to restore later.
                 selectizeElements[$(this).attr('id')] = {
-                    inputOptions: $(this)[0].selectize.options,
+                    inputOptions: $(this)[0].selectize.getOptions(),
                     inputValue:   $(this)[0].selectize.getValue()
                 }
                 $(this)[0].selectize.destroy();
             }
         });
 
-
-        // Clone last row
+        // Clone last row and insert at end of formset
         var newRow = lastRow.clone().insertAfter(lastRow);
 
         // Clear any data that was already entered in the copied row
@@ -63,19 +62,24 @@ $(document).ready(function() {
         //Re-enable any dynamo-selectize fields if needed, adding
         // back any options and selected values to the cloned row
         if (!$.isEmptyObject(selectizeElements)) {
-            var formElements = [];
+            var copiedFormElements = [];
+            var newFormElements    = [];
             $.each(selectizeElements, function(key, value) {
-                formElements.push(lastRow.find('select#'+key));
-                formElements.push(newRow.find('select#'+key));
+                copiedFormElements.push(lastRow.find('select#'+key));
+                newFormElements.push(newRow.find('select#'+key));
             })
 
-            // Renable Selectize
-            initDynamoSelectize(formElements);
+            // Renable Selectize with disabled PreLoad on copied elements
+            initDynamoSelectize(copiedFormElements, true);
+
+            // Renable Selectize on new elements
+            initDynamoSelectize(newFormElements);
 
             // Copy back options and values to cloned row
             $.each(selectizeElements, function(key, value) {
-                lastRow.find('select#'+key)[0].selectize.addOption(value.inputOptions);
-                lastRow.find('select#'+key)[0].selectize.setValue(value.inputValue);
+                selectizedObject = lastRow.find('select#'+key)[0].selectize;
+                selectizedObject.addOption(value.inputOptions);
+                selectizedObject.setValue(value.inputValue);
             });
         }
 

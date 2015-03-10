@@ -57,7 +57,10 @@ $(document).ready(function() {
  * Initialize Dynamo-selectize elements
  *
  */
-function initDynamoSelectize(formElements) {
+function initDynamoSelectize(formElements, disablePreLoad) {
+
+    // Default disablePreLoad to false
+    var disablePreLoad = (undefined === typeof(disablePreLoad)) ? false : disablePreLoad;
 
     // Array to track element chaining
     var chainedChildren = [];
@@ -66,7 +69,7 @@ function initDynamoSelectize(formElements) {
     $.each(formElements, function() {
 
         // Parse the elements attribute options into the selectize format.
-        var options = buildSelectizeOptionsObject($(this));
+        var options = buildSelectizeOptionsObject($(this), disablePreLoad);
 
         // Enable selectize on the element with the desired option
         // configuration.
@@ -105,7 +108,10 @@ function initDynamoSelectize(formElements) {
  * when possible.
  *
  */
-function buildSelectizeOptionsObject(formElement) {
+function buildSelectizeOptionsObject(formElement, disablePreLoad) {
+
+    // Default disablePreLoad to false
+    var disablePreLoad = (undefined === typeof(disablePreLoad)) ? false : disablePreLoad;
 
     var _options = {};
 
@@ -217,8 +223,18 @@ function buildSelectizeOptionsObject(formElement) {
         }
     }
 
-    // data-preload: false | Can be boolean or string
-    if ('undefined' !==  typeof formElement.attr('data-preload')) {
+    /** data-preload: false | Can be boolean or string
+     *
+     * If disablePreLoad is true, then we need to bypass preload for this
+     * specific initialization. This is common when the selectize element is
+     * being destroyed to be copied/cloned and the element will be restored
+     * with it's originally set options and value(s) when coping is complete.
+     *
+     **/
+    if (true === disablePreLoad) {
+        _options.preload = false;
+    }
+    else if ('undefined' !==  typeof formElement.attr('data-preload')) {
         //If defined string 'true', use boolean true
         if ('true' === formElement.attr('data-preload').toLowerCase()) {
             _options.preload = true;
