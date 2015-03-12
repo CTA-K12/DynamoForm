@@ -419,26 +419,24 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
 
         // Load render html from data attribute
         var rendorHtml = formElement.attr('data-render-option');
-        //console.log(rendorHtml);
-
-        // Create list of render variables to processed
-        renderVars = rendorHtml.match(/\{(\w+)\}/g);
-        //console.log(renderVars);
 
         // Create new render object
         _options.render = {};
 
-        // Build Render Function for Item Option
+        // Build Render Function for Option items
         _options.render.option =
-            function(item, escape) {
+            function(option, escape) {
 
-                // Don't overwrite the original html on first render pass
+                // Don't overwrite the original html on first pass
                 var localRenderHtml = rendorHtml;
+
+                // Create list of render variables to processed
+                renderVars = rendorHtml.match(/\{(\w+)\}/g);
 
                 // Replace render variables with option data
                 renderVars.forEach(function(value) {
                     value = value.replace(/\{(\w+)\}/, '$1');
-                    localRenderHtml = localRenderHtml.replace(/\{(\w+)\}/, item[value]);
+                    localRenderHtml = localRenderHtml.replace(/\{(\w+)\}/, option[value]);
                 });
 
                 return localRenderHtml;
