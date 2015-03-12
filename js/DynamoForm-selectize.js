@@ -52,7 +52,6 @@ $(document).ready(function() {
 
 
 
-
 /**
  * Initialize Dynamo-selectize elements
  *
@@ -536,8 +535,8 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
 /**
  * Process Chained Child
  *
- * Disable and enable child form elments that are part of a chained dependency
- * between mutiple form elments. Additionaly, update the load url when needed.
+ * Disable and enable child form elements that are part of a chained dependency
+ * between multiple form elements. Additionally, update the load URL when needed.
  *
  */
 function processSelectizeChainedChild(childElement) {
@@ -565,6 +564,7 @@ function processSelectizeChainedChild(childElement) {
             // enable the child again upon next parent update.
             childElement[0].selectize.setValue("");
             childElement[0].selectize.disable();
+            //childElement.change();
             parentDependencyMet = false;
         }
     });
@@ -594,4 +594,6 @@ function processSelectizeChainedChild(childElement) {
 
     }
 
+    //Trigger change event to cascade to dependent grand-children
+    childElement.change();
 }
