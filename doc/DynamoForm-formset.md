@@ -4,7 +4,12 @@ A jquery based dynamic formset generator with support for Selectize.js via Dynam
 
 ![DynamoForm Example](https://github.com/MESD/DynamoForm/blob/master/demo/DynamoForm-formset.png "DynamoForm Example")
 
-**Status:** Beta (Feb 9, 2015)
+**Note:** (March 11, 2015)
+At the moment, for cloning of rows to work with selectize'd fields, you need a new API method
+called getOptions() for selectize.js. I have submitted a pull request to the selectize.js
+project for this method. [selectize.js - Pull Request #735](https://github.com/brianreavis/selectize.js/pull/735)
+
+**Status:** Beta (March 11, 2015)
 
 **To Do:**
 * Add prototype option for row creation (apoosed to copying last row)
