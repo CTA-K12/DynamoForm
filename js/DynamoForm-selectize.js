@@ -83,11 +83,11 @@ function initDynamoSelectize(formElements, disablePreLoad) {
     });
 
     /**
-     * Proocess chained elments
+     * Process chained elements
      *
-     * Child elments need to be diabled until all thier parents have values set.
-     * Child elements often need to be rebuilt with new options for data
-     * selection based on the values from the parent element.
+     * Child elements need to be disabled until all their parents have values set.
+     * Child elements often need to be rebuilt with new options for data selection
+     * based on the values from the parent element.
      */
     $.each(chainedChildren, function() {
         processSelectizeChainedChild($(this));
@@ -556,7 +556,7 @@ function processSelectizeChainedChild(childElement) {
     var parentValues = {};
     parent.forEach(function(id) {
         if ($('#' + id).val()) {
-            // Store parent / value combination
+            // Store parent id/value combination
             parentValues[id] = $('#' + id).val();
         }
         else {
@@ -564,23 +564,59 @@ function processSelectizeChainedChild(childElement) {
             // enable the child again upon next parent update.
             childElement[0].selectize.setValue("");
             childElement[0].selectize.disable();
-            //childElement.change();
             parentDependencyMet = false;
         }
     });
 
-    // Exit now if any dependcy is not met
+    // Exit now if any dependency is not met
     if ( false === parentDependencyMet) {
         return false;
     }
 
+
+    /*
+     * Check for parent deactivation values. These are values the parent
+     * contains, which when selected, require the child remain or become
+     * deactivated.
+     *
+     * data-chain-parent-deactivate: null
+     */
+    var parentDeactivate = null;
+    if ('undefined' !==  typeof childElement.attr('data-chain-parent-deactivate')) {
+        try {
+            parentDeactivate = JSON.parse(childElement.attr('data-chain-parent-deactivate'));
+        } catch (e) {}
+    }
+
+    // If parent deactivation values exist, process them and disable child
+    // element if needed.
+    var parentActivationMet = true;
+    if (null !== parentDeactivate) {
+        $.each(parentValues, function(id, value) {
+            if (-1 !== $.inArray(value, parentDeactivate[id])) {
+                // One of the parents has a value which has indicated the
+                // child should be deactivated. Exit, we'll attempt to
+                // enable the child again upon next parent update.
+                childElement[0].selectize.setValue("");
+                childElement[0].selectize.disable();
+                parentActivationMet = false;
+            }
+        });
+    }
+
+    // Exit now if any activation requirements are not met
+    if ( false === parentActivationMet) {
+        return false;
+    }
+
+    
     // Ensure child is enabled
     childElement[0].selectize.enable();
 
     // Re-Build selectize control with new options if needed
     if ('undefined' !==  typeof childElement.attr('data-load-url')) {
 
-        // Destroy exisiting selectize control
+        // Destroy existing selectize control
         childElement[0].selectize.destroy();
 
         // Set data-load-url-vars attribute with values from parent elements
@@ -591,7 +627,6 @@ function processSelectizeChainedChild(childElement) {
 
         // Re-create selectize control with new options
         childElement.selectize(_options);
-
     }
 
     //Trigger change event to cascade to dependent grand-children

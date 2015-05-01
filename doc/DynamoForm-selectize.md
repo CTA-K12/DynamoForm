@@ -252,6 +252,35 @@ the url specification where you want the value to appear when the fetch occurs.
 </select>
 ```
 
+**Parent values the should render children disable**:
+If you have a case where even if the parent control has been activated, but
+certain parent values should prevent the child from becoming or staying active,
+use the `data-chain-parent-deactivate` attribute. The attribute is a JSON
+object element. You can specify more than one parent if needed. You should also
+specify an array of values that should prevent the child from becoming active.
+Since html values are passed as strings, make sure to include quotes around
+your values, even if they are simple integers.
+
+The below example specifies that the `city` selector should not become enabled
+when the state selector has not been set, or when the state has been set to
+items with a value of 2 or 5.
+
+``` html
+<select id="city" class="dynamo-selectize"
+    data-chain-parent='["state"]'
+    data-chain-parent-deactivate='{ "state": [ "2", "5" ] }'
+    data-load-type="GET"
+    data-load-url="data.php/{state}/cities/"
+    data-load-resultSet-limit="10"
+    data-valueField="value"
+    data-labelField="text"
+    data-searchField='["text"]'
+>
+</select>
+```
+
+
+
 
 #### Custom rendering of options list
 

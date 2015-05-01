@@ -17,3 +17,5 @@ attributes without writing any javascript.
 [DynamoForm-formset](https://github.com/MESD/DynamoForm/blob/master/doc/DynamoForm-formset.md "DynamoForm-formset Docs")
 
 [DynamoForm-selectize](https://github.com/MESD/DynamoForm/blob/master/doc/DynamoForm-selectize.md "DynamoForm-selectize Docs")
+
+[Using DynamoForm-selectize with Symfony2](https://github.com/MESD/DynamoForm/blob/master/doc/DynamoForm-selectize-symfony2-ajax.md "DynamoForm-selectize Symfony2 Docs")

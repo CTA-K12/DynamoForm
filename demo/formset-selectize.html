@@ -68,6 +68,7 @@
                   <div class="col-md-2">
                     <select id="state_1" class="form-control dynamo-selectize"
                       data-chain-parent='["country_1"]'
+                      data-chain-parent-deactivate='{ "country_1": [ "2", "5" ] }'
                       data-chain-child='["city_1"]'
                       data-preload="focus"
                       data-load-type="GET"
@@ -127,6 +128,6 @@
 
   <!-- DynamoForm Libraries -->
   <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-formset.js"></script>
-  <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script>  
+  <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script>
 
 </html>
