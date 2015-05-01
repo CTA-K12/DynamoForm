@@ -252,7 +252,8 @@ the url specification where you want the value to appear when the fetch occurs.
 </select>
 ```
 
-**Parent values the should render children disable**:
+**Parent values the should render children disabled**:
+
 If you have a case where even if the parent control has been activated, but
 certain parent values should prevent the child from becoming or staying active,
 use the `data-chain-parent-deactivate` attribute. The attribute is a JSON
