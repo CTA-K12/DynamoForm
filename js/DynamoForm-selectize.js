@@ -512,7 +512,7 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
             // Don't search if query string is empty, unless pre-loading
             if (!requestPreload && !query.length) return callback();
             $.ajax({
-                url: loadUrl + encodeURIComponent(query),
+                url: loadUrl + '/' + encodeURIComponent(query),
                 type: loadType,
                 error: function() {
                     callback();
