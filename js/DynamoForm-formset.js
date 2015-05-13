@@ -49,6 +49,12 @@ $(document).ready(function() {
             }
         });
 
+        // Determine if dynamo-datetimepicker is in use and disable for
+        // cloning purposes.
+        lastRow.find('.dynamo-datepicker').each(function() {
+            $(this).data('DateTimePicker').destroy();
+        });
+
         // Clone last row and insert at end of formset
         var newRow = lastRow.clone().insertAfter(lastRow);
 
@@ -82,6 +88,15 @@ $(document).ready(function() {
                 selectizedObject.setValue(value.inputValue);
             });
         }
+
+        // Re-enable any dynamo-datetimepicker fields, adding
+        // back any options to the cloned row
+        lastRow.find('.dynamo-datepicker').each(function() {
+            initBootstrapDateTimePicker($(this));
+        });
+        newRow.find('.dynamo-datepicker').each(function() {
+            initBootstrapDateTimePicker($(this));
+        });
 
         // Update the row numbering
         updateRowIndex( dynamoForm );

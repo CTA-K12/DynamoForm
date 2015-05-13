@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <title>DynamoForm-datetimepicker</title>
+
+      <!-- Bootstrap is required for datetimepicker -->
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap-theme.min.css">
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+      <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+      <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+
+      <!-- Styles specific to this demo -->
+      <style>
+        body {
+          padding: 50px 20px;
+        }
+      </style>
+
+  </head>
+  <body>
+    <form>
+
+      <div class="row">
+        <div class="form-group col-md-3">
+          <label><strong>Standard date picker</strong></label>
+          <input
+            type="text"
+            class="form-control input-sm dynamo-datepicker"
+            id="expenseDate_1"
+            name="expenseDate_1"
+            required="required"
+            maxlength="10"
+            data-format="MM/DD/YYYY"
+          />
+        </div>
+
+        <div class="form-group col-md-3">
+          <label><strong>Standard date/time picker</strong></label>
+          <input
+            type="text"
+            class="form-control input-sm dynamo-datepicker"
+            id="expenseDate_1"
+            name="expenseDate_1"
+            required="required"
+            maxlength="10"
+            data-format="MM/DD/YYYY hh:mm"
+          />
+        </div>
+      </div>
+
+      <br>
+
+      <div class="row">
+        <div class="form-group col-md-3">
+          <label><strong>Date picker with button</strong></label>
+          <div
+            class="input-group dynamo-datepicker"
+            data-format="MM/DD/YYYY"
+            >
+            <input
+              type="text"
+              class="form-control input-sm "
+              id="expenseDate_1"
+              name="expenseDate_1"
+              required="required"
+              maxlength="10"
+            />
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-3">
+          <label><strong>Date/Time picker with button</strong></label>
+          <div
+            class="input-group dynamo-datepicker"
+            data-format="MM/DD/YYYY hh:mm"
+            >
+            <input
+              type="text"
+              class="form-control input-sm "
+              id="expenseDate_1"
+              name="expenseDate_1"
+              required="required"
+              maxlength="10"
+            />
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <div class="row">
+        <div class="form-group col-md-3">
+          <label><strong>Date Picker with default date</strong></label>
+          <div
+            class="input-group dynamo-datepicker"
+            data-format="MM/DD/YYYY"
+            data-defaultDate="now"
+            >
+            <input
+              type="text"
+              class="form-control input-sm "
+              id="expenseDate_1"
+              name="expenseDate_1"
+              required="required"
+              maxlength="10"
+            />
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-3">
+          <label><strong>Date/Time Picker with default date</strong></label>
+          <div
+            class="input-group dynamo-datepicker"
+            data-format="MM/DD/YYYY hh:mm"
+            data-defaultDate="03/20/2014 06:34"
+            >
+            <input
+              type="text"
+              class="form-control input-sm "
+              id="expenseDate_1"
+              name="expenseDate_1"
+              required="required"
+              maxlength="10"
+            />
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </body>
+
+  <!-- Jquery is requierd for Bootstrap -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+  <!-- Bootstrap is required for datetimepicker -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+  <!-- Moment is required for datetimepicker -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+
+  <!-- Bootstrap datetimepicker -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
+
+  <!-- DynamoForm-datepicker Library -->
+  <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-datetimepicker.js"></script>
+
+</html>

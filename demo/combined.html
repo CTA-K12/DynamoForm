@@ -7,7 +7,8 @@
       <!-- Bootstrap, HTML5 shim, & Respond.js are not required for selectize -->
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap-theme.min.css">
-      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.0/css/selectize.bootstrap3.min.css">      
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.0/css/selectize.bootstrap3.min.css">
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
       <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
       <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
       <!--[if lt IE 9]>
@@ -31,20 +32,35 @@
     <form class="form-horizontal">
 
       <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-12">
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">Dynamo Formset / Selectize Demo</h3>
+              <h3 class="panel-title">Dynamo Combined Demo</h3>
             </div>
             <div class="panel-body">
 
               <div class="dynamo-formset"  data-min-rows="1" data-max-rows="8">
 
                 <div class="dynamo-formset-row form-group">
-                  <label for="location_1"  class="col-md-2 control-label" data-dynamo-relabel="true">Location 1</label>
+
+                  <label for="dataset_1"  class="col-md-2 control-label" data-dynamo-relabel="true">Dataset 1</label>
+
                   <div class="col-md-2">
-                    <input type="text" class="form-control" id="address_1" placeholder="Enter address">
+                    <div class="input-group dynamo-datepicker" data-format="MM/DD/YYYY" >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="date_1"
+                        name="date_1"
+                        required="required"
+                        maxlength="10"
+                      />
+                      <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                    </div>
                   </div>
+
                   <div class="col-md-2">
                     <select id="country_1" class="form-control dynamo-selectize"
                       data-chain-child='["state_1"]'
@@ -65,6 +81,7 @@
                       <option value="">Choose Country</option>
                     </select>
                   </div>
+
                   <div class="col-md-2">
                     <select id="state_1" class="form-control dynamo-selectize"
                       data-chain-parent='["country_1"]'
@@ -83,6 +100,7 @@
                       <option value="">Choose State</option>
                     </select>
                   </div>
+
                   <div class="col-md-2">
                     <select id="city_1" class="form-control dynamo-selectize"
                       data-chain-parent='["state_1"]'
@@ -98,6 +116,7 @@
                       <option value="">Choose City</option>
                     </select>
                   </div>
+
                   <div class="col-md-1">
                     <button type="button" class="btn btn-default dynamo-formset-row-delete" disabled="disabled">Delete</button>
                   </div>
@@ -126,8 +145,15 @@
   <!-- Bootstrap is not required for Selectize -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
+    <!-- Moment is required for datetimepicker -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+
+  <!-- Bootstrap datetimepicker -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
   <!-- DynamoForm Libraries -->
   <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-formset.js"></script>
   <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script>
+  <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-datetimepicker.js"></script>
 
 </html>
