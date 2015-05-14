@@ -337,7 +337,9 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
 
     // data-sortField: '$order'
     if ('undefined' !==  typeof formElement.attr('data-sortField')) {
-        _options.sortField = formElement.attr('data-sortField');
+        try {
+            _options.sortField = JSON.parse(formElement.attr('data-sortField'));
+        } catch (e) {}
     }
 
     /**

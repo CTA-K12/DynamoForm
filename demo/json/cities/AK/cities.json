@@ -2,19 +2,19 @@
     "cities": [
         {
             "id": 1,
-            "city": "Anchorage"
-        },
-        {
-            "id": 2,
             "city": "Fairbanks"
         },
         {
-            "id": 3,
+            "id": 2,
             "city": "Juneau"
         },
         {
-            "id": 4,
+            "id": 3,
             "city": "Sitka"
+        },
+        {
+            "id": 4,
+            "city": "Anchorage"
         }
     ]
 }
