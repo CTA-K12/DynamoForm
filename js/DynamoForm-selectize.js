@@ -448,13 +448,13 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
     }
 
     /**
-     *  data-load-url: null
+     *  data-load-type: null
      *
      *  The data-load-[*] attributes define the necessary selectize options for
-     *  remote data fetching. You must define the data-load-url attribute to
+     *  remote data fetching. You must define the data-load-type attribute to
      *  trigger the functionality.
      */
-    if ('undefined' !==  typeof formElement.attr('data-load-url')) {
+    if ('undefined' !==  typeof formElement.attr('data-load-type')) {
         // Determine if preload is in use
         var requestPreload = false;
         if('undefined' !==  typeof _options.preload) {
@@ -477,13 +477,40 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
  */
 function processSelectizeLoadOptions(formElement, requestPreload) {
 
-    var loadUrl = formElement.attr('data-load-url');
-
-    // data-load-type: 'GET'
-    var loadType = 'GET';
+    // data-load-type: null
     if ('undefined' !==  typeof formElement.attr('data-load-type')) {
-        loadType = formElement.attr('data-load-type');
+        loadType = formElement.attr('data-load-type').toUpperCase();
     }
+
+    /*
+     * If loadType is GET|POST, grab url to load data from or throw error
+     *
+     * If loadType is CALLBACK, grab callback function to load data from or
+     * throw error.
+     *
+     * Throw error on any other loadType
+     */
+    if ('GET' == loadType || 'POST' == loadType) {
+        if ('undefined' !==  typeof formElement.attr('data-load-url')) {
+            var loadUrl = formElement.attr('data-load-url');
+        }
+        else {
+            throw 'No URL provided, please set the data-load-url attribute';
+        }
+    }
+    else if ('CALLBACK' == loadType) {
+        if ('undefined' !==  typeof formElement.attr('data-load-callback')) {
+            var loadCallback = formElement.attr('data-load-callback');
+
+        }
+        else {
+            throw 'No callback provided, please set the data-load-callback attribute';
+        }
+    }
+    else {
+        throw 'Load type: ' + loadType + ' is invalid, please check data-load-type attribute';
+    }
+
 
     // data-load-resultSet-limit: 10
     var loadLimit = 10;
@@ -497,40 +524,64 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
         loadKey = formElement.attr('data-load-resultSet-key');
     }
 
-    // data-load-url-vars: null
-    var loadUrlVars = [];
-    if ('undefined' !==  typeof formElement.attr('data-load-url-vars')) {
-        try {
-            loadUrlVars = JSON.parse(formElement.attr('data-load-url-vars'));
-        } catch (e) {}
 
-        //Update URL with var data
-        $.each(loadUrlVars, function(k, v) {
-            var re = new RegExp('\\{' + k + '\\}', 'g');
-            loadUrl = loadUrl.replace(re, v);
-        });
-    }
+    // If GET|POST type, build out ajax based option
+    if ('GET' == loadType || 'POST' == loadType) {
 
-    // Build load option
-    var _load =
-        function(query, callback) {
-            // Don't search if query string is empty, unless pre-loading
-            if (!requestPreload && !query.length) return callback();
-            $.ajax({
-                url: loadUrl + '/' + encodeURIComponent(query),
-                type: loadType,
-                error: function() {
-                    callback();
-                },
-                success: function(res) {
-                    if (loadKey) {
-                        callback(res[loadKey].slice(0, loadLimit));
-                    } else {
-                        callback(res.slice(0, loadLimit));
-                    }
-                }
+        // data-load-url-vars: null
+        var loadUrlVars = [];
+        if ('undefined' !==  typeof formElement.attr('data-load-url-vars')) {
+            try {
+                loadUrlVars = JSON.parse(formElement.attr('data-load-url-vars'));
+            } catch (e) {}
+
+            //Update URL with var data
+            $.each(loadUrlVars, function(k, v) {
+                var re = new RegExp('\\{' + k + '\\}', 'g');
+                loadUrl = loadUrl.replace(re, v);
             });
-        };
+        }
+
+        // Build load option
+        var _load =
+            function(query, callback) {
+                // Don't search if query string is empty, unless pre-loading
+                if (!requestPreload && !query.length) return callback();
+                $.ajax({
+                    url: loadUrl + '/' + encodeURIComponent(query),
+                    type: loadType,
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        if (loadKey) {
+                            callback(res[loadKey].slice(0, loadLimit));
+                        } else {
+                            callback(res.slice(0, loadLimit));
+                        }
+                    }
+                });
+            };
+    }
+    // If CALLBACK type, build out callback based option
+    else if ('CALLBACK' == loadType) {
+
+        // Build load option
+        var _load =
+            function(query, callback) {
+                // Don't search if query string is empty, unless pre-loading
+                if (!requestPreload && !query.length) {
+                     return callback();
+                }
+
+                if (loadKey) {
+                    callback(window[loadCallback](query)[loadKey].slice(0, loadLimit));
+                }
+                else {
+                    callback(window[loadCallback](query).slice(0, loadLimit));
+                }
+            };
+    }
 
     return _load;
 }
@@ -647,37 +698,37 @@ function processSelectizeChainedChild(childElement) {
  *
  */
 Selectize.define('typing_mode', function(options) {
-	var self = this;
+    var self = this;
 
-	this.setup = (function() {
-		var original = self.setup;
+    this.setup = (function() {
+        var original = self.setup;
 
-		return function() {
-			original.apply(this, arguments);
+        return function() {
+            original.apply(this, arguments);
 
-			this.on('dropdown_open', function() {
-				self.typingValue = self.typingValue || self.getValue()
-				var option = self.getOption(self.typingValue);
+            this.on('dropdown_open', function() {
+                self.typingValue = self.typingValue || self.getValue()
+                var option = self.getOption(self.typingValue);
 
-				self.$control_input.attr('placeholder', option.text().trim());
-				self.$control_input.css({
-					opacity: '1',
-					width: '100%',
-					position: 'relative'
-				});
-				self.$control.find('.item').hide();
+                self.$control_input.attr('placeholder', option.text().trim());
+                self.$control_input.css({
+                    opacity: '1',
+                    width: '100%',
+                    position: 'relative'
+                });
+                self.$control.find('.item').hide();
 
-				self.items = [];
-				self.setCaret(0);
-			});
+                self.items = [];
+                self.setCaret(0);
+            });
 
-			this.on('change', function() {
-				self.typingValue = self.getValue();
-			});
+            this.on('change', function() {
+                self.typingValue = self.getValue();
+            });
 
-			this.$control_input.on('blur', function() {
-				self.setValue(self.typingValue);
-			});
-		};
-	})();
+            this.$control_input.on('blur', function() {
+                self.setValue(self.typingValue);
+            });
+        };
+    })();
 });

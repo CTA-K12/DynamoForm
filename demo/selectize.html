@@ -50,14 +50,14 @@
           <select id="state" class="form-control dynamo-selectize"
             data-chain-child='["city"]'
             data-preload="true"
-            data-load-type="GET"
-            data-load-url="json/states.json?"
+            data-load-type="callback"
+            data-load-callback="loadStates"
             data-load-resultSet-key="states"
             data-load-resultSet-limit="10"
             data-valueField="abbr"
             data-labelField="description"
             data-searchField='["abbr","description"]'
-            data-render-option='&#x3C;div&#x3E;&#x3C;strong&#x3E;{abbr}&#x3C;/strong&#x3E; - {description}&#x3C;/div&#x3E;'
+            data-render-option='<div><strong>{abbr}</strong> - {description}</div>'
           >
             <option value="">Choose State</option>
           </select>
@@ -147,5 +147,35 @@
 
   <!-- DynamoForm-Selectize Library -->
   <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script>
+
+  <!-- Example - Load By Callback option -->
+  <script>
+    function loadStates(search) {
+      return {
+        "states": [
+            {
+                "id": 1,
+                "abbr": "AK",
+                "description": "Alaska"
+            },
+            {
+                "id": 2,
+                "abbr": "CA",
+                "description": "California"
+            },
+            {
+                "id": 3,
+                "abbr": "OR",
+                "description": "Oregon"
+            },
+            {
+                "id": 4,
+                "abbr": "WA",
+                "description": "Washington"
+            }
+        ]
+      };
+    }
+  </script>
 
 </html>
