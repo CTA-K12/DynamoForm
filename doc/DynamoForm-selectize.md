@@ -133,20 +133,19 @@ html attribute value in single quotes. See example below:
 
 Selectize.js has a `load` option to specify a function for loading remote
 data. To trigger the load option to be built by dynamo-selectize you must specify
-at least the`data-load-url` attribute. There are 4 attributes you can use to
+at least the`data-load-type` attribute. There are 4 attributes you can use to
 customize the remote fetch:
+
+* data-load-type : The http method to use for the fetch. GET | POST
 
 * data-load-url : The URL to fetch data from. The users search text will be
 appended to the URL.
-
-* data-load-type : The http method to use for the fetch. Defaults to `GET`
 
 * data-load-resultSet-limit: The max number of records from remote fetch.
 Default: 10
 
 * data-load-resultSet-key: The object key under which your data can be found.
 Default: null
-
 
       If your remote source returns multiple types of data, for instance
       a list of beverages and a list of food items, and you only want the
@@ -206,6 +205,71 @@ Default: null
 > in the selectize'd input. If you would like to `preload` data when the
 > selectize'd input is initialized, use the `data-preload` attribute.
 
+
+#### Loading data from a callback
+
+You can also load data via a callback, or custom function you have written to
+return data in a JSON format. This is helpful if you want to load data with a
+custom transport method that can not be handled easily via simple GET or POST.
+
+* data-load-type : Set to `callback`
+
+* data-load-callback : The custom function you want to call to load your data.
+
+* data-load-resultSet-limit: The max number of records from remote fetch.
+Default: 10
+
+* data-load-resultSet-key: The object key under which your data can be found.
+Default: null
+
+
+      If your remote source returns multiple types of data, for instance
+      a list of beverages and a list of food items, and you only want the
+      beverage list you would specify the key name for the beverage list.
+
+
+``` html
+<select id="state" class="form-control dynamo-selectize"
+  data-preload="true"
+  data-load-type="callback"
+  data-load-callback="loadStates"
+  data-load-resultSet-key="states"
+  data-load-resultSet-limit="10"
+  data-valueField="abbr"
+  data-labelField="description"
+  data-searchField='["abbr","description"]'
+>
+</select>
+
+<script>
+    function loadStates(search) {
+      return {
+        "states": [
+            {
+                "id": 1,
+                "abbr": "AK",
+                "description": "Alaska"
+            },
+            {
+                "id": 2,
+                "abbr": "CA",
+                "description": "California"
+            },
+            {
+                "id": 3,
+                "abbr": "OR",
+                "description": "Oregon"
+            },
+            {
+                "id": 4,
+                "abbr": "WA",
+                "description": "Washington"
+            }
+        ]
+      };
+    }
+  </script>
+```
 
 #### Working with dependencies - Chaining elements
 
@@ -330,9 +394,18 @@ option list. I develop the following html to display my options:
 ```
 
 The varible names between braces `{abbr}` and `{description}` match the
-property names from my json data above. The html needs to be encoded as html
-entities to prevent the web broswer from trying to render it in the middle of
-my input element. Below is the final product:
+property names from my json data above. Below is the final product:
+
+
+``` html
+<select id="state" class="dynamo-selectize"
+    data-render-option='<div><strong>{abbr}</strong> - {description}</div>'
+>
+```
+
+You may find the html needs to be encoded as html entities to prevent the web
+broswer from trying to render the html in the middle of the input element.
+The example below uses html entities:
 
 
 ``` html
