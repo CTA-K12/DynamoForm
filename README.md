@@ -16,10 +16,6 @@ removed from a form by the end user as needed.
 Enable the use Brian Reavis's popular selectize.js library using html
 attributes without writing any javascript.
 
-**DynamoForm-datetimepicker:**
-Enable the use Brian Reavis's popular selectize.js library using html
-attributes without writing any javascript.
-
 ### Docs
 
 [DynamoForm-datetimepicker](https://github.com/MESD/DynamoForm/blob/master/doc/DynamoForm-datetimepicker.md "DynamoForm-datetimepicker Docs")
