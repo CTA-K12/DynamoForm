@@ -679,10 +679,10 @@ function processSelectizeChainedChild(childElement) {
         childElement.attr('data-load-url-vars', JSON.stringify(parentValues));
 
         // Build new selectize options
-        var _options = buildSelectizeOptionsObject(childElement);
+        var options = buildSelectizeOptionsObject(childElement);
 
         // Re-create selectize control with new options
-        childElement.selectize(_options);
+        childElement.selectize(options);
     }
 
     //Trigger change event to cascade to dependent grand-children

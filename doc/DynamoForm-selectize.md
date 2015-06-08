@@ -241,34 +241,45 @@ Default: null
 >
 </select>
 
+
 <script>
-    function loadStates(search) {
-      return {
+  var dynamoCallbacks = {
+    loadKey:    null,
+    loadLimit:  10,
+    loadStates: function (query, selectizeCallback) {
+      var data = {
         "states": [
-            {
-                "id": 1,
-                "abbr": "AK",
-                "description": "Alaska"
-            },
-            {
-                "id": 2,
-                "abbr": "CA",
-                "description": "California"
-            },
-            {
-                "id": 3,
-                "abbr": "OR",
-                "description": "Oregon"
-            },
-            {
-                "id": 4,
-                "abbr": "WA",
-                "description": "Washington"
-            }
+          {
+            "id": 1,
+            "abbr": "AK",
+            "description": "Alaska"
+          },
+          {
+              "id": 2,
+              "abbr": "CA",
+              "description": "California"
+          },
+          {
+              "id": 3,
+              "abbr": "OR",
+              "description": "Oregon"
+          },
+          {
+              "id": 4,
+              "abbr": "WA",
+              "description": "Washington"
+          }
         ]
       };
+      if (null !== this.loadKey) {
+        selectizeCallback(data[this.loadKey].slice(0, this.loadLimit));
+      }
+      else {
+        selectizeCallback(data.slice(0, this.loadLimit));
+      }
     }
-  </script>
+  }
+</script>
 ```
 
 #### Working with dependencies - Chaining elements
