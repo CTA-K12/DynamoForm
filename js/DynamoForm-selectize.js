@@ -566,22 +566,22 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
     // If CALLBACK type, build out callback based option
     else if ('CALLBACK' == loadType) {
 
-        // Build load option
-        var _load =
-            function(query, callback) {
-                // Don't search if query string is empty, unless pre-loading
-                if (!requestPreload && !query.length) {
-                     return callback();
-                }
+        // Don't search if query string is empty, unless pre-loading
+        if (!requestPreload && !query.length) {
+            var _load = function(query, callback) {
+                    return callback();
+                };
+        }
 
-                if (loadKey) {
-                    callback(window[loadCallback](query)[loadKey].slice(0, loadLimit));
-                }
-                else {
-                    callback(window[loadCallback](query).slice(0, loadLimit));
-                }
-            };
+        // Set load parameters
+        dynamoCallbacks.loadKey   = loadKey;
+        dynamoCallbacks.loadLimit = loadLimit;
+
+        // Build load option
+        var _load = dynamoCallbacks[loadCallback].bind(dynamoCallbacks);
+
     }
+
 
     return _load;
 }

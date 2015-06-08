@@ -53,7 +53,7 @@
             data-load-type="callback"
             data-load-callback="loadStates"
             data-load-resultSet-key="states"
-            data-load-resultSet-limit="10"
+            data-load-resultSet-limit="100"
             data-valueField="abbr"
             data-labelField="description"
             data-searchField='["abbr","description"]'
@@ -150,32 +150,44 @@
 
   <!-- Example - Load By Callback option -->
   <script>
-    function loadStates(search) {
-      return {
-        "states": [
-            {
+      var dynamoCallbacks = {
+        loadKey:    null,
+        loadLimit:  10,
+        loadStates: function (query, selectizeCallback) {
+          var data = {
+            "states": [
+              {
                 "id": 1,
                 "abbr": "AK",
                 "description": "Alaska"
-            },
-            {
-                "id": 2,
-                "abbr": "CA",
-                "description": "California"
-            },
-            {
-                "id": 3,
-                "abbr": "OR",
-                "description": "Oregon"
-            },
-            {
-                "id": 4,
-                "abbr": "WA",
-                "description": "Washington"
-            }
-        ]
-      };
-    }
+              },
+              {
+                  "id": 2,
+                  "abbr": "CA",
+                  "description": "California"
+              },
+              {
+                  "id": 3,
+                  "abbr": "OR",
+                  "description": "Oregon"
+              },
+              {
+                  "id": 4,
+                  "abbr": "WA",
+                  "description": "Washington"
+              }
+            ]
+          };
+          if (null !== this.loadKey) {
+            selectizeCallback(data[this.loadKey].slice(0, this.loadLimit));
+          }
+          else {
+            selectizeCallback(data.slice(0, this.loadLimit));
+          }
+        }
+      }
   </script>
+
+
 
 </html>
