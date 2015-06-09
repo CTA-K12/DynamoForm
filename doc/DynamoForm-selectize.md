@@ -243,7 +243,7 @@ Default: {}
 
 <script>
 
-  // Create a new object called `dynamoCallbacks` to hold your custom
+  // Create a new object called "dynamoCallbacks" to hold your custom
   // data load functions.
   var dynamoCallbacks = {
 
@@ -258,14 +258,14 @@ Default: {}
     loadStates: function (query, selectizeCallback) {
 
       // These are not required to be locally scoped, but doing so can help
-      // prevent issues in functions you may create below, where `this` may be
+      // prevent issues in functions you may create below, where "this" may be
       // pointed at a different scope.
       loadLimit = this.loadLimit;
       loadKey   = this.loadKey;
       loadData  = this.loadData;
 
       // You can access any custom data passed in from the
-      // `data-load-callback-data` attribute via the `loadData` object.
+      // "data-load-callback-data" attribute via the "loadData" object.
       searchDate = typeof loadData.searchDate !== 'undefined' ? loadData.searchDate : null;
 
       // Optionally, prevent search from running if searchTerm string is empty,
