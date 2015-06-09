@@ -254,7 +254,10 @@ Default: {}
     loadKey:    null,
     loadLimit:  10,
 
-    // Now Specify one or more custom data functions
+    // Now Specify one or more custom data anonymous functions. The function(s)
+    // must have two arguments:
+    //   query: The value the user typed into the ajax selector
+    //   selectizeCallback: The callback function that will return the data
     loadStates: function (query, selectizeCallback) {
 
       // These are not required to be locally scoped, but doing so can help
