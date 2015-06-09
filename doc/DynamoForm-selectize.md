@@ -222,7 +222,7 @@ Default: 10
 * data-load-resultSet-key: The object key under which your data can be found.
 Default: null
 
-* data-load-callback-data: Any custom data you want to make available to your custom function
+* data-load-callback-data: Any custom data you want to make available to your custom function.
 Default: {}
 
 
@@ -300,7 +300,7 @@ Default: {}
         ]
       };
 
-      // Returns your custom data, or a sub-set of it, using the
+      // Return your custom data, or a sub-set of it, using the
       // data-load-resultSet-key and data-load-resultSet-limit attributes
       // specified on your element.
       if (null !== loadKey) {
