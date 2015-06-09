@@ -497,17 +497,14 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
         else {
             throw 'No URL provided, please set the data-load-url attribute';
         }
-    }
-    else if ('CALLBACK' == loadType) {
+    } else if ('CALLBACK' == loadType) {
         if ('undefined' !==  typeof formElement.attr('data-load-callback')) {
             var loadCallback = formElement.attr('data-load-callback');
 
-        }
-        else {
+        } else {
             throw 'No callback provided, please set the data-load-callback attribute';
         }
-    }
-    else {
+    } else {
         throw 'Load type: ' + loadType + ' is invalid, please check data-load-type attribute';
     }
 
@@ -563,25 +560,31 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
                 });
             };
     }
-    // If CALLBACK type, build out callback based option
+    // If CALLBACK type, build a custom callback based load option
     else if ('CALLBACK' == loadType) {
 
-        // Don't search if query string is empty, unless pre-loading
-        if (!requestPreload && !query.length) {
-            var _load = function(query, callback) {
-                    return callback();
-                };
+        // Get any custom data from form elment
+        if ('undefined' !==  typeof formElement.attr('data-load-callback-data')) {
+            try {
+                loadData = JSON.parse(formElement.attr('data-load-callback-data'));
+            } catch (e) {
+                loadData = {};
+            }
+        } else {
+            loadData = {};
         }
 
-        // Set load parameters
+        // Add preload status bool to loadData object
+        loadData.requestPreload = requestPreload;
+
+        // Set load parameters in user defined dynamoCallbacks object
         dynamoCallbacks.loadKey   = loadKey;
         dynamoCallbacks.loadLimit = loadLimit;
+        dynamoCallbacks.loadData  = loadData;
 
         // Build load option
         var _load = dynamoCallbacks[loadCallback].bind(dynamoCallbacks);
-
     }
-
 
     return _load;
 }
@@ -679,10 +682,10 @@ function processSelectizeChainedChild(childElement) {
         childElement.attr('data-load-url-vars', JSON.stringify(parentValues));
 
         // Build new selectize options
-        var options = buildSelectizeOptionsObject(childElement);
+        var _options = buildSelectizeOptionsObject(childElement);
 
         // Re-create selectize control with new options
-        childElement.selectize(options);
+        childElement.selectize(_options);
     }
 
     //Trigger change event to cascade to dependent grand-children

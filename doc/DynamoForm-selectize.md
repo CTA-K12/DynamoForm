@@ -206,7 +206,7 @@ Default: null
 > selectize'd input is initialized, use the `data-preload` attribute.
 
 
-#### Loading data from a callback
+#### Loading data from a custom function
 
 You can also load data via a callback, or custom function you have written to
 return data in a JSON format. This is helpful if you want to load data with a
@@ -222,10 +222,8 @@ Default: 10
 * data-load-resultSet-key: The object key under which your data can be found.
 Default: null
 
-
-      If your remote source returns multiple types of data, for instance
-      a list of beverages and a list of food items, and you only want the
-      beverage list you would specify the key name for the beverage list.
+* data-load-callback-data: Any custom data you want to make available to your custom function
+Default: {}
 
 
 ``` html
@@ -233,6 +231,7 @@ Default: null
   data-preload="true"
   data-load-type="callback"
   data-load-callback="loadStates"
+  data-load-callback-data='{"searchDate": "05/05/2015"}'
   data-load-resultSet-key="states"
   data-load-resultSet-limit="10"
   data-valueField="abbr"
@@ -243,10 +242,39 @@ Default: null
 
 
 <script>
+
+  // Create a new object called `dynamoCallbacks` to hold your custom
+  // data load functions.
   var dynamoCallbacks = {
+
+    // These properties are set automatically by DynamoForm-Selectize, using
+    // values from the html data attributes on your element. The values
+    // specified below are the default values.
+    loadData:   {},
     loadKey:    null,
     loadLimit:  10,
+
+    // Now Specify one or more custom data functions
     loadStates: function (query, selectizeCallback) {
+
+      // These are not required to be locally scoped, but doing so can help
+      // prevent issues in functions you may create below, where `this` may be
+      // pointed at a different scope.
+      loadLimit = this.loadLimit;
+      loadKey   = this.loadKey;
+      loadData  = this.loadData;
+
+      // You can access any custom data passed in from the
+      // `data-load-callback-data` attribute via the `loadData` object.
+      searchDate = typeof loadData.searchDate !== 'undefined' ? loadData.searchDate : null;
+
+      // Optionally, prevent search from running if searchTerm string is empty,
+      // unless data-preload is enabled.
+      if (!loadData.requestPreload && !searchTerm.length) {
+          return {};
+      }
+
+      // Get your custom data here
       var data = {
         "states": [
           {
@@ -271,13 +299,20 @@ Default: null
           }
         ]
       };
-      if (null !== this.loadKey) {
-        selectizeCallback(data[this.loadKey].slice(0, this.loadLimit));
+
+      // Returns your custom data, or a sub-set of it, using the
+      // data-load-resultSet-key and data-load-resultSet-limit attributes
+      // specified on your element.
+      if (null !== loadKey) {
+        selectizeCallback(data[loadKey].slice(0, loadLimit));
       }
       else {
-        selectizeCallback(data.slice(0, this.loadLimit));
+        selectizeCallback(data.slice(0, loadLimit));
       }
+
     }
+
+    // Add more custom functions as needed
   }
 </script>
 ```
