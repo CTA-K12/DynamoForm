@@ -574,7 +574,7 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
             loadData = {};
         }
 
-        // Add preload status bool to loadData object
+        // Add the preload status bool to loadData object
         loadData.requestPreload = requestPreload;
 
         // Set load parameters in user defined dynamoCallbacks object
