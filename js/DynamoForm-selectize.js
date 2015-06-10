@@ -256,6 +256,14 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
         }
     }
 
+    // data-dropdownOffsetWidth: null
+    if ('undefined' !==  typeof formElement.attr('data-dropdownOffsetWidth')) {
+        //If defined any way other than a number, use selectize default
+        if (NaN !== parseInt(formElement.attr('data-dropdownOffsetWidth'))) {
+            _options.dropdownOffsetWidth = parseInt(formElement.attr('data-dropdownOffsetWidth'));
+        }
+    }
+
    // data-addPrecedence: false
     if ('undefined' !==  typeof formElement.attr('data-addPrecedence')) {
         //If defined any way other than string 'true', use selectize default

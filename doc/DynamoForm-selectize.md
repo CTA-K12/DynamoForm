@@ -64,6 +64,7 @@ project page for more details about these options.
     data-loadThrottle="300"
     data-preload="false"
     data-dropdownParent="null"
+    data-dropdownOffsetWidth="null"   <-- only custom selectize
     data-addPrecedence="false"
     data-selectOnTab="false"
     data-options='[]'
