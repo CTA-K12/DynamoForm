@@ -64,15 +64,19 @@
                   <div class="col-md-2">
                     <select id="country_1" class="form-control dynamo-selectize"
                       data-chain-child='["state_1"]'
-                      data-preload="true"
-                      data-load-type="callback"
-                      data-load-callback="loadStates"
-                      data-load-resultSet-key="states"
-                      data-load-resultSet-limit="100"
-                      data-valueField="abbr"
-                      data-labelField="description"
-                      data-searchField='["abbr","description"]'
-                      data-render-option='<div><strong>{abbr}</strong> - {description}</div>'
+                      data-valueField="value"
+                      data-labelField="text"
+                      data-searchField='["text"]'
+                      data-options='[
+                        {
+                          "value": 1,
+                          "text": "US"
+                        },
+                        {
+                          "value": 2,
+                          "text": "Canada"
+                        }
+                      ]'
                       data-dropdownOffsetWidth="100"
                     >
                       <option value="">Choose Country</option>
@@ -85,6 +89,8 @@
                       data-chain-parent-deactivate='{ "country_1": [ "2", "5" ] }'
                       data-chain-child='["city_1"]'
                       data-preload="focus"
+                      data-load-type="callback"
+                      data-load-callback="loadStates"
                       data-load-type="GET"
                       data-load-url="json/states.json?"
                       data-load-resultSet-key="states"
