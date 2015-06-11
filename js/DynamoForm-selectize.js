@@ -115,7 +115,7 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
     var _options = {};
 
     // Enable typing mode plugin by default
-    _options.plugins = ['typing_mode'];
+    _options.plugins = ['typing_mode', 'item_nowrap'];
 
     // data-diacritics: true
     if ('undefined' !==  typeof formElement.attr('data-diacritics')) {
