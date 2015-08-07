@@ -85,7 +85,7 @@ $(document).ready(function() {
             $.each(selectizeElements, function(key, value) {
                 selectizedObject = lastRow.find('select#'+key)[0].selectize;
                 selectizedObject.addOption(value.inputOptions);
-                selectizedObject.setValue(value.inputValue);
+                selectizedObject.setValue(value.inputValue, true);
             });
         }
 
