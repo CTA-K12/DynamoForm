@@ -84,7 +84,9 @@ $(document).ready(function() {
             // Copy back options and values to cloned row
             $.each(selectizeElements, function(key, value) {
                 selectizedObject = lastRow.find('select#'+key)[0].selectize;
-                selectizedObject.addOption(value.inputOptions);
+                $.each(value.inputOptions, function(key, value) {
+                    selectizedObject.addOption(value);
+                });
                 selectizedObject.setValue(value.inputValue, true);
             });
         }
