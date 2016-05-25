@@ -53,6 +53,7 @@
   color: #000000;
 }
 .plugin-item_nowrap.selectize-control.single .selectize-input {
+  height: 30px;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -133,6 +134,15 @@
 .selectize-control.plugin-remove_button .disabled [data-value] .remove {
   border-left-color: #ffffff;
 }
+.selectize-control.plugin-remove_button .remove-single {
+  position: absolute;
+  right: 34px;
+  top: 7px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
 .selectize-control {
   position: relative;
 }

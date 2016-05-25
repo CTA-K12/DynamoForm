@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <title>DynamoForm-selectize</title>
 
+      <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
       <!-- Bootstrap, HTML5 shim, & Respond.js are not required for selectize -->
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap-theme.min.css">
@@ -48,7 +50,7 @@
       <div class="form-group">
         <label for="state"  class="col-md-3 control-label">State</label>
         <div class="col-md-6">
-          <select id="state" class="form-control dynamo-selectize"
+          <select id="state" class="form-control dynamo-selectize" readonly="readonly"
             data-chain-child='["city"]'
             data-preload="true"
             data-load-type="callback"
@@ -147,8 +149,7 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
   <!-- DynamoForm-Selectize Library -->
-  <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js">
-
+  <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script>
 
   <!-- Example - Load By Callback option -->
   <script>

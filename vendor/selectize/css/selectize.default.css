@@ -52,6 +52,7 @@
   color: #000000;
 }
 .plugin-item_nowrap.selectize-control.single .selectize-input {
+  height: 30px;
   white-space: nowrap;
   overflow: hidden;
 }

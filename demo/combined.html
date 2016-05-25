@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <title>DynamoForm</title>
 
+      <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
       <!-- Bootstrap, HTML5 shim, & Respond.js are not required for selectize -->
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap-theme.min.css">
@@ -44,7 +46,7 @@
 
                 <div class="dynamo-formset-row form-group">
 
-                  <label for="dataset_1"  class="col-md-2 control-label" data-dynamo-relabel="true">Dataset 1</label>
+                  <label for="dataset_1"  class="col-md-1 control-label" data-dynamo-relabel="true">Row 1</label>
 
                   <div class="col-md-2">
                     <div class="input-group dynamo-datepicker" data-format="MM/DD/YYYY" >
@@ -93,7 +95,7 @@
                       data-chain-parent='["country_1"]'
                       data-chain-parent-deactivate='{ "country_1": [ "2", "5" ] }'
                       data-chain-child='["city_1"]'
-                      data-preload="focus"
+                      data-preload="true"
                       data-load-type="callback"
                       data-load-callback="loadStates"
                       data-load-type="GET"
@@ -112,7 +114,7 @@
                   <div class="col-md-2">
                     <select id="city_1" class="form-control dynamo-selectize"
                       data-chain-parent='["state_1"]'
-                      data-preload="focus"
+                      data-preload="true"
                       data-load-type="GET"
                       data-load-url="json/cities/{state_1}/cities.json?"
                       data-load-resultSet-key="cities"
@@ -123,6 +125,10 @@
                     >
                       <option value="">Choose City</option>
                     </select>
+                  </div>
+
+                  <div class="col-md-2">
+                    <input type="text" id="zip_1" name="zip_1" class="form-control" placeholder="Enter Zip">
                   </div>
 
                   <div class="col-md-1">
@@ -150,6 +156,7 @@
   <!-- Modified Selectize Library is required for DynamoForm-Selectize -->
   <script src="//rawgit.com/MESD/dynamoForm/master/vendor/selectize/js/selectize.min.js"></script>
 
+
   <!-- Bootstrap is not required for Selectize -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
@@ -161,8 +168,9 @@
 
   <!-- DynamoForm Libraries -->
   <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-formset.js"></script>
+
   <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script>
-  <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-datetimepicker.js"></script>
+    <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-datetimepicker.js"></script>
 
   <!-- Example - Load By Callback option -->
   <script>
