@@ -3,7 +3,7 @@
 Enable the use of Brian Reavis's popular selectize.js library using html
 attributes, without writing any javascript.
 
-**Status:** Beta (March 11, 2015)
+**Status:** Beta (May 23, 2016)
 
 **To Do:**
 * Add custom rendering support for items from a data attribute.
