@@ -4,15 +4,13 @@ A jquery based dynamic formset generator with support for Selectize.js via Dynam
 
 ![DynamoForm Example](https://github.com/MESD/DynamoForm/blob/master/demo/DynamoForm-formset.png "DynamoForm Example")
 
-**Note:** (March 11, 2015)
+**Note:** (May 25, 2016)
 At the moment, for cloning of rows to work with selectize'd fields, you need a new API method
 called getOptions() for selectize.js. I have submitted a pull request to the selectize.js
 project for this method. [selectize.js - Pull Request #735](https://github.com/brianreavis/selectize.js/pull/735)
+At this time it's best just to use the version of Selectize in the vendor directory of this repo.
 
-**Status:** Beta (March 11, 2015)
-
-**To Do:**
-* Add prototype option for row creation (apoosed to copying last row)
+**Status:** Beta (May 25, 2016)
 
 ## Usuage
 
@@ -95,5 +93,26 @@ Here is the same email address collection formset using bootstrap based form cod
   <div class="col-md-offset-3 col-md-2">
     <button type="button" class="btn btn-default dynamo-formset-row-add">Add Email</button>
   </div>
+</div>
+```
+
+### Prototype Example:
+
+Here is the first example agin, this time using a `prototype` for the row
+definition. This is helpful in situations where you may start (and end) with
+zero rows in your formset.
+
+The only difference in this configuration is the addition of an attribute
+called `data-prototype`. The value of this attribute will be the html for
+your formset row. The html may need to be encoded as html entities to prevent
+the browser from attempting to render the prototype.
+
+
+``` html
+<div
+  class="dynamo-formset"
+  data-prototype="<div class="dynamo-formset-row"><label>Email</label><input type="text" id="user_email_1" name="user[email][1]" /><button type="button" class="dynamo-formset-row-delete">Delete</button></div>"
+>
+    <button type="button" class="dynamo-formset-row-add">Add Email</button>
 </div>
 ```
