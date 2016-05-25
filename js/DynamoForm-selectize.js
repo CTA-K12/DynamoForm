@@ -67,18 +67,19 @@ function initDynamoSelectize(formElements, disablePreLoad) {
     // Enable Selectize on each element
     $.each(formElements, function() {
 
-        // Parse the elements attribute options into the selectize format.
-        var options = buildSelectizeOptionsObject($(this), disablePreLoad);
-
-        // Enable selectize on the element with the desired option
-        // configuration.
-        $(this).selectize(options);
-
         // Determine if chaining is in use on element. If yes, track the element
         // in the chainedChildren array to be processed once all elements have
         // been initialized.
         if ('undefined' !==  typeof $(this).attr('data-chain-parent')) {
             chainedChildren.push($(this));
+        }
+        else {
+            // Parse the elements attribute options into the selectize format.
+            var options = buildSelectizeOptionsObject($(this), disablePreLoad);
+
+            // Enable selectize on the element with the desired option
+            // configuration.
+            $(this).selectize(options);
         }
     });
 
@@ -627,10 +628,27 @@ function processSelectizeChainedChild(childElement) {
             parentValues[id] = $('#' + id).val();
         }
         else {
-            // One of the parents has no value yet. Exit, we'll attempt to
-            // enable the child again upon next parent update.
-            childElement[0].selectize.setValue("");
-            childElement[0].selectize.disable();
+            // One of the parents has no value yet. Disable and clear
+            // this child. We'll attempt to enable the child again upon
+            // the next parent update.
+            //
+            // If Selectize has already been initialized on this child, clear
+            // the value and disable.
+            if(childElement[0].selectize) {
+                childElement[0].selectize.setValue("");
+                childElement[0].selectize.disable();
+            }
+            // If Selectize has not been initialized yet, then initialize
+            // now and disable.
+            else {
+                 // Build new selectize options with preload disabled
+                var _options = buildSelectizeOptionsObject(childElement, true);
+
+                // Create selectize control with new options
+                childElement.selectize(_options);
+                childElement[0].selectize.setValue("");
+                childElement[0].selectize.disable();
+            }
             parentDependencyMet = false;
         }
     });
@@ -677,25 +695,24 @@ function processSelectizeChainedChild(childElement) {
     }
 
 
+    // Dependencies have been met. Re-Build selectize control with
+    // new options.
+
     // Ensure child is enabled
     childElement[0].selectize.enable();
 
-    // Re-Build selectize control with new options if needed
-    if ('undefined' !==  typeof childElement.attr('data-load-url')) {
+    // Destroy existing selectize control
+    childElement[0].selectize.destroy();
 
-        // Destroy existing selectize control
-        childElement[0].selectize.destroy();
+    // Set data-load-url-vars attribute with values from parent elements
+    childElement.attr('data-load-url-vars', JSON.stringify(parentValues));
 
-        // Set data-load-url-vars attribute with values from parent elements
-        childElement.attr('data-load-url-vars', JSON.stringify(parentValues));
+    // Build new selectize options
+    var _options = buildSelectizeOptionsObject(childElement);
 
-        // Build new selectize options
-        var _options = buildSelectizeOptionsObject(childElement);
+    // Re-create selectize control with new options
+    childElement.selectize(_options);
 
-        // Re-create selectize control with new options
-        childElement.selectize(_options);
-    }
-
-    //Trigger change event to cascade to dependent grand-children
+    // Trigger change event to cascade to dependent grand-children
     childElement.change();
 }
