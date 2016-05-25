@@ -21,24 +21,37 @@ $(document).ready(function() {
         // Find the parent dynamo-formset
         var dynamoForm = $(this).closest('.dynamo-formset');
 
+        // Find the number of exisiting rows
+        var rowCount = dynamoForm.find('.dynamo-formset-row').size();
+
         // Determine if Max Rows is specified
         var maxRows = dynamoForm.attr('data-max-rows');
         if (undefined !== maxRows) {
             // Determine if Max Rows is exceeded and return false now if
             // yes. The add row button should be disabled if max rows has
             // been reached. This check is in here as a precaution.
-            if (dynamoForm.find('.dynamo-formset-row').size() >= maxRows) {
+            if (rowCount >= maxRows) {
                 return false;
             }
         }
 
-        // Find last row
-        var lastRow = dynamoForm.find('.dynamo-formset-row').last();
+        // Determine if a prototype is defined, if not, use one of
+        // the exisiting rows as a the prototype definition.
+        var usingPrototype = false;
+        if ('undefined' !==  typeof dynamoForm.attr('data-prototype')) {
+            var prototypeHtml = dynamoForm.attr('data-prototype');
+            baseRow = $($.parseHTML(prototypeHtml));
+            usingPrototype = true;
+        }
+        else {
+            // Find last row
+            var baseRow = dynamoForm.find('.dynamo-formset-row').last();
+        }
 
         // Determine if dynamo-selectize is in use and disable for cloning
         // purposes.
         var selectizeElements = {};
-        lastRow.find('select').each(function() {
+        baseRow.find('select').each(function() {
             if ($(this)[0].selectize) {
                 // Store current seletize options and values to restore later.
                 selectizeElements[$(this).attr('id')] = {
@@ -51,12 +64,22 @@ $(document).ready(function() {
 
         // Determine if dynamo-datetimepicker is in use and disable for
         // cloning purposes.
-        lastRow.find('.dynamo-datepicker').each(function() {
-            $(this).data('DateTimePicker').destroy();
+        baseRow.find('.dynamo-datepicker').each(function() {
+            if ($(this).data('DateTimePicker')) {
+                $(this).data('DateTimePicker').destroy();
+            }
         });
 
-        // Clone last row and insert at end of formset
-        var newRow = lastRow.clone().insertAfter(lastRow);
+        // Clone base row (prototype or last row)
+        // If no rows exisit yet, then prepend to formset container
+        // If row(s) does/do exist, insert at end of formset
+        if (true === usingPrototype && 0 === rowCount) {
+            var newRow = baseRow.clone().prependTo(dynamoForm);
+        }
+        else {
+            var lastRow = dynamoForm.find('.dynamo-formset-row').last();
+            var newRow = baseRow.clone().insertAfter(lastRow);
+        }
 
         // Clear any data that was already entered in the copied row
         newRow.find( 'input,select,textarea' ).each(function() {
@@ -65,25 +88,32 @@ $(document).ready(function() {
         });
 
 
-        //Re-enable any dynamo-selectize fields if needed, adding
+        // Enable or Re-enable any dynamo-selectize fields, adding
         // back any options and selected values to the cloned row
-        if (!$.isEmptyObject(selectizeElements)) {
+        // when needed.
+        if (true === usingPrototype) {
+            var selectizeElements = newRow.find('.dynamo-selectize');
+
+            // Enable Selectize on new elements
+            initDynamoSelectize(selectizeElements);
+        }
+        else if (!$.isEmptyObject(selectizeElements)) {
             var copiedFormElements = [];
             var newFormElements    = [];
             $.each(selectizeElements, function(key, value) {
-                copiedFormElements.push(lastRow.find('select#'+key));
+                copiedFormElements.push(baseRow.find('select#'+key));
                 newFormElements.push(newRow.find('select#'+key));
             })
 
             // Renable Selectize with disabled PreLoad on copied elements
             initDynamoSelectize(copiedFormElements, true);
 
-            // Renable Selectize on new elements
+            // Enable Selectize on new elements
             initDynamoSelectize(newFormElements);
 
             // Copy back options and values to cloned row
             $.each(selectizeElements, function(key, value) {
-                selectizedObject = lastRow.find('select#'+key)[0].selectize;
+                selectizedObject = baseRow.find('select#'+key)[0].selectize;
                 $.each(value.inputOptions, function(key, value) {
                     selectizedObject.addOption(value);
                 });
@@ -91,9 +121,8 @@ $(document).ready(function() {
             });
         }
 
-        // Re-enable any dynamo-datetimepicker fields, adding
-        // back any options to the cloned row
-        lastRow.find('.dynamo-datepicker').each(function() {
+        // Re-enable any dynamo-datetimepicker fields
+        baseRow.find('.dynamo-datepicker').each(function() {
             initBootstrapDateTimePicker($(this));
         });
         newRow.find('.dynamo-datepicker').each(function() {
@@ -227,6 +256,15 @@ function updateRowIndex(obj) {
                     'data-chain-parent',
                     reindexDynamoSelectizeAttribute(
                         $(this).attr('data-chain-parent'),
+                        index
+                    )
+                );
+            }
+            if ( undefined !== $(this).attr('data-chain-parent-deactivate') ) {
+                $(this).attr(
+                    'data-chain-parent-deactivate',
+                    reindexDynamoSelectizeAttribute(
+                        $(this).attr('data-chain-parent-deactivate'),
                         index
                     )
                 );
