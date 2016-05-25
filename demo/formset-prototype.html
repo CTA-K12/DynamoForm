@@ -62,14 +62,13 @@
 
               <div
                 class="dynamo-formset"
-                data-min-rows="1"
+                data-min-rows="0"
                 data-max-rows="4"
                 data-prototype="&#x3C;div class=&#x22;dynamo-formset-row form-group&#x22;&#x3E;&#x3C;label for=&#x22;email_1&#x22;  class=&#x22;col-md-3 control-label&#x22; data-dynamo-relabel=&#x22;true&#x22;&#x3E;Email 1&#x3C;/label&#x3E;&#x3C;div class=&#x22;col-md-6&#x22;&#x3E;&#x3C;input type=&#x22;email&#x22; class=&#x22;form-control&#x22; id=&#x22;email_1&#x22; placeholder=&#x22;Enter email addresss&#x22;&#x3E;&#x3C;/div&#x3E;&#x3C;div class=&#x22;col-md-1&#x22;&#x3E;&#x3C;button type=&#x22;button&#x22; class=&#x22;btn btn-default dynamo-formset-row-delete&#x22; disabled=&#x22;disabled&#x22;&#x3E;Delete&#x3C;/button&#x3E;&#x3C;/div&#x3E;&#x3C;/div&#x3E;"
               >
                 <div class="col-md-offset-3 col-md-2">
                   <button type="button" class="btn btn-default dynamo-formset-row-add">Add Email</button>
                 </div>
-
               </div>
 
             </div>
@@ -78,25 +77,23 @@
                 This email addresses section is DynamoForm powered. Click the Add Email button to
                 add email address lines dynamically. Click the Delete button to remove an address
                 line dynamically. You can optionally configure the minimum and maximum number of
-                form elements you would like to allow. This form requires at least 1 email
-                address, but no more than 4 are accepted.
+                form elements you would like to allow. Since this form uses a prototype row
+                definition, no minimum number of rows are required, but no more than 4 are
+                accepted.
               </p>
               <p><strong>Here is the HTML for the above example</strong></p>
               <p>
 <pre>
-&lt;div
-    class=&quot;dynamo-formset&quot;
-    data-min-rows=&quot;1&quot;
-    data-max-rows=&quot;4&quot;
-    data-prototype=&quot;&#x3C;div class=&#x22;dynamo-formset-row form-group&#x22;&#x3E;&#x3C;label for=&#x22;email_1&#x22;  class=&#x22;col-md-3 control-label&#x22; data-dynamo-relabel=&#x22;true&#x22;&#x3E;Email 1&#x3C;/label&#x3E;&#x3C;div class=&#x22;col-md-6&#x22;&#x3E;&#x3C;input type=&#x22;email&#x22; class=&#x22;form-control&#x22; id=&#x22;email_1&#x22; placeholder=&#x22;Enter email addresss&#x22;&#x3E;&#x3C;/div&#x3E;&#x3C;div class=&#x22;col-md-1&#x22;&#x3E;&#x3C;button type=&#x22;button&#x22; class=&#x22;btn btn-default dynamo-formset-row-delete&#x22; disabled=&#x22;disabled&#x22;&#x3E;Delete&#x3C;/button&#x3E;&#x3C;/div&#x3E;&#x3C;/div&#x3E;&quot;
-&gt;
-  &lt;div class=&quot;dynamo-formset-row&quot;&gt;
-    &lt;label for=&quot;email_1&quot; data-dynamo-relabel=&quot;true&quot;&gt;Email 1&lt;/label&gt;
-    &lt;input type=&quot;email&quot; id=&quot;email_1&quot; name=&quot;email_1&quot;&gt;
-    &lt;button type=&quot;button&quot; class=&quot;dynamo-formset-row-delete&quot; disabled=&quot;disabled&quot;&gt;Delete&lt;/button&gt;
-  &lt;/div&gt;
-  &lt;button type=&quot;button&quot; class=&quot;dynamo-formset-row-add&quot;&gt;Add Email&lt;/button&gt;
-&lt;/div&gt;
+&#x3C;div
+  class=&#x22;dynamo-formset&#x22;
+  data-min-rows=&#x22;0&#x22;
+  data-max-rows=&#x22;4&#x22;
+  data-prototype=&#x22;&#x3C;div class=&#x22;dynamo-formset-row form-group&#x22;&#x3E;&#x3C;label for=&#x22;email_1&#x22;  class=&#x22;col-md-3 control-label&#x22; data-dynamo-relabel=&#x22;true&#x22;&#x3E;Email 1&#x3C;/label&#x3E;&#x3C;div class=&#x22;col-md-6&#x22;&#x3E;&#x3C;input type=&#x22;email&#x22; class=&#x22;form-control&#x22; id=&#x22;email_1&#x22; placeholder=&#x22;Enter email addresss&#x22;&#x3E;&#x3C;/div&#x3E;&#x3C;div class=&#x22;col-md-1&#x22;&#x3E;&#x3C;button type=&#x22;button&#x22; class=&#x22;btn btn-default dynamo-formset-row-delete&#x22; disabled=&#x22;disabled&#x22;&#x3E;Delete&#x3C;/button&#x3E;&#x3C;/div&#x3E;&#x3C;/div&#x3E;&#x22;
+&#x3E;
+  &#x3C;div class=&#x22;col-md-offset-3 col-md-2&#x22;&#x3E;
+    &#x3C;button type=&#x22;button&#x22; class=&#x22;btn btn-default dynamo-formset-row-add&#x22;&#x3E;Add Email&#x3C;/button&#x3E;
+  &#x3C;/div&#x3E;
+&#x3C;/div&#x3E;
 </pre>
               </p>
             </div>
