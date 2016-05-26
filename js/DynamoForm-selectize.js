@@ -24,7 +24,7 @@ $(document).ready(function() {
     /**
      * Update selectize objects, if needed, when data changes.
      *
-     * If chaining (element dependency) is in use, child elemenets may need to
+     * If chaining (element dependency) is in use, child elements may need to
      * be enabled or disabled based on the change.
      *
      */
@@ -115,7 +115,7 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
 
     var _options = {};
 
-    // Enable typing mode plugin by default
+    // Enable typing mode plug-in by default
     _options.plugins = ['typing_mode', 'item_nowrap'];
 
     // data-diacritics: true
@@ -572,7 +572,7 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
     // If CALLBACK type, build a custom callback based load option
     else if ('CALLBACK' == loadType) {
 
-        // Get any custom data from form elment
+        // Get any custom data from form element
         if ('undefined' !==  typeof formElement.attr('data-load-callback-data')) {
             try {
                 loadData = JSON.parse(formElement.attr('data-load-callback-data'));
