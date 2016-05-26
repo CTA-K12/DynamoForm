@@ -88,19 +88,22 @@ $(document).ready(function() {
         });
 
 
-        // Enable or Re-enable any dynamo-selectize fields, adding
-        // back any options and selected values to the cloned row
-        // when needed.
+        /*
+         *   Enable or Re-enable any dynamo-selectize fields, adding
+         *   back any options and selected values to the cloned row
+         *   when needed.
+         *
+         *   Update Row indexing and Label indexing.
+         */
+         // Determine if Dynamo-Selectize library is in use
         if ('function' == typeof initDynamoSelectize) {
+            // Is prototype functionality in use
             if (true === usingPrototype) {
-                // Update the row numbering
                 updateRowIndex( dynamoForm );
-
                 var elements = newRow.find('.dynamo-selectize');
-
-                // Enable Selectize on new elements
                 initDynamoSelectize(elements);
             }
+            // Are there any selectize fields in this formset
             else if (!$.isEmptyObject(selectizeElements)) {
                 var copiedFormElements = [];
                 var newFormElements    = [];
@@ -124,12 +127,15 @@ $(document).ready(function() {
                     selectizedObject.setValue(value.inputValue, true);
                 });
 
-                // Update the row numbering
+                updateRowIndex( dynamoForm );
+            }
+            // No Selectize fields in this formset
+            else {
                 updateRowIndex( dynamoForm );
             }
         }
+        // Dynamo-Selectize is not in use
         else {
-            // Update the row numbering
             updateRowIndex( dynamoForm );
         }
 
