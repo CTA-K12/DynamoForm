@@ -250,6 +250,11 @@ function updateRowIndex(obj) {
 
         var dynamoFormRow = $(this);
 
+        // Re-index 'id' attribute
+        if ( undefined !== dynamoFormRow.attr('id') ) {
+            dynamoFormRow.attr('id', reindexIdentityAttribute( dynamoFormRow.attr('id'), index));
+        }
+
         dynamoFormRow.find('*').not('option').each( function() {
 
             // Re-index 'id' attribute
@@ -260,6 +265,11 @@ function updateRowIndex(obj) {
             // Re-index 'name' attribute
             if ( undefined !== $(this).attr('name') ) {
                 $(this).attr('name', reindexIdentityAttribute($(this).attr('name'), index));
+            }
+
+            // Re-index 'for' attribute
+            if ( undefined !== $(this).attr('for') ) {
+                $(this).attr('for', reindexIdentityAttribute($(this).attr('for'), index));
             }
 
             // Re-index dynamo-selectize data-chain-child / data-chain-parent
@@ -326,7 +336,7 @@ function updateRowIndex(obj) {
  */
 function reindexIdentityAttribute(attribute, index) {
     attribute = attribute.replace(/\_\d+/, '_' + index);
-    attribute = attribute.replace(/\d+]$/, index + ']');
+    attribute = attribute.replace(/\d+]/, index + ']');
 
     return attribute;
 }
