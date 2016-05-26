@@ -53,7 +53,7 @@ $(document).ready(function() {
         var selectizeElements = {};
         baseRow.find('select').each(function() {
             if ($(this)[0].selectize) {
-                // Store current seletize options and values to restore later.
+                // Store current selectize options and values to restore later.
                 selectizeElements[$(this).attr('id')] = {
                     inputOptions: $(this)[0].selectize.getOptions(),
                     inputValue:   $(this)[0].selectize.getValue()
