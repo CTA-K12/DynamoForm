@@ -21,7 +21,7 @@ $(document).ready(function() {
         // Find the parent dynamo-formset
         var dynamoForm = $(this).closest('.dynamo-formset');
 
-        // Find the number of exisiting rows
+        // Find the number of existing rows
         var rowCount = dynamoForm.find('.dynamo-formset-row').size();
 
         // Determine if Max Rows is specified
@@ -36,7 +36,7 @@ $(document).ready(function() {
         }
 
         // Determine if a prototype is defined, if not, use one of
-        // the exisiting rows as a the prototype definition.
+        // the existing rows as a the prototype definition.
         var usingPrototype = false;
         if ('undefined' !==  typeof dynamoForm.attr('data-prototype')) {
             var prototypeHtml = dynamoForm.attr('data-prototype');
@@ -71,7 +71,7 @@ $(document).ready(function() {
         });
 
         // Clone base row (prototype or last row)
-        // If no rows exisit yet, then prepend to formset container
+        // If no rows exist, then prepend to formset container
         // If row(s) does/do exist, insert at end of formset
         if (true === usingPrototype && 0 === rowCount) {
             var newRow = baseRow.clone().prependTo(dynamoForm);
@@ -109,7 +109,7 @@ $(document).ready(function() {
                     newFormElements.push(newRow.find('select#'+key));
                 })
 
-                // Renable Selectize with disabled PreLoad on copied elements
+                // Re-enable Selectize with disabled PreLoad on copied elements
                 initDynamoSelectize(copiedFormElements, true);
 
                 // Enable Selectize on new elements
@@ -127,6 +127,10 @@ $(document).ready(function() {
                 // Update the row numbering
                 updateRowIndex( dynamoForm );
             }
+        }
+        else {
+            // Update the row numbering
+            updateRowIndex( dynamoForm );
         }
 
         // Enable or Re-enable any dynamo-datetimepicker fields
@@ -291,7 +295,7 @@ function updateRowIndex(obj) {
                 }
             }
 
-            // Re-index dynamo-selectize url vairables if needed
+            // Re-index dynamo-selectize url variables if needed
             if ($(this).hasClass('dynamo-selectize') && undefined !== $(this).attr('data-load-url')) {
                 $(this).attr(
                     'data-load-url',
