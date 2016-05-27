@@ -7,7 +7,7 @@ A jquery based dynamic formset generator with support for Selectize.js via Dynam
 **Note:** (May 25, 2016)
 At the moment, for cloning of rows to work with selectize'd fields, you need a new API method
 called getOptions() for selectize.js. I have submitted a pull request to the selectize.js
-project for this method. [selectize.js - Pull Request #735](https://github.com/brianreavis/selectize.js/pull/735)
+project for this method. [selectize.js - Pull Request #735](https://github.com/selectize/selectize.js/pull/820)
 At this time it's best just to use the version of Selectize in the vendor directory of this repo.
 
 **Status:** Beta (May 25, 2016)
