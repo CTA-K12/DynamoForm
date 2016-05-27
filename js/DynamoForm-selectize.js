@@ -67,6 +67,7 @@ function initDynamoSelectize(formElements, disablePreLoad) {
     // Enable Selectize on each element
     $.each(formElements, function() {
 
+
         // Determine if chaining is in use on element. If yes, track the element
         // in the chainedChildren array to be processed once all elements have
         // been initialized.
@@ -81,6 +82,7 @@ function initDynamoSelectize(formElements, disablePreLoad) {
             // configuration.
             $(this).selectize(options);
         }
+
     });
 
     /**
@@ -652,6 +654,7 @@ function processSelectizeChainedChild(childElement) {
             parentDependencyMet = false;
         }
     });
+
 
     // Exit now if any dependency is not met
     if ( false === parentDependencyMet) {

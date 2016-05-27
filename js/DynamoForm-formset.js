@@ -95,11 +95,12 @@ $(document).ready(function() {
          *
          *   Update Row indexing and Label indexing.
          */
+         updateRowIndex( dynamoForm );
+
          // Determine if Dynamo-Selectize library is in use
         if ('function' == typeof initDynamoSelectize) {
             // Is prototype functionality in use
             if (true === usingPrototype) {
-                updateRowIndex( dynamoForm );
                 var elements = newRow.find('.dynamo-selectize');
                 initDynamoSelectize(elements);
             }
@@ -108,8 +109,8 @@ $(document).ready(function() {
                 var copiedFormElements = [];
                 var newFormElements    = [];
                 $.each(selectizeElements, function(key, value) {
-                    copiedFormElements.push(baseRow.find('select#'+key));
-                    newFormElements.push(newRow.find('select#'+key));
+                    copiedFormElements.push(baseRow.find('select#' + key));
+                    newFormElements.push(newRow.find('select#' + incrementItemKey(key)));
                 })
 
                 // Re-enable Selectize with disabled PreLoad on copied elements
@@ -120,24 +121,17 @@ $(document).ready(function() {
 
                 // Copy back options and values to cloned row
                 $.each(selectizeElements, function(key, value) {
-                    selectizedObject = baseRow.find('select#'+key)[0].selectize;
+                    selectObject = baseRow.find('select#'+key);
+                    selectizedObject = selectObject[0].selectize;
                     $.each(value.inputOptions, function(key, value) {
                         selectizedObject.addOption(value);
                     });
                     selectizedObject.setValue(value.inputValue, true);
+                    selectObject.change();
                 });
+            }
+        }
 
-                updateRowIndex( dynamoForm );
-            }
-            // No Selectize fields in this formset
-            else {
-                updateRowIndex( dynamoForm );
-            }
-        }
-        // Dynamo-Selectize is not in use
-        else {
-            updateRowIndex( dynamoForm );
-        }
 
         // Enable or Re-enable any dynamo-datetimepicker fields
         if ('function' == typeof initBootstrapDateTimePicker) {
@@ -325,6 +319,25 @@ function updateRowIndex(obj) {
 
         index++;
     });
+}
+
+
+/**
+ * Increment index on item key
+ *
+ * Check key for integer index pattern and increment the key
+ * when pattern is matched.
+ */
+function incrementItemKey(key) {
+
+    var myRegexp = /(.*)\_(\d+)(\_?.*)/;
+    var match = myRegexp.exec(key);
+
+    if (null === match) {
+        return key;
+    }
+
+    return  match[1] + '_' + (parseInt(match[2]) + 1) + match[3];
 }
 
 
