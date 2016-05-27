@@ -111,7 +111,7 @@ the browser from attempting to render the prototype.
 ``` html
 <div
   class="dynamo-formset"
-  data-prototype="<div class="dynamo-formset-row"><label>Email</label><input type="text" id="user_email_1" name="user[email][1]" /><button type="button" class="dynamo-formset-row-delete">Delete</button></div>"
+  data-prototype="&#x3C;div class=&#x22;dynamo-formset-row&#x22;&#x3E;&#x3C;label&#x3E;Email&#x3C;/label&#x3E;&#x3C;input type=&#x22;text&#x22; id=&#x22;user_email_1&#x22; name=&#x22;user[email][1]&#x22; /&#x3E;&#x3C;button type=&#x22;button&#x22; class=&#x22;dynamo-formset-row-delete&#x22;&#x3E;Delete&#x3C;/button&#x3E;&#x3C;/div&#x3E;"
 >
     <button type="button" class="dynamo-formset-row-add">Add Email</button>
 </div>
