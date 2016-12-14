@@ -378,14 +378,14 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
     }
 
     // data-searchConjunction: 'and'
-    if ('undefined' !==  typeof formElement.attr('data-preload')) {
+    if ('undefined' !==  typeof formElement.attr('data-searchConjunction')) {
         //If defined string 'and', use sting 'and'
-        if ('and' === formElement.attr('data-preload').toLowerCase()) {
-            _options.preload = 'and';
+        if ('and' === formElement.attr('data-searchConjunction').toLowerCase()) {
+            _options.searchConjunction = 'and';
         }
         //If defined string 'or', use string 'or'
-        else if ('or' === formElement.attr('data-preload').toLowerCase()) {
-            _options.preload = 'or';
+        else if ('or' === formElement.attr('data-searchConjunction').toLowerCase()) {
+            _options.searchConjunction = 'or';
         }
         //If defined any other way, use selectize default
     }
