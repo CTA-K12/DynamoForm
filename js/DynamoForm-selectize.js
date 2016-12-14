@@ -588,13 +588,14 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
         // Add the preload status bool to loadData object
         loadData.requestPreload = requestPreload;
 
-        // Set load parameters in user defined dynamoCallbacks object
-        dynamoCallbacks.loadKey   = loadKey;
-        dynamoCallbacks.loadLimit = loadLimit;
-        dynamoCallbacks.loadData  = loadData;
+        // Set load parameters in data object
+        callbackData = {};
+        callbackData.loadKey   = loadKey;
+        callbackData.loadLimit = loadLimit;
+        callbackData.loadData  = loadData;
 
         // Build load option
-        var _load = dynamoCallbacks[loadCallback].bind(dynamoCallbacks);
+        var _load = dynamoCallbacks[loadCallback].bind(callbackData);
     }
 
     return _load;
