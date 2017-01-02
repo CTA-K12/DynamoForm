@@ -248,13 +248,6 @@ Default: {}
   // data load functions.
   var dynamoCallbacks = {
 
-    // These properties are set automatically by DynamoForm-Selectize, using
-    // values from the html data attributes on your element. The values
-    // specified below are the default values.
-    loadData:   {},
-    loadKey:    null,
-    loadLimit:  10,
-
     // Now Specify one or more custom data anonymous functions. The function(s)
     // must have two arguments:
     //   query: The value the user typed into the ajax selector
