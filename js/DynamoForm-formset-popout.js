@@ -47,82 +47,36 @@ $(document).ready(function() {
         // Locate the popout prototype definition or throw error.
         if ('undefined' !==  typeof dynamoForm.attr('data-popout-prototype')) {
             var prototypeHtml = dynamoForm.attr('data-popout-prototype');
-            var popout = $($.parseHTML(prototypeHtml));
+            var popoutForm = $($.parseHTML(prototypeHtml));
         }
         else {
             console.error('ERROR: Dynamo-Formset-Popout requires a data-popout-prototype attribute.');
             return false;
         }
 
-        // Display dialog
-        BootstrapDialog.show({
-            type: BootstrapDialog.TYPE_INFO,
-            title: popoutTitle,
-            message: popout,
-            closeByBackdrop: false,
-            buttons: [{
-                label: 'Cancel',
-                cssClass: 'pull-left btn-default',
-                action: function(dialogRef) {
-                    dialogRef.close();
-                }
-            },
-            {
-                label: 'Save',
-                cssClass: 'btn-info',
-                action: function(dialogRef) {
+        // Create new dialog
+        var dialog = createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows);
 
-                    // Get dialog form
-                    var dialogForm = dialogRef.getModalBody().find('form');
+        // Realize dialog without displaying
+        dialog.realize();
 
-                    // Validate form content
-                    // validateForm(dialogForm)
-
-                    // Proccess to formset row
-                    processToRow(dialogForm, dynamoForm, rowCount);
-
-                    //dialogRef.close();
-                }
-            }]
-        });
-
-
-/*
         // Enable any Dynamo-Selectize fields
         if ('function' == typeof initDynamoSelectize) {
-            var elements = newRow.find('.dynamo-selectize');
+            var elements = dialog.getModalBody().find('.dynamo-selectize');
             initDynamoSelectize(elements);
         }
 
 
         // Enable or Re-enable any dynamo-datetimepicker fields
         if ('function' == typeof initBootstrapDateTimePicker) {
-            newRow.find('.dynamo-datepicker').each(function() {
+            dialog.getModalBody().find('.dynamo-datepicker').each(function() {
                 initBootstrapDateTimePicker($(this));
             });
         }
-*/
 
-        // Determine if Max Rows is specified
-        if (undefined !== maxRows) {
-            // Determine if Max Rows has been met. If yes
-            // remove add row button functionality.
-            if (dynamoForm.find('.dynamo-formset-row').size() == maxRows) {
-                dynamoForm.find('.dynamo-formset-popout-add').addClass('disabled');
-                dynamoForm.find('.dynamo-formset-popout-add').attr('disabled', 'disabled');
-            }
-        }
+        // Open dialog
+        dialog.open();
 
-        // Determine if Min Rows is specified
-        var minRows = dynamoForm.attr('data-min-rows');
-        if (undefined !== minRows) {
-            // Determine if Min Rows has now been exceeded.
-            // If yes, restore delete button functionality.
-            if (dynamoForm.find('.dynamo-formset-row').size() > minRows) {
-                dynamoForm.find('.dynamo-formset-row-delete').removeClass('disabled');
-                dynamoForm.find('.dynamo-formset-row-delete').removeAttr('disabled');
-            }
-        }
 
         return false;
     });
@@ -187,10 +141,177 @@ $(document).ready(function() {
 
 
 /**
+ * Edit formset row activity
+ *
+ * Display dialog window with formset row data when user clicks the edit
+ * button.
+ *
+ */
+$('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
+
+    // Find the parent dynamo-formset-popout
+    var dynamoForm = $(this).closest('.dynamo-formset-popout');
+
+    // Find the triggering row
+    var dynamoFormRow = $(this).closest('.dynamo-formset-row');
+
+    // Find the number of existing rows
+    var rowCount = dynamoForm.find('.dynamo-formset-row').size();
+
+    // Determine if Max Rows is specified
+    var maxRows = dynamoForm.attr('data-max-rows');
+    if (undefined !== maxRows) {
+        // Determine if Max Rows is exceeded and return false now if
+        // yes. The add row button should be disabled if max rows has
+        // been reached. This check is in here as a precaution.
+        if (rowCount >= maxRows) {
+            return false;
+        }
+    }
+
+    // Check for popout title attribute or set default title.
+    if ('undefined' !==  typeof dynamoForm.attr('data-popout-title')) {
+        var popoutTitle = dynamoForm.attr('data-popout-title');
+    }
+    else {
+        var popoutTitle = 'Add Record';
+    }
+
+    // Locate the popout prototype definition or throw error.
+    if ('undefined' !==  typeof dynamoForm.attr('data-popout-prototype')) {
+        var prototypeHtml = dynamoForm.attr('data-popout-prototype');
+        var popoutForm = $($.parseHTML(prototypeHtml));
+    }
+    else {
+        console.error('ERROR: Dynamo-Formset-Popout requires a data-popout-prototype attribute.');
+        return false;
+    }
+
+    // Create new dialog
+    var dialog = createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows);
+
+    // Realize dialog without displaying
+    dialog.realize();
+
+    // Set values from formset row into dialog form
+    processFromRow(dialog.getModalBody(), dynamoFormRow);
+
+    // Enable any Dynamo-Selectize fields
+    if ('function' == typeof initDynamoSelectize) {
+        var elements = dialog.getModalBody().find('.dynamo-selectize');
+        initDynamoSelectize(elements);
+    }
+
+    // Enable or Re-enable any dynamo-datetimepicker fields
+    if ('function' == typeof initBootstrapDateTimePicker) {
+        dialog.getModalBody().find('.dynamo-datepicker').each(function() {
+            initBootstrapDateTimePicker($(this));
+        });
+    }
+
+    // Open dialog
+    dialog.open();
+
+    return false;
+
+});
+
+
+/**
+ * Create Dialog form
+ *
+ */
+function createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows) {
+
+    var dialog = new BootstrapDialog({
+        type: BootstrapDialog.TYPE_INFO,
+        title: popoutTitle,
+        message: popoutForm,
+        closeByBackdrop: false,
+        buttons: [{
+            label: 'Close',
+            cssClass: 'pull-left btn-default',
+            action: function(dialogRef) {
+                dialogRef.close();
+            }
+        },
+        {
+            label: 'Save',
+            cssClass: 'btn-info',
+            action: function(dialogRef) {
+
+                // Get dialog form
+                var dialogForm = dialogRef.getModalBody().find('form');
+
+                // Validate form content
+                var valid = validateForm(dialogForm)
+
+                if (true === valid) {
+                    // Process to formset row
+                    processToRow(dialogForm, dynamoForm, rowCount, maxRows);
+
+                    dialogRef.close();                    
+                }
+                else {
+                    alert('Invalid!');
+                }
+            }
+        }]
+    });
+
+    return dialog;
+}
+
+
+/**
+ * Process formset row into dialog form data
+ *
+ */
+function processFromRow(dialogBody, dynamoFormRow) {
+
+    dynamoFormRow.find('input,select').each(function(){
+
+        // Get formset field
+        var formsetInput = $(this);
+
+        // Get Input Name and create a "begins with" pattern
+        var formsetInputName = formsetInput.attr('name');
+        if (undefined === formsetInputName) {
+            // Skip un-named inputs
+            return true;
+        }
+
+        // Remove any numerical indexing from attribute name
+        formsetInputName = getUnindexedAttribute(formsetInputName);
+        var pattern = "input[name='" + formsetInputName + "'],select[name='" + formsetInputName + "']";
+
+        /*
+         *  Check for formset input field in dialog form.
+         *
+         *  If matching field exists, update value in dialog form.
+         *
+         *  If matching field does not exist, ignore.
+         */
+        var formField = dialogBody.find(pattern);
+        if (formField.length) {
+            formField.val(formsetInput.val());
+        }
+        else {
+            console.log(pattern);
+        }
+    });
+
+    console.log
+
+    return false;
+}
+
+
+/**
  * Process Dialog form data into formset row
  *
  */
-function processToRow(dialogForm, dynamoForm, rowCount) {
+function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
 
     // Locate the formset row prototype definition or throw error.
     if ('undefined' !==  typeof dynamoForm.attr('data-row-prototype')) {
@@ -203,30 +324,40 @@ function processToRow(dialogForm, dynamoForm, rowCount) {
     }
 
     // Iterate through dialog form inputs
-    dialogForm.find('input').each(function(){
+    dialogForm.find('input,select').each(function(){
         // Get form field
         var formInput = $(this);
 
-        // Get Input Name and create starts with pattern
+        // Get Input Name and create a "begins with" pattern
         var formInputName = formInput.attr('name');
+        if (undefined === formInputName) {
+            // Skip un-named inputs
+            return true;
+        }
         var pattern = "input[name^='" + formInputName + "_'],input[name^='" + formInputName + "-']";
 
         /*
-         *  Check for input field in formset row
+         *  Check for form input field in formset row
          *
-         *  If field exisits, store dialog form data in formset row.
+         *  If matching field exists, store dialog form data in formset row,
+         *  both in a hidden input to be passed for back-end processing, and
+         *  also to be displayed as text in the formset row for user
+         *  experience.
          *
-         *  If field does not exisit, store dialog form data in hidden input
-         *  appended to formset row.
+         *  If matching field does not exist, store dialog form data in
+         *  hidden input appended to formset row. The "_0 " row index on name
+         *  and id attributes will be corrected during re-indexing below.
          */
         var baseField = baseRow.find(pattern);
         if (baseField.length) {
-            //console.log(baseField);
             baseField.val(formInput.val());
             baseField.after(formInput.val());
         }
         else{
-
+            var newField = $($.parseHTML(
+                '<input type="hidden" name="' + formInputName + '_0" id="' + formInputName + '_0" value ="' + formInput.val() + '">'
+            ));
+            newField.appendTo(baseRow);
         }
 
     });
@@ -246,6 +377,35 @@ function processToRow(dialogForm, dynamoForm, rowCount) {
     // Update Row indexing and Label indexing.
     updateRowIndex( dynamoForm );
 
+    // Determine if Max Rows is specified
+    if (undefined !== maxRows) {
+        // Determine if Max Rows has been met. If yes
+        // remove add row button functionality.
+        if (dynamoForm.find('.dynamo-formset-row').size() == maxRows) {
+            dynamoForm.find('.dynamo-formset-popout-add').addClass('disabled');
+            dynamoForm.find('.dynamo-formset-popout-add').attr('disabled', 'disabled');
+        }
+    }
+
+    // Determine if Min Rows is specified
+    var minRows = dynamoForm.attr('data-min-rows');
+    if (undefined !== minRows) {
+        // Determine if Min Rows has now been exceeded.
+        // If yes, restore delete button functionality.
+        if (dynamoForm.find('.dynamo-formset-row').size() > minRows) {
+            dynamoForm.find('.dynamo-formset-row-delete').removeClass('disabled');
+            dynamoForm.find('.dynamo-formset-row-delete').removeAttr('disabled');
+        }
+    }
+}
+
+/**
+ * Validate dialog form data
+ *
+ */
+function validateForm(dialogForm) {
+
+    return true;
 }
 
 
@@ -342,21 +502,14 @@ function updateRowIndex(obj) {
 
 
 /**
- * Increment index on item key
+ * Get the attribute name after removing any numerical indexing.
  *
- * Check key for integer index pattern and increment the key
- * when pattern is matched.
  */
-function incrementItemKey(key) {
+function getUnindexedAttribute(attribute) {
+    attribute = attribute.replace(/\_\d+/, '');
+    attribute = attribute.replace(/\d+]/, '');
 
-    var myRegexp = /(.*)\_(\d+)(\_?.*)/;
-    var match = myRegexp.exec(key);
-
-    if (null === match) {
-        return key;
-    }
-
-    return  match[1] + '_' + (parseInt(match[2]) + 1) + match[3];
+    return attribute;
 }
 
 

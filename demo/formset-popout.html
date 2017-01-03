@@ -4,15 +4,15 @@
     <meta charset="utf-8">
     <title>DynamoForm</title>
 
-      <!-- Bootstrap & Bootstrap Dialog are required for dynamoForm _formset_popout_ . -->
+      <!-- Bootstrap & Bootstrap Dialog are required for DynamoForm-formset-popout. -->
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap-theme.min.css">
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/css/bootstrap-dialog.min.css">
 
-      <!-- HTML5 shim & Respond.js are not required for dynamoForm. -->
-      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
-      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap-theme.min.css">
-      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/css/bootstrap-dialog.min.css">
+      <!-- Selectize Library is not required for DynamoForm-formset-popout. -->
+      <link rel="stylesheet" href="//rawgit.com/MESD/dynamoForm/master/vendor/selectize/css/selectize.css">
+      <link rel="stylesheet" href="//rawgit.com/MESD/dynamoForm/master/vendor/selectize/css/selectize.bootstrap3.css">
+      <link rel="stylesheet" href="//rawgit.com/MESD/dynamoForm/master/vendor/selectize/css/selectize.default.css">
 
       <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
       <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -75,7 +75,8 @@
             <div class="panel-body">
 
               <div class="row">
-                <label class="col-md-1"></label>
+                <label class="col-md-2"></label>
+                <label class="col-md-1">Type</label>
                 <label class="col-md-3">Address</label>
                 <label class="col-md-2">City</label>
                 <label class="col-md-2">State</label>
@@ -89,6 +90,15 @@
                 data-popout-title="Add Address"
                 data-popout-prototype='
                   <form>
+                    <div class="form-group">
+                      <label for="type">Address Type</label>
+                      <select class="form-control dynamo-selectize" id="type" name="type" placeholder="Select Type">
+                        <option value=""></option>
+                        <option value="BL">Billing</option>
+                        <option value="PO">Purchasing</option>
+                        <option value="RE">Receiving</option>
+                      </select>
+                    </div>
                     <div class="form-group">
                       <label for="address">Address</label>
                       <input type="text" class="form-control" id="address" name="address" placeholder="Enter Address">
@@ -105,44 +115,109 @@
                       <label for="zip">Zip</label>
                       <input type="text" class="form-control" id="zip" name="zip" placeholder="Enter Zip">
                     </div>
+                    <div class="form-group">
+                      <label for="contact">Contact Person</label>
+                      <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter Name">
+                    </div>
                   </form>'
                 data-row-prototype='
                   <div class="row dynamo-formset-row">
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                       <button type="button" class="btn btn-xs btn-default dynamo-formset-row-delete" disabled="disabled">Delete</button>
+                      <button type="button" class="btn btn-xs btn-default dynamo-formset-row-edit">Edit</button>
                     </div>
+                    <div class="col-md-1 text-middle"><input type="hidden" id="type_1" name="type_1"></div>
                     <div class="col-md-3 text-middle"><input type="hidden" id="address_1" name="address_1"></div>
                     <div class="col-md-2 text-middle"><input type="hidden" id="city_1" name="city_1"></div>
                     <div class="col-md-2 text-middle"><input type="hidden" id="state_1" name="state_1"></div>
-                    <div class="col-md-2 text-middle"><input type="hidden" id="zipr_1" name="zipr_1"></div>
+                    <div class="col-md-2 text-middle"><input type="hidden" id="zip_1" name="zip_1"></div>
                   </div>'
               >
                 <div class="col-md-offset-1 col-md-2">
-                  <button type="button" class="btn btn-default dynamo-formset-popout-add">Add Email</button>
+                  <button type="button" class="btn btn-default dynamo-formset-popout-add">Add Address</button>
                 </div>
               </div>
 
             </div>
             <div class="panel-footer">
               <p>
-                This email addresses section is DynamoForm powered. Click the Add Email button to
-                add email address lines dynamically. Click the Delete button to remove an address
-                line dynamically. You can optionally configure the minimum and maximum number of
-                form elements you would like to allow. Since this form uses a prototype row
-                definition, no minimum number of rows are required, but no more than 4 are
-                accepted.
+                This vendor addresses section is DynamoForm powered. Click the Add Address button
+                to open the popout dialog and add address lines dynamically. Click the Delete
+                button to remove an address line dynamically. You can optionally configure the
+                minimum and maximum number of form elements you would like to allow. Since this
+                form uses a prototype row definition, no minimum number of rows is required, but
+                no more than 4 are accepted in this example. All form fields are placed in hidden
+                input fields in the formset rows. Additional form fields that aren't part of the
+                formset display prototype are also added as hidden input fields in each formset
+                row.
               </p>
               <p><strong>Here is the HTML for the above example</strong></p>
               <p>
 <pre>
+&#x3C;div class=&#x22;row&#x22;&#x3E;
+  &#x3C;label class=&#x22;col-md-1&#x22;&#x3E;&#x3C;/label&#x3E;
+  &#x3C;label class=&#x22;col-md-2&#x22;&#x3E;Type&#x3C;/label&#x3E;
+  &#x3C;label class=&#x22;col-md-3&#x22;&#x3E;Address&#x3C;/label&#x3E;
+  &#x3C;label class=&#x22;col-md-2&#x22;&#x3E;City&#x3C;/label&#x3E;
+  &#x3C;label class=&#x22;col-md-2&#x22;&#x3E;State&#x3C;/label&#x3E;
+  &#x3C;label class=&#x22;col-md-2&#x22;&#x3E;Zip&#x3C;/label&#x3E;
+&#x3C;/div&#x3E;
+
 &#x3C;div
-  class=&#x22;dynamo-formset&#x22;
+  class=&#x22;dynamo-formset-popout&#x22;
   data-min-rows=&#x22;0&#x22;
   data-max-rows=&#x22;4&#x22;
-  data-prototype=&#x22;&#x3C;div class=&#x22;dynamo-formset-row form-group&#x22;&#x3E;&#x3C;label for=&#x22;email_1&#x22;  class=&#x22;col-md-3 control-label&#x22; data-dynamo-relabel=&#x22;true&#x22;&#x3E;Email 1&#x3C;/label&#x3E;&#x3C;div class=&#x22;col-md-6&#x22;&#x3E;&#x3C;input type=&#x22;email&#x22; class=&#x22;form-control&#x22; id=&#x22;email_1&#x22; placeholder=&#x22;Enter email addresss&#x22;&#x3E;&#x3C;/div&#x3E;&#x3C;div class=&#x22;col-md-1&#x22;&#x3E;&#x3C;button type=&#x22;button&#x22; class=&#x22;btn btn-default dynamo-formset-row-delete&#x22; disabled=&#x22;disabled&#x22;&#x3E;Delete&#x3C;/button&#x3E;&#x3C;/div&#x3E;&#x3C;/div&#x3E;&#x22;
+  data-popout-title=&#x22;Add Address&#x22;
+  data-popout-prototype=&#x27;
+    &#x3C;form&#x3E;
+      &#x3C;div class=&#x22;form-group&#x22;&#x3E;
+        &#x3C;label for=&#x22;type&#x22;&#x3E;Address Type&#x3C;/label&#x3E;
+        &#x3C;select class=&#x22;form-control dynamo-selectize&#x22; id=&#x22;type&#x22; name=&#x22;type&#x22; placeholder=&#x22;Select Type&#x22;&#x3E;
+          &#x3C;option value=&#x22;&#x22;&#x3E;&#x3C;/option&#x3E;
+          &#x3C;option value=&#x22;PO&#x22;&#x3E;Purchaseing&#x3C;/option&#x3E;
+          &#x3C;option value=&#x22;RE&#x22;&#x3E;Receiving&#x3C;/option&#x3E;
+        &#x3C;/select&#x3E;
+      &#x3C;/div&#x3E;
+      &#x3C;div class=&#x22;form-group&#x22;&#x3E;
+        &#x3C;label for=&#x22;address&#x22;&#x3E;Address&#x3C;/label&#x3E;
+        &#x3C;input type=&#x22;text&#x22; class=&#x22;form-control&#x22; id=&#x22;address&#x22; name=&#x22;address&#x22; placeholder=&#x22;Enter Address&#x22;&#x3E;
+      &#x3C;/div&#x3E;
+      &#x3C;div class=&#x22;form-group&#x22;&#x3E;
+        &#x3C;label for=&#x22;city&#x22;&#x3E;City&#x3C;/label&#x3E;
+        &#x3C;input type=&#x22;text&#x22; class=&#x22;form-control&#x22; id=&#x22;city&#x22; name=&#x22;city&#x22; placeholder=&#x22;Enter City&#x22;&#x3E;
+      &#x3C;/div&#x3E;
+      &#x3C;div class=&#x22;form-group&#x22;&#x3E;
+        &#x3C;label for=&#x22;state&#x22;&#x3E;State&#x3C;/label&#x3E;
+        &#x3C;input type=&#x22;text&#x22; class=&#x22;form-control&#x22; id=&#x22;state&#x22; name=&#x22;state&#x22; placeholder=&#x22;Enter State&#x22;&#x3E;
+      &#x3C;/div&#x3E;
+      &#x3C;div class=&#x22;form-group&#x22;&#x3E;
+        &#x3C;label for=&#x22;zip&#x22;&#x3E;Zip&#x3C;/label&#x3E;
+        &#x3C;input type=&#x22;text&#x22; class=&#x22;form-control&#x22; id=&#x22;zip&#x22; name=&#x22;zip&#x22; placeholder=&#x22;Enter Zip&#x22;&#x3E;
+      &#x3C;/div&#x3E;
+      &#x3C;div class=&#x22;form-group&#x22;&#x3E;
+        &#x3C;label for=&#x22;paymentMethod&#x22;&#x3E;Payment Method&#x3C;/label&#x3E;
+        &#x3C;select class=&#x22;form-control dynamo-selectize&#x22; id=&#x22;paymentMethod&#x22; name=&#x22;paymentMethod&#x22; placeholder=&#x22;Select Method&#x22;&#x3E;
+          &#x3C;option value=&#x22;&#x22;&#x3E;&#x3C;/option&#x3E;
+          &#x3C;option value=&#x22;EFT&#x22;&#x3E;Electronic Funds Transfer&#x3C;/option&#x3E;
+          &#x3C;option value=&#x22;Check&#x22;&#x3E;Check&#x3C;/option&#x3E;
+          &#x3C;option value=&#x22;Paypal&#x22;&#x3E;Paypal&#x3C;/option&#x3E;
+        &#x3C;/select&#x3E;
+      &#x3C;/div&#x3E;
+    &#x3C;/form&#x3E;&#x27;
+  data-row-prototype=&#x27;
+    &#x3C;div class=&#x22;row dynamo-formset-row&#x22;&#x3E;
+      &#x3C;div class=&#x22;col-md-1&#x22;&#x3E;
+        &#x3C;button type=&#x22;button&#x22; class=&#x22;btn btn-xs btn-default dynamo-formset-row-delete&#x22; disabled=&#x22;disabled&#x22;&#x3E;Delete&#x3C;/button&#x3E;
+      &#x3C;/div&#x3E;
+      &#x3C;div class=&#x22;col-md-2 text-middle&#x22;&#x3E;&#x3C;input type=&#x22;hidden&#x22; id=&#x22;type_1&#x22; name=&#x22;type_1&#x22;&#x3E;&#x3C;/div&#x3E;
+      &#x3C;div class=&#x22;col-md-3 text-middle&#x22;&#x3E;&#x3C;input type=&#x22;hidden&#x22; id=&#x22;address_1&#x22; name=&#x22;address_1&#x22;&#x3E;&#x3C;/div&#x3E;
+      &#x3C;div class=&#x22;col-md-2 text-middle&#x22;&#x3E;&#x3C;input type=&#x22;hidden&#x22; id=&#x22;city_1&#x22; name=&#x22;city_1&#x22;&#x3E;&#x3C;/div&#x3E;
+      &#x3C;div class=&#x22;col-md-2 text-middle&#x22;&#x3E;&#x3C;input type=&#x22;hidden&#x22; id=&#x22;state_1&#x22; name=&#x22;state_1&#x22;&#x3E;&#x3C;/div&#x3E;
+      &#x3C;div class=&#x22;col-md-2 text-middle&#x22;&#x3E;&#x3C;input type=&#x22;hidden&#x22; id=&#x22;zip_1&#x22; name=&#x22;zip_1&#x22;&#x3E;&#x3C;/div&#x3E;
+    &#x3C;/div&#x3E;&#x27;
 &#x3E;
-  &#x3C;div class=&#x22;col-md-offset-3 col-md-2&#x22;&#x3E;
-    &#x3C;button type=&#x22;button&#x22; class=&#x22;btn btn-default dynamo-formset-row-add&#x22;&#x3E;Add Email&#x3C;/button&#x3E;
+  &#x3C;div class=&#x22;col-md-offset-1 col-md-2&#x22;&#x3E;
+    &#x3C;button type=&#x22;button&#x22; class=&#x22;btn btn-default dynamo-formset-popout-add&#x22;&#x3E;Add Address&#x3C;/button&#x3E;
   &#x3C;/div&#x3E;
 &#x3C;/div&#x3E;
 </pre>
@@ -157,14 +232,20 @@
   <!-- Jquery is requierd for DynamoForm -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-  <!-- Bootstrap is required for dynamoForm _formset_popout_ . -->
+  <!-- Bootstrap is required for DynamoForm-formset-popout. -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-  <!-- Bootstrap dialog is required for dynamoForm _formset_popout_ . -->
+  <!-- Bootstrap dialog is required for DynamoForm-formset-popout. -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
 
   <!-- DynamoForm-Formset Library -->
   <!-- <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-formset-popout.js"></script> -->
   <script src="../js/DynamoForm-formset-popout.js"></script>
+
+  <!-- Selectize Library is not required for DynamoForm-formset-popout -->
+  <script src="//rawgit.com/MESD/dynamoForm/master/vendor/selectize/js/selectize.min.js"></script>
+
+  <!-- DynamoForm-Selectize Library is not required for DynamoForm-formset-popout -->
+  <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script>
 
 </html>
