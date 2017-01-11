@@ -55,7 +55,7 @@ $(document).ready(function() {
         }
 
         // Create new dialog
-        var dialog = createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows);
+        var dialog = createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows, false);
 
         // Realize dialog without displaying
         dialog.realize();
@@ -187,7 +187,7 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
 
 
     // Create new dialog
-    var dialog = createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows);
+    var dialog = createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows, true);
 
     // Realize dialog without displaying
     dialog.realize();
@@ -220,23 +220,50 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
  * Create Dialog form
  *
  */
-function createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows) {
+function createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows, editMode) {
 
-    var dialog = new BootstrapDialog({
-        type: BootstrapDialog.TYPE_INFO,
-        title: popoutTitle,
-        message: popoutForm,
-        closeByBackdrop: false,
-        buttons: [{
-            label: 'Close',
-            cssClass: 'pull-left btn-default',
-            action: function(dialogRef) {
-                dialogRef.close();
+    var buttonList = [{
+        label: 'Close',
+        cssClass: 'pull-left btn-default',
+        action: function(dialogRef) {
+            dialogRef.close();
+        }
+    },
+    {
+        label: 'Save',
+        cssClass: 'pull-right btn-info',
+        action: function(dialogRef) {
+
+            // Get dialog form
+            var dialogForm = dialogRef.getModalBody().find('form');
+
+            // Validate form content
+            var valid = validateForm(dialogForm)
+
+            if (true === valid) {
+                // Check for edit mode flag
+                if (undefined !== dialogForm.find('input#dynForm-popout-editMode').attr('id')) {
+                    // Update formset row
+                    updateRow(dialogForm, dynamoForm);
+                }
+                else {
+                    // Process to formset row
+                    processToRow(dialogForm, dynamoForm, rowCount, maxRows);
+                }                    
+
+                dialogRef.close();                    
             }
-        },
-        {
-            label: 'Save',
-            cssClass: 'btn-info',
+            else {
+                alert('Invalid!');
+            }
+        }
+    }];
+
+    // If not editing, then allow save and add another
+    if (true !== editMode) {
+        buttonList.push({
+            label: 'Save + Add Another',
+            cssClass: 'btn-default',
             action: function(dialogRef) {
 
                 // Get dialog form
@@ -254,15 +281,23 @@ function createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows) {
                     else {
                         // Process to formset row
                         processToRow(dialogForm, dynamoForm, rowCount, maxRows);
-                    }                    
+                    }
 
-                    dialogRef.close();                    
+                    // Clear Form
                 }
                 else {
                     alert('Invalid!');
                 }
             }
-        }]
+        });
+    }
+
+    var dialog = new BootstrapDialog({
+        type: BootstrapDialog.TYPE_INFO,
+        title: popoutTitle,
+        message: popoutForm,
+        closeByBackdrop: false,
+        buttons: buttonList
     });
 
     return dialog;
