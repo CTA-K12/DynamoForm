@@ -392,7 +392,7 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
         var baseField = baseRow.find(pattern);
         if (baseField.length) {
             baseField.val(formInput.val());
-            baseField.after(formInput.val());
+            baseField.after(formatTextNode(formInput.val()));
         }
         else{
             var newField = $($.parseHTML(
@@ -506,7 +506,7 @@ function updateRow(dialogForm, dynamoForm) {
                     textNode.nodeValue = formInput.val();
                 }
                 else {
-                    formsetRowField.after(formInput.val());
+                    formsetRowField.after(formatTextNode(formInput.val()));
                 }
             }
             else {
@@ -696,4 +696,23 @@ function reindexUrlVariables(attribute, index) {
     attribute = attribute.replace(/\{(\w+)\_\d+\}/g, '{' + '$1' + '_' + index + '}');
 
     return attribute;
+}
+
+
+/**
+ * Format Text Nodes when empty strings
+ *
+ * Empty text nodes cause formating issues when no text
+ * is present (empty strings). This function adds an html
+ * non-breaking space in place of empty strings to resolve
+ * the formating issues.
+ */
+function formatTextNode(stringValue) {
+    if ('' == stringValue) {
+        return '&nbsp;';
+    }
+    else {
+        return stringValue;
+    }
+
 }
