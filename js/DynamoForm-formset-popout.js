@@ -160,14 +160,6 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
 
     // Determine if Max Rows is specified
     var maxRows = dynamoForm.attr('data-max-rows');
-    if (undefined !== maxRows) {
-        // Determine if Max Rows is exceeded and return false now if
-        // yes. The add row button should be disabled if max rows has
-        // been reached. This check is in here as a precaution.
-        if (rowCount >= maxRows) {
-            return false;
-        }
-    }
 
     // Check for popout title attribute or set default title.
     if ('undefined' !==  typeof dynamoForm.attr('data-popout-title')) {
@@ -257,7 +249,7 @@ function createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows) {
                     // Check for edit mode flag
                     if (undefined !== dialogForm.find('input#dynForm-popout-editMode').attr('id')) {
                         // Update formset row
-                        updateRow(dialogForm, dynamoForm, rowCount, maxRows);
+                        updateRow(dialogForm, dynamoForm);
                     }
                     else {
                         // Process to formset row
@@ -418,7 +410,7 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
  * Update formset row from dialog form data
  *
  */
-function updateRow(dialogForm, dynamoForm, rowCount, maxRows) {
+function updateRow(dialogForm, dynamoForm) {
 
     // Locate the formset row prototype definition or throw error.
     if ('undefined' !==  typeof dynamoForm.attr('data-row-prototype')) {
@@ -495,32 +487,6 @@ function updateRow(dialogForm, dynamoForm, rowCount, maxRows) {
         }
 
     });
-
-/*
-    // Update Row indexing and Label indexing.
-    updateRowIndex( dynamoForm );
-
-    // Determine if Max Rows is specified
-    if (undefined !== maxRows) {
-        // Determine if Max Rows has been met. If yes
-        // remove add row button functionality.
-        if (dynamoForm.find('.dynamo-formset-row').size() == maxRows) {
-            dynamoForm.find('.dynamo-formset-popout-add').addClass('disabled');
-            dynamoForm.find('.dynamo-formset-popout-add').attr('disabled', 'disabled');
-        }
-    }
-
-    // Determine if Min Rows is specified
-    var minRows = dynamoForm.attr('data-min-rows');
-    if (undefined !== minRows) {
-        // Determine if Min Rows has now been exceeded.
-        // If yes, restore delete button functionality.
-        if (dynamoForm.find('.dynamo-formset-row').size() > minRows) {
-            dynamoForm.find('.dynamo-formset-row-delete').removeClass('disabled');
-            dynamoForm.find('.dynamo-formset-row-delete').removeAttr('disabled');
-        }
-    }
-    */
 }
 
 
