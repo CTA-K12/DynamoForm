@@ -499,9 +499,15 @@ function updateRow(dialogForm, dynamoForm) {
             var formsetRowField = formsetRow.find(pattern);
             if (formsetRowField.length) {
                 formsetRowField.val(formInput.val());
-                formsetRowField.parent().contents().filter(function(){ 
-                    return this.nodeType == 3; 
-                })[0].nodeValue = formInput.val();
+                var textNode = formsetRowField.parent().contents().filter(function(){
+                    return this.nodeType == 3;
+                })[0];
+                if ("undefined" !== typeof textNode) {
+                    textNode.nodeValue = formInput.val();
+                }
+                else {
+                    formsetRowField.after(formInput.val());
+                }
             }
             else {
                 console.error('ERROR: Dynamo-Formset-Popout could not locate .dynamo-formset-row display field with pattern ' + pattern);
