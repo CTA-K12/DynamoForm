@@ -187,6 +187,13 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
         return false;
     }
 
+    // Add edit mode flag to popoutForm html
+    var editModeFlag = $($.parseHTML(
+        '<input type="hidden" id="dynForm-popout-editMode" value ="' + dynamoFormRow.index() + '">'
+    ));
+    editModeFlag.appendTo(popoutForm);
+
+
     // Create new dialog
     var dialog = createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows);
 
@@ -247,8 +254,15 @@ function createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows) {
                 var valid = validateForm(dialogForm)
 
                 if (true === valid) {
-                    // Process to formset row
-                    processToRow(dialogForm, dynamoForm, rowCount, maxRows);
+                    // Check for edit mode flag
+                    if (undefined !== dialogForm.find('input#dynForm-popout-editMode').attr('id')) {
+                        // Update formset row
+                        updateRow(dialogForm, dynamoForm, rowCount, maxRows);
+                    }
+                    else {
+                        // Process to formset row
+                        processToRow(dialogForm, dynamoForm, rowCount, maxRows);
+                    }                    
 
                     dialogRef.close();                    
                 }
@@ -398,6 +412,118 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
         }
     }
 }
+
+
+/**
+ * Update formset row from dialog form data
+ *
+ */
+function updateRow(dialogForm, dynamoForm, rowCount, maxRows) {
+
+    // Locate the formset row prototype definition or throw error.
+    if ('undefined' !==  typeof dynamoForm.attr('data-row-prototype')) {
+        var prototypeHtml = dynamoForm.attr('data-row-prototype');
+        var baseRow = $($.parseHTML(prototypeHtml));
+    }
+    else {
+        console.error('ERROR: Dynamo-Formset-Popout requires a data-row-prototype attribute.');
+        return false;
+    }
+
+    // Get original formset row index
+    var formsetRowIndex = dialogForm.find('input#dynForm-popout-editMode').val();
+
+    // Locate the formset row to update or throw error.
+    var formsetRow = dynamoForm.find('.dynamo-formset-row').eq(formsetRowIndex);
+    if ('undefined' ===  typeof formsetRow) {
+        console.error('ERROR: Dynamo-Formset-Popout could not locate .dynamo-formset-row number ' + formsetRowIndex);
+
+        return false;
+    }
+
+    // Iterate through dialog form inputs
+    dialogForm.find('input,select').each(function(){
+        // Get form field
+        var formInput = $(this);
+
+        // Get Input Name and create a "begins with" pattern
+        var formInputName = formInput.attr('name');
+        if (undefined === formInputName) {
+            // Skip un-named inputs
+
+            return true;
+        }
+        var pattern = "input[name^='" + formInputName + "_'],input[name^='" + formInputName + "-']";
+
+        /*
+         *  Check for form input field in formset row
+         *
+         *  If matching field exists, store dialog form data in formset row,
+         *  both in a hidden input to be passed for back-end processing, and
+         *  also to be displayed as text in the formset row for user
+         *  experience.
+         *
+         *  If matching field does not exist, store dialog form data in
+         *  hidden input appended to formset row. The "_0 " row index on name
+         *  and id attributes will be corrected during re-indexing below.
+         */
+        var baseField = baseRow.find(pattern);
+        if (baseField.length) {
+            var formsetRowField = formsetRow.find(pattern);
+            if (formsetRowField.length) {
+                formsetRowField.val(formInput.val());
+                formsetRowField.parent().contents().filter(function(){ 
+                    return this.nodeType == 3; 
+                })[0].nodeValue = formInput.val();
+            }
+            else {
+                console.error('ERROR: Dynamo-Formset-Popout could not locate .dynamo-formset-row display field with pattern ' + pattern);
+
+                return false;
+            }
+        }
+        else{
+            var formsetRowField = formsetRow.find(pattern);
+            if (formsetRowField.length) {
+                formsetRowField.val(formInput.val());
+            }
+            else {
+                console.error('ERROR: Dynamo-Formset-Popout could not locate .dynamo-formset-row hidden field with pattern ' + pattern);
+
+                return false;
+            }
+        }
+
+    });
+
+/*
+    // Update Row indexing and Label indexing.
+    updateRowIndex( dynamoForm );
+
+    // Determine if Max Rows is specified
+    if (undefined !== maxRows) {
+        // Determine if Max Rows has been met. If yes
+        // remove add row button functionality.
+        if (dynamoForm.find('.dynamo-formset-row').size() == maxRows) {
+            dynamoForm.find('.dynamo-formset-popout-add').addClass('disabled');
+            dynamoForm.find('.dynamo-formset-popout-add').attr('disabled', 'disabled');
+        }
+    }
+
+    // Determine if Min Rows is specified
+    var minRows = dynamoForm.attr('data-min-rows');
+    if (undefined !== minRows) {
+        // Determine if Min Rows has now been exceeded.
+        // If yes, restore delete button functionality.
+        if (dynamoForm.find('.dynamo-formset-row').size() > minRows) {
+            dynamoForm.find('.dynamo-formset-row-delete').removeClass('disabled');
+            dynamoForm.find('.dynamo-formset-row-delete').removeAttr('disabled');
+        }
+    }
+    */
+}
+
+
 
 /**
  * Validate dialog form data
