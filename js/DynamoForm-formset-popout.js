@@ -296,7 +296,8 @@ function createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows, ed
 
 
 /**
- * Process formset row into dialog form data
+ * Process formset row into dialog form data when user edits
+ * existing data.
  *
  */
 function processFromRow(dialogBody, dynamoFormRow) {
@@ -325,15 +326,11 @@ function processFromRow(dialogBody, dynamoFormRow) {
          *  If matching field does not exist, ignore.
          */
         var formField = dialogBody.find(pattern);
+        console.log(formField);
         if (formField.length) {
             formField.val(formsetInput.val());
         }
-        else {
-            console.log(pattern);
-        }
     });
-
-    console.log
 
     return false;
 }
@@ -433,7 +430,7 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
 
 
 /**
- * Update formset row from dialog form data
+ * Update formset row from dialog form data in edit mode.
  *
  */
 function updateRow(dialogForm, dynamoForm) {
