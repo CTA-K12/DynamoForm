@@ -273,17 +273,8 @@ function createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows, ed
                 var valid = validateForm(dialogForm)
 
                 if (true === valid) {
-                    // Check for edit mode flag
-                    if (undefined !== dialogForm.find('input#dynForm-popout-editMode').attr('id')) {
-                        // Update formset row
-                        updateRow(dialogForm, dynamoForm);
-                    }
-                    else {
-                        // Process to formset row
-                        processToRow(dialogForm, dynamoForm, rowCount, maxRows);
-                    }
-
-                    // Clear Form
+                    // Process to formset row
+                    processToRow(dialogForm, dynamoForm, rowCount, maxRows);
                 }
                 else {
                     alert('Invalid!');
@@ -700,12 +691,12 @@ function reindexUrlVariables(attribute, index) {
 
 
 /**
- * Format Text Nodes when empty strings
+ * Format Text Nodes with empty strings
  *
- * Empty text nodes cause formating issues when no text
- * is present (empty strings). This function adds an html
- * non-breaking space in place of empty strings to resolve
- * the formating issues.
+ * Empty text nodes cause html/css display formating issues when
+ * no text is present (empty strings). This function adds an html
+ * non-breaking space in place of empty strings to resolve the
+ * formating issues.
  */
 function formatTextNode(stringValue) {
     if ('' == stringValue) {
