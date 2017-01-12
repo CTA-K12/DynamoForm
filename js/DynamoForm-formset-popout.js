@@ -193,12 +193,23 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
     dialog.realize();
 
     // Set values from formset row into dialog form
-    processFromRow(dialog.getModalBody(), dynamoFormRow);
+    var selectizeElements = processFromRow(dialog.getModalBody(), dynamoFormRow);
 
     // Enable any Dynamo-Selectize fields
     if ('function' == typeof initDynamoSelectize) {
         var elements = dialog.getModalBody().find('.dynamo-selectize');
         initDynamoSelectize(elements);
+    }
+
+    // Are there Dynamo-Selectize fields that need data copied back
+    // after initialization?
+    if (!$.isEmptyObject(selectizeElements)) {
+        $.each(selectizeElements, function(key, value) {
+            var selectObject = dialog.getModalBody().find('#'+key);
+            var selectizedObject = selectObject[0].selectize;
+            selectizedObject.setValue(value.optionId, true);
+            selectObject.change();
+        })
     }
 
     // Enable or Re-enable any dynamo-datetimepicker fields
@@ -212,7 +223,6 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
     dialog.open();
 
     return false;
-
 });
 
 
@@ -302,6 +312,9 @@ function createDialog(popoutTitle, popoutForm, dynamoForm, rowCount, maxRows, ed
  */
 function processFromRow(dialogBody, dynamoFormRow) {
 
+    // Create object to track selectize elements
+    var selectizeElements = {};
+
     dynamoFormRow.find('input,select').each(function(){
 
         // Get formset field
@@ -321,18 +334,32 @@ function processFromRow(dialogBody, dynamoFormRow) {
         /*
          *  Check for formset input field in dialog form.
          *
-         *  If matching field exists, update value in dialog form.
+         *  If matching field exists:
+         
+         *    Determine if dynamo-selectize is in use. If yes, grab select option
+         *    id and label to be stored and added back to selectize after
+         *    initialization.
+         *
+         *    If no selectize in use, update value in dialog form.
          *
          *  If matching field does not exist, ignore.
+         * 
          */
         var formField = dialogBody.find(pattern);
-        console.log(formField);
-        if (formField.length) {
-            formField.val(formsetInput.val());
+        if (formField.length) {            
+            if (formField.hasClass('dynamo-selectize')) {
+                // Store current selectize options and values to restore later.
+                selectizeElements[formField.attr('id')] = {
+                    optionId:     formsetInput.val()
+                };
+            }
+            else {
+                formField.val(formsetInput.val());
+            }
         }
     });
 
-    return false;
+    return selectizeElements;
 }
 
 
