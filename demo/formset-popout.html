@@ -92,11 +92,30 @@
                   <form>
                     <div class="form-group">
                       <label for="type">Address Type</label>
-                      <select class="form-control dynamo-selectize" id="type" name="type" placeholder="Select Type">
-                        <option value=""></option>
-                        <option value="BL">Billing</option>
-                        <option value="PO">Purchasing</option>
-                        <option value="RE">Receiving</option>
+                      <select
+                        class="form-control dynamo-selectize"
+                        id="type"
+                        name="type"
+                        placeholder="Select Type"
+                        data-options=&#x27;[
+                          {
+                            "value": "AD",
+                            "text": "Administration"
+                          },
+                          {
+                            "value": "BL",
+                            "text": "Billing"
+                          },
+                          {
+                            "value": "PO",
+                            "text": "Purchasing"
+                          },
+                          {
+                            "value": "RE",
+                            "text": "Receiving"
+                          }
+                      ]&#x27;
+                      >
                       </select>
                     </div>
                     <div class="form-group">
