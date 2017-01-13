@@ -478,8 +478,8 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
          *  Determine if user requested the value be set after load function
          *  complets the loading process.
          *
-         *  data-load-set-value: null 
-         */ 
+         *  data-load-set-value: null
+         */
         var setValue = null;
         if ('undefined' !==  typeof formElement.attr('data-load-set-value')) {
             setValue = formElement.attr('data-load-set-value');
@@ -580,7 +580,7 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
                             callback(res[loadKey].slice(0, loadLimit));
                         } else {
                             callback(res.slice(0, loadLimit));
-                        }                        
+                        }
                     }
                 });
             };
@@ -607,7 +607,7 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
         callbackData.loadKey    = loadKey;
         callbackData.loadLimit  = loadLimit;
         callbackData.loadData   = loadData;
-        
+
         // Build load option
         var _load = dynamoCallbacks[loadCallback].bind(callbackData);
     }

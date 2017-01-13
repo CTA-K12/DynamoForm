@@ -170,13 +170,13 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
                 initDynamoSelectize(selectObject);
             }
             else {
-                initDynamoSelectize(selectObject);   
+                initDynamoSelectize(selectObject);
                 var selectizedObject = selectObject[0].selectize;
                 selectizedObject.setValue(value.optionId);
             }
         })
     }
-    
+
 
     // Enable or Re-enable any dynamo-datetimepicker fields
     if ('function' == typeof initBootstrapDateTimePicker) {
@@ -237,7 +237,7 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
     if (undefined !== dynamoPopout.attr('data-popout-closeButton-class')) {
         saveCloseButtonClass = dynamoPopout.attr('data-popout-closeButton-class');
     }
-    
+
 
     var buttonList = [{
         label: 'Close',
@@ -266,9 +266,9 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
                 else {
                     // Process to formset row
                     processToRow(dialogForm, dynamoPopout, rowCount, maxRows);
-                }                    
+                }
 
-                dialogRef.close();                    
+                dialogRef.close();
             }
             else {
                 alert('Invalid!');
@@ -343,7 +343,7 @@ function processFromRow(dialogBody, dynamoFormRow) {
          *  Check for formset input field in dialog form.
          *
          *  If matching field exists:
-         
+
          *    Determine if dynamo-selectize is in use. If yes, grab select option
          *    id and label to be stored and added back to selectize after
          *    initialization.
@@ -351,10 +351,10 @@ function processFromRow(dialogBody, dynamoFormRow) {
          *    If no selectize in use, update value in dialog form.
          *
          *  If matching field does not exist, ignore.
-         * 
+         *
          */
         var formField = dialogBody.find(pattern);
-        if (formField.length) {            
+        if (formField.length) {
             if (formField.hasClass('dynamo-selectize')) {
                 // Store current selectize options and values to restore later.
                 selectizeElements[formField.attr('id')] = {
@@ -426,7 +426,7 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
 
     });
 
-    /* 
+    /*
      *  If no rows exist, then prepend to formset container
      *  If row(s) exist, insert at end of formset
      */
