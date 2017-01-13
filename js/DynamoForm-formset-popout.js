@@ -314,32 +314,34 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
     // Non-Mode Specific Functions
     if (undefined !== dynamoPopout.attr('data-onShown-function')) {
         var onShownFn = dynamoPopout.attr('data-onShown-function');
-        dialog.onshown = dynamoFormsetPopoutCallbacks[onShownFn]();
+        dialog.onshown = dynamoFormsetPopoutCallbacks[onShownFn](dialog);
     }
     if (undefined !== dynamoPopout.attr('data-onHidden-function')) {
         var onHiddenFn = dynamoPopout.attr('data-onHidden-function');
-        dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenFn](dialogRef);
+        dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenFn](dialog);
     }
     // Add New Record Specific Functions
     if (false === editRow) {
         if (undefined !== dynamoPopout.attr('data-onShown-add-function')) {
             var onShownAddFn = dynamoPopout.attr('data-onShown-add-function');
-            dialog.onshown = dynamoFormsetPopoutCallbacks[onShownAddFn](dialogRef);
+            dialog.onshown = dynamoFormsetPopoutCallbacks[onShownAddFn](dialog);
         }
         if (undefined !== dynamoPopout.attr('data-onHidden-add-function')) {
             var onHiddenAddFn = dynamoPopout.attr('data-onHidden-add-function');
-            dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenAddFn](dialogRef);
+            dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenAddFn](dialog);
         }
     }
     // Edit Record Specific Functions
     else {
         if (undefined !== dynamoPopout.attr('data-onShown-edit-function')) {
             var onShownEditFn = dynamoPopout.attr('data-onShown-edit-function');
-            dialog.onshown = dynamoFormsetPopoutCallbacks[onShownEditFn]();
+            var data = {};
+            data.stuff = "Hey";
+            dialog.onshown = dynamoFormsetPopoutCallbacks[onShownEditFn](dialog);
         }
         if (undefined !== dynamoPopout.attr('data-onHidden-edit-function')) {
             var onHiddenEditFn = dynamoPopout.attr('data-onHidden-edit-function');
-            dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenEditFn](dialogRef);
+            dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenEditFn](dialog);
         }
     }
 
