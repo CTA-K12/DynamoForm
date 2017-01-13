@@ -532,6 +532,23 @@ function updateRow(dialogForm, dynamoForm) {
         }
         var pattern = "input[name^='" + formInputName + "_'],input[name^='" + formInputName + "-']";
 
+        /**
+         *  Determin if selectize options should be stored in formset field
+         *
+         *  This is common for remotely loaded data options that the user
+         *  searched for, and may not be avilable immediately if the user
+         *  chooses to edit the row later on. In this case, the inital
+         *  options will be loaded from this attribute store method.
+         */
+         var selectizeOptions = null;
+         if (undefined !== formInput[0].selectize && undefined !== formInput.attr('data-popout-store-options')) {
+            if ('true' === formInput.attr('data-popout-store-options')) {
+                var selectizeOptions = JSON.stringify(
+                    formInput[0].selectize.getOptions()
+                );
+            }
+         }
+
         /*
          *  Check for form input field in formset row
          *
@@ -549,6 +566,9 @@ function updateRow(dialogForm, dynamoForm) {
             var formsetRowField = formsetRow.find(pattern);
             if (formsetRowField.length) {
                 formsetRowField.val(formInput.val());
+                if (null !== selectizeOptions) {
+                    formsetRowField.attr('data-selectize-options', selectizeOptions);
+                }
                 var textNode = formsetRowField.parent().contents().filter(function(){
                     return this.nodeType == 3;
                 })[0];
@@ -569,6 +589,9 @@ function updateRow(dialogForm, dynamoForm) {
             var formsetRowField = formsetRow.find(pattern);
             if (formsetRowField.length) {
                 formsetRowField.val(formInput.val());
+                if (null !== selectizeOptions) {
+                    formsetRowField.attr('data-selectize-options', selectizeOptions);
+                }
             }
             else {
                 console.error('ERROR: Dynamo-Formset-Popout could not locate .dynamo-formset-row hidden field with pattern ' + pattern);
