@@ -117,11 +117,13 @@
                         id="type"
                         name="type"
                         placeholder="Select Type"
-                        data-preload="true"
+                        data-preload="false"
                         data-load-type="callback"
                         data-load-callback="getType"
-                        data-valueField="value"
-                        data-labelField="label"
+                        data-valueField="code"
+                        data-labelField="description"
+                        data-searchField=&#x27;["description"]&#x27;
+                        data-popout-store-options="true"
                       >
                       </select>
                     </div>
@@ -320,9 +322,9 @@
 
                     var typesList = [];
                     $( xml ).find( 'type' ).each( function() {
-                        var id    = $(this).find( "code" ).text();
-                        var label = $(this).find( "description" ).text();
-                        typesList.push ( {'value': id, 'label': label} );
+                        var code    = $(this).find( "code" ).text();
+                        var description = $(this).find( "description" ).text();
+                        typesList.push ( {'code': code, 'description': description} );
                     });
 
                     if (null !== loadKey) {

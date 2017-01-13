@@ -166,9 +166,13 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
             var selectObject = dialog.getModalBody().find('#'+key);
             selectObject.attr('data-set-value', value.optionId);
             initDynamoSelectize(selectObject);
+
+            if (!$.isEmptyObject(value.optionList)) {
+                selectObject[0].selectize.addOption(value.optionList);
+                selectObject[0].selectize.setValue(value.optionId);
+            }
         })
     }
-
 
     // Enable or Re-enable any dynamo-datetimepicker fields
     if ('function' == typeof initBootstrapDateTimePicker) {
@@ -336,11 +340,11 @@ function processFromRow(dialogBody, dynamoFormRow) {
          *
          *  If matching field exists:
 
-         *    Determine if dynamo-selectize is in use. If yes, grab select option
-         *    id and label to be stored and added back to selectize after
-         *    initialization.
+         *    Determine if dynamo-selectize is in use. If yes, grab selected
+         *    item id to be stored and added back to selectize after
+         *    initialization. If requested, also grab all options as well.
          *
-         *    If no selectize in use, update value in dialog form.
+         *    If selectize is not in use, update value in dialog form.
          *
          *  If matching field does not exist, ignore.
          *
@@ -348,10 +352,18 @@ function processFromRow(dialogBody, dynamoFormRow) {
         var formField = dialogBody.find(pattern);
         if (formField.length) {
             if (formField.hasClass('dynamo-selectize')) {
-                // Store current selectize options and values to restore later.
+                // Store current selectize item value to restore later.
                 selectizeElements[formField.attr('id')] = {
                     optionId:     formsetInput.val()
                 };
+                if (undefined !== formField.attr('data-popout-store-options')) {
+                    if ('true' === formField.attr('data-popout-store-options')) {
+                        var selectizeOptions = JSON.parse(
+                            formsetInput.attr('data-selectize-options')
+                        );
+                        selectizeElements[formField.attr('id')].optionList = selectizeOptions;
+                    }
+                }
             }
             else {
                 formField.val(formsetInput.val());
@@ -392,6 +404,23 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
         }
         var pattern = "input[name^='" + formInputName + "_'],input[name^='" + formInputName + "-']";
 
+        /**
+         *  Determin if selectize options should be stored in formset field
+         *
+         *  This is common for remotely loaded data options that the user
+         *  searched for, and may not be avilable immediately if the user
+         *  chooses to edit the row later on. In this case, the inital
+         *  options will be loaded from this attribute store method.
+         */
+         var selectizeOptions = null;
+         if (undefined !== formInput[0].selectize && undefined !== formInput.attr('data-popout-store-options')) {
+            if ('true' === formInput.attr('data-popout-store-options')) {
+                var selectizeOptions = JSON.stringify(
+                    formInput[0].selectize.getOptions()
+                );
+            }
+         }
+
         /*
          *  Check for form input field in formset row
          *
@@ -408,12 +437,18 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
         if (baseField.length) {
             baseField.val(formInput.val());
             baseField.after(formatTextNode(formInput.val()));
+            if (null !== selectizeOptions) {
+                baseField.attr('data-selectize-options', selectizeOptions);
+            }
         }
         else{
             var newField = $($.parseHTML(
                 '<input type="hidden" name="' + formInputName + '_0" id="' + formInputName + '_0" value ="' + formInput.val() + '">'
             ));
             newField.appendTo(baseRow);
+            if (null !== selectizeOptions) {
+                newField.attr('data-selectize-options', selectizeOptions);
+            }
         }
 
     });
