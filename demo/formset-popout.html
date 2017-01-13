@@ -108,6 +108,7 @@
                 data-popout-saveButton-class="btn-primary"
                 data-popout-saveMoreButton-class="pull-right btn-info"
                 data-popout-closeButton-class="pull-left btn-default"
+                data-onShown-edit-function="prepareForAddressType"
                 data-popout-prototype='
                   <form>
                     <div class="form-group">
@@ -299,7 +300,7 @@
      * These are custom callback methods for selectize drop downs that load
      * data asynchronously when the user types in a search string.
      */
-    var dynamoCallbacks = {
+    var dynamoSelectizeCallbacks = {
 
         getType: function (searchTerm, selectizeCallback)
         {
@@ -345,6 +346,20 @@
             });
         }
     };
+
+    /*
+     * Custom Data Load methods for DynamoForm-formset-popout elements.
+     *
+     * These are custom callback methods for formset-popout events.
+     */
+    var dynamoFormsetPopoutCallbacks = {
+
+        prepareForAddressType: function (dialogRef)
+        {
+          alert("Hey - it worked!!");
+        }
+    };
+  </script>
   </script>
 
 </html>

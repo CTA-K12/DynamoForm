@@ -223,17 +223,16 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
     // Check for button additional css classes
     var saveButtonClass = '';
     if (undefined !== dynamoPopout.attr('data-popout-saveButton-class')) {
-        saveButtonClass = dynamoPopout.attr('data-popout-saveButton-class');
+        var saveButtonClass = dynamoPopout.attr('data-popout-saveButton-class');
     }
     var saveMoreButtonClass = '';
     if (undefined !== dynamoPopout.attr('data-popout-saveMoreButton-class')) {
-        saveMoreButtonClass = dynamoPopout.attr('data-popout-saveMoreButton-class');
+        var saveMoreButtonClass = dynamoPopout.attr('data-popout-saveMoreButton-class');
     }
     var saveCloseButtonClass = ''
     if (undefined !== dynamoPopout.attr('data-popout-closeButton-class')) {
-        saveCloseButtonClass = dynamoPopout.attr('data-popout-closeButton-class');
+        var saveCloseButtonClass = dynamoPopout.attr('data-popout-closeButton-class');
     }
-
 
     var buttonList = [{
         label: 'Close',
@@ -297,6 +296,7 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
         });
     }
 
+    // Create new dialog object
     var dialog = new BootstrapDialog({
         type: BootstrapDialog.TYPE_INFO,
         title: popoutTitle,
@@ -304,6 +304,45 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
         closeByBackdrop: false,
         buttons: buttonList
     });
+
+    /**
+     *  Determine if any function should be run on events
+     *
+     *  Add/Edit Mode Specific functions will override, non-mode
+     *  specific functions if both have been defined.
+     */
+    // Non-Mode Specific Functions
+    if (undefined !== dynamoPopout.attr('data-onShown-function')) {
+        var onShownFn = dynamoPopout.attr('data-onShown-function');
+        dialog.onshown = dynamoFormsetPopoutCallbacks[onShownFn]();
+    }
+    if (undefined !== dynamoPopout.attr('data-onHidden-function')) {
+        var onHiddenFn = dynamoPopout.attr('data-onHidden-function');
+        dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenFn](dialogRef);
+    }
+    // Add New Record Specific Functions
+    if (false === editRow) {
+        if (undefined !== dynamoPopout.attr('data-onShown-add-function')) {
+            var onShownAddFn = dynamoPopout.attr('data-onShown-add-function');
+            dialog.onshown = dynamoFormsetPopoutCallbacks[onShownAddFn](dialogRef);
+        }
+        if (undefined !== dynamoPopout.attr('data-onHidden-add-function')) {
+            var onHiddenAddFn = dynamoPopout.attr('data-onHidden-add-function');
+            dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenAddFn](dialogRef);
+        }
+    }
+    // Edit Record Specific Functions
+    else {
+        if (undefined !== dynamoPopout.attr('data-onShown-edit-function')) {
+            var onShownEditFn = dynamoPopout.attr('data-onShown-edit-function');
+            dialog.onshown = dynamoFormsetPopoutCallbacks[onShownEditFn]();
+        }
+        if (undefined !== dynamoPopout.attr('data-onHidden-edit-function')) {
+            var onHiddenEditFn = dynamoPopout.attr('data-onHidden-edit-function');
+            dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenEditFn](dialogRef);
+        }
+    }
+
 
     return dialog;
 }
