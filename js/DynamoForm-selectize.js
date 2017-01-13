@@ -473,6 +473,21 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
         }
         // Build load options
         _options.load = processSelectizeLoadOptions(formElement, requestPreload);
+
+        /**
+         *  Determine if user requested the value be set after load function
+         *  complets the loading process.
+         *
+         *  data-load-set-value: null 
+         */ 
+        var setValue = null;
+        if ('undefined' !==  typeof formElement.attr('data-load-set-value')) {
+            setValue = formElement.attr('data-load-set-value');
+            _options.onLoad = function(data) {
+                formElement[0].selectize.setValue(setValue);
+            };
+        }
+
     }
 
     return _options;
@@ -532,13 +547,6 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
         loadKey = formElement.attr('data-load-resultSet-key');
     }
 
-    // data-load-set-value: null
-    var setValue = null;
-    if ('undefined' !==  typeof formElement.attr('data-load-set-value')) {
-        setValue = formElement.attr('data-load-set-value');
-    }
-
-
     // If GET|POST type, build out ajax based option
     if ('GET' == loadType || 'POST' == loadType) {
 
@@ -572,13 +580,7 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
                             callback(res[loadKey].slice(0, loadLimit));
                         } else {
                             callback(res.slice(0, loadLimit));
-                        }
-
-                        // Set initial value if requested
-                        if (setValue) {
-                            formElement[0].selectize.setValue(setValue)
-                        }
-                        
+                        }                        
                     }
                 });
             };
@@ -605,8 +607,6 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
         callbackData.loadKey    = loadKey;
         callbackData.loadLimit  = loadLimit;
         callbackData.loadData   = loadData;
-        callbackData.setValue   = setValue;
-        callbackData.formElment = formElement;
         
         // Build load option
         var _load = dynamoCallbacks[loadCallback].bind(callbackData);

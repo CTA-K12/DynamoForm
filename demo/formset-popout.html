@@ -292,8 +292,6 @@
             loadLimit  = this.loadLimit;
             loadKey    = this.loadKey;
             loadData   = this.loadData;
-            setValue   = this.setValue;
-            formElment = this.formElment
 
             // Don't search if searchTerm string is empty, unless pre-loading
             if (!loadData.requestPreload && !searchTerm.length) {
@@ -319,13 +317,7 @@
                     }
                     else {
                         selectizeCallback(typesList.slice(0, loadLimit));
-                    }
-
-                    // Set initial value if requested
-                    if (setValue) {
-                      formElment[0].selectize.setValue(setValue);
-                    }
-                    
+                    }                    
                 },
                 error: function( xhr, status, error  ) {
                     console.error('The location xml file (xml/types.xml) could not be read.');
