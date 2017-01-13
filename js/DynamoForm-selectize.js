@@ -112,13 +112,31 @@ function initDynamoSelectize(formElements, disablePreLoad) {
  */
 function buildSelectizeOptionsObject(formElement, disablePreLoad) {
 
+    /**
+     *  Reset local storage for this element
+     *
+     *  Currently using local storage to prevent the onLoad() event
+     *  from being called more than once. Using the onLoad to set
+     *  the control value after the load routine has been run when
+     *  the user is trying to set the value programmatically.
+     *
+     *  This is especially useful in DynamoForm-formset-popout when
+     *  the user is editing a existing row.
+     *
+     *  Is there a better way?
+     */
+    var storageKey = 'dynamoForm-' + formElement.attr('id') + '-hasRunOnLoadSetValue';
+    localStorage.setItem(storageKey, false);
+
     // Default disablePreLoad to false
     var disablePreLoad = (undefined === typeof(disablePreLoad)) ? false : disablePreLoad;
 
     var _options = {};
 
     // Enable typing mode plug-in by default
-    _options.plugins = ['typing_mode', 'item_nowrap'];
+    //    David - item_nowrap has bug causing text to creep to right after multiple re-selects
+    //_options.plugins = ['typing_mode', 'item_nowrap'];
+    _options.plugins = ['typing_mode'];
 
     // data-diacritics: true
     if ('undefined' !==  typeof formElement.attr('data-diacritics')) {
@@ -459,6 +477,20 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
     }
 
     /**
+     *  data-set-value: null
+     *
+     *  This option allows users to force the value to be set
+     *  programmatically after the control is initialized.
+     */
+    var setValue = null;
+    if ('undefined' !==  typeof formElement.attr('data-set-value')) {
+        setValue = formElement.attr('data-set-value');
+        _options.onInitialize = function() {
+            formElement[0].selectize.setValue(setValue);
+        };
+    }
+
+    /**
      *  data-load-type: null
      *
      *  The data-load-[*] attributes define the necessary selectize options for
@@ -475,19 +507,21 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
         _options.load = processSelectizeLoadOptions(formElement, requestPreload);
 
         /**
-         *  Determine if user requested the value be set after load function
-         *  complets the loading process.
+         *  data-set-value: null
          *
-         *  data-load-set-value: null
+         *  This option allows users to force the value to be set
+         *  programmatically after remote data is loaded.
          */
         var setValue = null;
-        if ('undefined' !==  typeof formElement.attr('data-load-set-value')) {
-            setValue = formElement.attr('data-load-set-value');
-            _options.onLoad = function(data) {
-                formElement[0].selectize.setValue(setValue);
+        if ('undefined' !==  typeof formElement.attr('data-set-value')) {
+            setValue = formElement.attr('data-set-value');
+            _options.onLoad = function() {
+                if ('false' === localStorage.getItem(storageKey)) {
+                    formElement[0].selectize.setValue(setValue);
+                    localStorage.setItem(storageKey, true);
+                }
             };
         }
-
     }
 
     return _options;

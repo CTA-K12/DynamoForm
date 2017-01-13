@@ -165,7 +165,10 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
         $.each(selectizeElements, function(key, value) {
             var selectObject = dialog.getModalBody().find('#'+key);
 
-            if (undefined !== selectObject.attr('data-load-type')) {
+            selectObject.attr('data-set-value', value.optionId);
+            initDynamoSelectize(selectObject);
+
+            /*if (undefined !== selectObject.attr('data-load-type')) {
                 selectObject.attr('data-load-set-value', value.optionId);
                 initDynamoSelectize(selectObject);
             }
@@ -173,7 +176,7 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
                 initDynamoSelectize(selectObject);
                 var selectizedObject = selectObject[0].selectize;
                 selectizedObject.setValue(value.optionId);
-            }
+            }*/
         })
     }
 
