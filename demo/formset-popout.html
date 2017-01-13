@@ -117,24 +117,12 @@
                         id="type"
                         name="type"
                         placeholder="Select Type"
-                        data-options=&#x27;[
-                          {
-                            "value": "AD",
-                            "text": "Administration"
-                          },
-                          {
-                            "value": "BL",
-                            "text": "Billing"
-                          },
-                          {
-                            "value": "PO",
-                            "text": "Purchasing"
-                          },
-                          {
-                            "value": "RE",
-                            "text": "Receiving"
-                          }
-                      ]&#x27;
+                        data-preload="true"
+                        data-load-type="callback"
+                        data-load-callback="getType"
+                        data-load-set-value="BL"
+                        data-valueField="value"
+                        data-labelField="label"
                       >
                       </select>
                     </div>
@@ -188,7 +176,8 @@
                 no more than 4 are accepted in this example. All form fields are placed in hidden
                 input fields in the formset rows. Additional form fields that aren't part of the
                 formset display prototype are also added as hidden input fields in each formset
-                row.
+                row. This allows you to have many more fields in the popout dialog then are
+                displayed on the screen in the formset.
               </p>
               <p><strong>Here is the HTML for the above example</strong></p>
               <p>
@@ -285,6 +274,71 @@
   <script src="//rawgit.com/MESD/dynamoForm/master/vendor/selectize/js/selectize.min.js"></script>
 
   <!-- DynamoForm-Selectize Library is not required for DynamoForm-formset-popout -->
-  <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script>
+  <!-- <script src="//rawgit.com/MESD/dynamoForm/master/js/DynamoForm-selectize.js"></script> -->
+  <script src="../js/DynamoForm-selectize.js"></script>
+
+  <script>
+
+    /*
+     * Custom Data Load methods for DynamoForm-selectize elements.
+     *
+     * These are custom callback methods for selectize drop downs that load
+     * data asynchronously when the user types in a search string.
+     */
+    var dynamoCallbacks = {
+
+        getType: function (searchTerm, selectizeCallback)
+        {
+
+            loadLimit  = this.loadLimit;
+            loadKey    = this.loadKey;
+            loadData   = this.loadData;
+            setValue   = this.setValue;
+            formElment = this.formElment
+
+            // Don't search if searchTerm string is empty, unless pre-loading
+            if (!loadData.requestPreload && !searchTerm.length) {
+                return {};
+            }
+
+            // Load locations from xml/locations.xml file.
+            $.ajax({
+                type: "GET",
+                url: "xml/types.xml",
+                dataType: "xml",
+                success: function( xml ) {
+
+                    var typesList = [];
+                    $( xml ).find( 'type' ).each( function() {
+                        var id    = $(this).find( "code" ).text();
+                        var label = $(this).find( "description" ).text();
+                        typesList.push ( {'value': id, 'label': label} );
+                    });
+
+                    if (null !== loadKey) {
+                    selectizeCallback(typesList[loadKey].slice(0, loadLimit));
+                    }
+                    else {
+                        selectizeCallback(typesList.slice(0, loadLimit));
+                    }
+
+                    // Set initial value if requested
+                    if (setValue) {
+                      formElment[0].selectize.setValue(setValue);
+                    }
+                    
+                },
+                error: function( xhr, status, error  ) {
+                    console.error('The location xml file (xml/types.xml) could not be read.');
+                    alertDialog (
+                                    'Error: Unable to Load Address Types',
+                                    'Please contact the system administrator for assistance.',
+                                    'error'
+                    );
+                }
+            });
+        }
+    };
+  </script>
 
 </html>

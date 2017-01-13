@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<types>
+	<type>
+		<code>AD</code>
+		<description>Administration</description>
+	</type>
+	<type>
+		<code>BL</code>
+		<description>Billing</description>
+	</type>
+	<type>
+		<code>PO</code>
+		<description>Purchasing</description>
+	</type>
+	<type>
+		<code>RE</code>
+		<description>Receiving</description>
+	</type>
+</types>

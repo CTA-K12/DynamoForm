@@ -532,6 +532,12 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
         loadKey = formElement.attr('data-load-resultSet-key');
     }
 
+    // data-load-set-value: null
+    var setValue = null;
+    if ('undefined' !==  typeof formElement.attr('data-load-set-value')) {
+        setValue = formElement.attr('data-load-set-value');
+    }
+
 
     // If GET|POST type, build out ajax based option
     if ('GET' == loadType || 'POST' == loadType) {
@@ -567,6 +573,12 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
                         } else {
                             callback(res.slice(0, loadLimit));
                         }
+
+                        // Set initial value if requested
+                        if (setValue) {
+                            formElement[0].selectize.setValue(setValue)
+                        }
+                        
                     }
                 });
             };
@@ -590,10 +602,12 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
 
         // Set load parameters in data object
         callbackData = {};
-        callbackData.loadKey   = loadKey;
-        callbackData.loadLimit = loadLimit;
-        callbackData.loadData  = loadData;
-
+        callbackData.loadKey    = loadKey;
+        callbackData.loadLimit  = loadLimit;
+        callbackData.loadData   = loadData;
+        callbackData.setValue   = setValue;
+        callbackData.formElment = formElement;
+        
         // Build load option
         var _load = dynamoCallbacks[loadCallback].bind(callbackData);
     }
