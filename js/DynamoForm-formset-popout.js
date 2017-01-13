@@ -172,8 +172,8 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
             else {
                 initDynamoSelectize(selectObject);   
                 var selectizedObject = selectObject[0].selectize;
-                selectizedObject.setValue(value.optionId, true);
-                selectObject.change();
+                selectizedObject.setValue(value.optionId);
+                //selectizedObject.change();
             }
 
         })
