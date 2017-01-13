@@ -149,25 +149,36 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
     // Realize dialog without displaying
     dialog.realize();
 
-    // Set values from formset row into dialog form
+    /**
+     * Set values from formset row into the dialog form, returning
+     * any exisiting selectize elments to be post processed.
+     *
+     */
     var selectizeElements = processFromRow(dialog.getModalBody(), dynamoFormRow);
 
-    // Enable any Dynamo-Selectize fields
-    if ('function' == typeof initDynamoSelectize) {
-        var elements = dialog.getModalBody().find('.dynamo-selectize');
-        initDynamoSelectize(elements);
-    }
-
-    // Are there Dynamo-Selectize fields that need data copied back
-    // after initialization?
+    /**
+     *  Are there Dynamo-Selectize fields that need data copied back
+     *  after initialization?
+     *
+     */
     if (!$.isEmptyObject(selectizeElements)) {
         $.each(selectizeElements, function(key, value) {
             var selectObject = dialog.getModalBody().find('#'+key);
-            var selectizedObject = selectObject[0].selectize;
-            selectizedObject.setValue(value.optionId, true);
-            selectObject.change();
+
+            if (undefined !== selectObject.attr('data-load-type')) {
+                selectObject.attr('data-load-set-value', value.optionId);
+                initDynamoSelectize(selectObject);
+            }
+            else {
+                initDynamoSelectize(selectObject);   
+                var selectizedObject = selectObject[0].selectize;
+                selectizedObject.setValue(value.optionId, true);
+                selectObject.change();
+            }
+
         })
     }
+    
 
     // Enable or Re-enable any dynamo-datetimepicker fields
     if ('function' == typeof initBootstrapDateTimePicker) {
