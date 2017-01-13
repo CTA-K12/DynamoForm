@@ -646,7 +646,7 @@ function processSelectizeLoadOptions(formElement, requestPreload) {
         callbackData.loadData   = loadData;
 
         // Build load option
-        var _load = dynamoCallbacks[loadCallback].bind(callbackData);
+        var _load = dynamoSelectizeCallbacks[loadCallback].bind(callbackData);
     }
 
     return _load;
