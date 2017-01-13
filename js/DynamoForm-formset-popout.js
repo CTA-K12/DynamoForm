@@ -164,19 +164,8 @@ $('.dynamo-formset-popout').on('click', '.dynamo-formset-row-edit', function() {
     if (!$.isEmptyObject(selectizeElements)) {
         $.each(selectizeElements, function(key, value) {
             var selectObject = dialog.getModalBody().find('#'+key);
-
             selectObject.attr('data-set-value', value.optionId);
             initDynamoSelectize(selectObject);
-
-            /*if (undefined !== selectObject.attr('data-load-type')) {
-                selectObject.attr('data-load-set-value', value.optionId);
-                initDynamoSelectize(selectObject);
-            }
-            else {
-                initDynamoSelectize(selectObject);
-                var selectizedObject = selectObject[0].selectize;
-                selectizedObject.setValue(value.optionId);
-            }*/
         })
     }
 

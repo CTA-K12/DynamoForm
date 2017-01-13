@@ -133,9 +133,12 @@ function buildSelectizeOptionsObject(formElement, disablePreLoad) {
 
     var _options = {};
 
-    // Enable typing mode plug-in by default
-    //    David - item_nowrap has bug causing text to creep to right after multiple re-selects
-    //_options.plugins = ['typing_mode', 'item_nowrap'];
+    /**
+     *   Enable typing mode plug-in by default
+     *
+     *     David - item_nowrap has bug causing text to creep to right after multiple re-selects
+     *    _options.plugins = ['typing_mode', 'item_nowrap'];
+     */
     _options.plugins = ['typing_mode'];
 
     // data-diacritics: true
