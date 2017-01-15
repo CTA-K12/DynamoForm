@@ -335,8 +335,6 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
     else {
         if (undefined !== dynamoPopout.attr('data-onShown-edit-function')) {
             var onShownEditFn = dynamoPopout.attr('data-onShown-edit-function');
-            var data = {};
-            data.stuff = "Hey";
             dialog.onshown = dynamoFormsetPopoutCallbacks[onShownEditFn](dialog);
         }
         if (undefined !== dynamoPopout.attr('data-onHidden-edit-function')) {
