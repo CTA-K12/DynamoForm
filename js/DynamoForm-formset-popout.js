@@ -279,9 +279,6 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
 
                 dialogRef.close();
             }
-            else {
-                alert('Invalid!');
-            }
         }
     }];
 
@@ -308,9 +305,6 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
                     // Process to formset row
                     processToRow(dialogForm, dynamoPopout, rowCount, maxRows);
                     clearPopoutForm(dialogForm);
-                }
-                else {
-                    alert('Invalid!');
                 }
             }
         });
