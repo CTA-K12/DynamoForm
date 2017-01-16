@@ -296,8 +296,14 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
                 var dialogForm = dialogRef.getModalBody().find('form');
 
                 // Validate form content
-                var valid = validateForm(dialogForm)
+                if (null !== vaidatorFunction) {
+                    var valid = dialogValidator(dialogForm);
+                }
+                else {
+                    var valid = true;
+                }
 
+                // Process popout form data
                 if (true === valid) {
                     // Process to formset row
                     processToRow(dialogForm, dynamoPopout, rowCount, maxRows);
