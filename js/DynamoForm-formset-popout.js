@@ -296,53 +296,56 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
         });
     }
 
-    // Create new dialog object
-    var dialog = new BootstrapDialog({
-        type: BootstrapDialog.TYPE_INFO,
-        title: popoutTitle,
-        message: popoutForm,
-        closeByBackdrop: false,
-        buttons: buttonList
-    });
-
     /**
      *  Determine if any function should be run on events
      *
      *  Add/Edit Mode Specific functions will override, non-mode
      *  specific functions if both have been defined.
      */
+     var dialogOnShown = null;
+     var dialogOnHidden = null;
     // Non-Mode Specific Functions
     if (undefined !== dynamoPopout.attr('data-onShown-function')) {
         var onShownFn = dynamoPopout.attr('data-onShown-function');
-        dialog.onshown = dynamoFormsetPopoutCallbacks[onShownFn](dialog);
+        dialogOnShown = dynamoFormsetPopoutEvents[onShownFn];
     }
     if (undefined !== dynamoPopout.attr('data-onHidden-function')) {
         var onHiddenFn = dynamoPopout.attr('data-onHidden-function');
-        dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenFn](dialog);
+        dialogOnHidden = dynamoFormsetPopoutEvents[onHiddenFn];
     }
     // Add New Record Specific Functions
     if (false === editRow) {
         if (undefined !== dynamoPopout.attr('data-onShown-add-function')) {
             var onShownAddFn = dynamoPopout.attr('data-onShown-add-function');
-            dialog.onshown = dynamoFormsetPopoutCallbacks[onShownAddFn](dialog);
+            dialogOnShown = dynamoFormsetPopoutEvents[onShownAddFn];
         }
         if (undefined !== dynamoPopout.attr('data-onHidden-add-function')) {
             var onHiddenAddFn = dynamoPopout.attr('data-onHidden-add-function');
-            dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenAddFn](dialog);
+            dialogOnHidden = dynamoFormsetPopoutEvents[onHiddenAddFn];
         }
     }
     // Edit Record Specific Functions
     else {
         if (undefined !== dynamoPopout.attr('data-onShown-edit-function')) {
             var onShownEditFn = dynamoPopout.attr('data-onShown-edit-function');
-            dialog.onshown = dynamoFormsetPopoutCallbacks[onShownEditFn](dialog);
+            dialogOnShown = dynamoFormsetPopoutEvents[onShownEditFn];
         }
         if (undefined !== dynamoPopout.attr('data-onHidden-edit-function')) {
             var onHiddenEditFn = dynamoPopout.attr('data-onHidden-edit-function');
-            dialog.onhidden = dynamoFormsetPopoutCallbacks[onHiddenEditFn](dialog);
+            dialogOnHidden = dynamoFormsetPopoutEvents[onHiddenEditFn];
         }
     }
 
+    // Create new dialog object
+    var dialog = new BootstrapDialog({
+        type: BootstrapDialog.TYPE_INFO,
+        title: popoutTitle,
+        message: popoutForm,
+        closeByBackdrop: false,
+        buttons: buttonList,
+        onshown: dialogOnShown,
+        onhidden: dialogOnHidden
+    });
 
     return dialog;
 }
