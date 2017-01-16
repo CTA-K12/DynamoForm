@@ -234,6 +234,14 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
         var saveCloseButtonClass = dynamoPopout.attr('data-popout-closeButton-class');
     }
 
+
+    // Check for validation function
+    var vaidatorFunction = null;
+    if (undefined !== dynamoPopout.attr('data-popout-validator-function')) {
+        var vaidatorFunction = dynamoPopout.attr('data-popout-validator-function');
+        dialogValidator = dynamoFormsetPopoutValidators[vaidatorFunction];
+    }
+
     var buttonList = [{
         label: 'Close',
         cssClass: saveCloseButtonClass,
@@ -250,8 +258,14 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
             var dialogForm = dialogRef.getModalBody().find('form');
 
             // Validate form content
-            var valid = validateForm(dialogForm)
+            if (null !== vaidatorFunction) {
+                var valid = dialogValidator(dialogForm);
+            }
+            else {
+                var valid = true;
+            }
 
+            // Process popout form data
             if (true === valid) {
                 // Check for edit mode flag
                 if (undefined !== dialogForm.find('input#dynForm-popout-editMode').attr('id')) {

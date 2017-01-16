@@ -109,6 +109,7 @@
                 data-popout-saveMoreButton-class="pull-right btn-info"
                 data-popout-closeButton-class="pull-left btn-default"
                 data-onShown-edit-function="prepareForAddressType"
+                data-popout-validator-function="validateDialogForm"
                 data-popout-prototype='
                   <form>
                     <div class="form-group">
@@ -348,7 +349,7 @@
     };
 
     /*
-     * Custom Event methods for DynamoForm-formset-popout elements.
+     * Custom Event methods for DynamoForm-formset-popout
      *
      */
     var dynamoFormsetPopoutEvents = {
@@ -358,6 +359,21 @@
           alert("Hey - I'm an edit onShown event!");
         }
     };
+
+
+    /*
+     * Custom validation methods for DynamoForm-formset-popout
+     *
+     */
+    var dynamoFormsetPopoutValidators = {
+
+        validateDialogForm: function (dialog)
+        {
+          return true;
+        }
+    };
+
+
   </script>
 
 </html>
