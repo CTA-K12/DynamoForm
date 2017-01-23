@@ -391,6 +391,18 @@ function processFromRow(dialogBody, dynamoFormRow) {
         formsetInputName = getUnindexedAttribute(formsetInputName);
         var pattern = "input[name='" + formsetInputName + "'],select[name='" + formsetInputName + "']";
 
+        // Determine if checked attribute is set
+        var checkedAttribute = null;
+        if ('checked' == formsetInput.attr('checked')) {
+            checkedAttribute = true;
+        }
+
+        // Determine if selected attribute is set
+        var selectedAttribute = null;
+        if ('selected' == formsetInput.attr('selected')) {
+            selectedAttribute = true;
+        }
+
         /*
          *  Check for formset input field in dialog form.
          *
@@ -407,6 +419,8 @@ function processFromRow(dialogBody, dynamoFormRow) {
          */
         var formField = dialogBody.find(pattern);
         if (formField.length) {
+
+            // Determine if selectize is in use
             if (formField.hasClass('dynamo-selectize')) {
                 // Store current selectize item value to restore later.
                 selectizeElements[formField.attr('id')] = {
@@ -424,6 +438,17 @@ function processFromRow(dialogBody, dynamoFormRow) {
             else {
                 formField.val(formsetInput.val());
             }
+
+            // Set checked attribute if needed
+            if (true === checkedAttribute) {
+                formField.attr('checked', true);
+            }
+
+            // Set selected attribute if needed
+            if (true === selectedAttribute) {
+                formField.attr('selected', true);
+            }
+
         }
     });
 
@@ -461,11 +486,11 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
         var pattern = "input[name^='" + formInputName + "_'],input[name^='" + formInputName + "-']";
 
         /**
-         *  Determin if selectize options should be stored in formset field
+         *  Determine if selectize options should be stored in formset field
          *
          *  This is common for remotely loaded data options that the user
-         *  searched for, and may not be avilable immediately if the user
-         *  chooses to edit the row later on. In this case, the inital
+         *  searched for, and may not be available immediately if the user
+         *  chooses to edit the row later on. In this case, the initial
          *  options will be loaded from this attribute store method.
          */
          var selectizeOptions = null;
@@ -475,6 +500,18 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
                     formInput[0].selectize.getOptions()
                 );
             }
+         }
+
+         // Determine if checked attribute is set
+         var checkedAttribute = null;
+         if ('checked' == formInput.attr('checked')) {
+            checkedAttribute = true;
+         }
+
+         // Determine if selected attribute is set
+         var selectedAttribute = null;
+         if ('selected' == formInput.attr('selected')) {
+            selectedAttribute = true;
          }
 
         /*
@@ -496,6 +533,12 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
             if (null !== selectizeOptions) {
                 baseField.attr('data-selectize-options', selectizeOptions);
             }
+            if (true === checkedAttribute) {
+                baseField.attr('checked', true);
+            }
+            if (true === selectedAttribute) {
+                baseField.attr('selected', true);
+            }
         }
         else{
             var newField = $($.parseHTML(
@@ -504,6 +547,12 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
             newField.appendTo(baseRow);
             if (null !== selectizeOptions) {
                 newField.attr('data-selectize-options', selectizeOptions);
+            }
+            if (true === checkedAttribute) {
+                newField.attr('checked', true);
+            }
+            if (true === selectedAttribute) {
+                newField.attr('selected', true);
             }
         }
 
