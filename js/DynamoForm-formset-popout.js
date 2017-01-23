@@ -721,12 +721,17 @@ function updateRow(dialogForm, dynamoForm) {
         if (true === checkedAttribute) {
             formsetRowField.attr('checked', true);
         }
+        else if (formsetRowField.attr('checked')) {
+            formsetRowField.attr('checked', false);
+        }
 
         // Set selected attribute if needed
         if (true === selectedAttribute) {
             formsetRowField.attr('selected', true);
         }
-
+        else if (formsetRowField.attr('selected')) {
+            formsetRowField.attr('selected', false);
+        }
     });
 }
 
