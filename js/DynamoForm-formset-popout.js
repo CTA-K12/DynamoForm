@@ -654,6 +654,18 @@ function updateRow(dialogForm, dynamoForm) {
             }
          }
 
+         // Determine if checked attribute is set
+         var checkedAttribute = null;
+         if ('checked' == formInput.attr('checked')) {
+            checkedAttribute = true;
+         }
+
+         // Determine if selected attribute is set
+         var selectedAttribute = null;
+         if ('selected' == formInput.attr('selected')) {
+            selectedAttribute = true;
+         }
+
         /*
          *  Check for form input field in formset row
          *
@@ -703,6 +715,16 @@ function updateRow(dialogForm, dynamoForm) {
 
                 return false;
             }
+        }
+
+        // Set checked attribute if needed
+        if (true === checkedAttribute) {
+            formsetRowField.attr('checked', true);
+        }
+
+        // Set selected attribute if needed
+        if (true === selectedAttribute) {
+            formsetRowField.attr('selected', true);
         }
 
     });
