@@ -238,8 +238,10 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
     // Check for validation function
     var vaidatorFunction = null;
     if (undefined !== dynamoPopout.attr('data-popout-validator-function')) {
-        var vaidatorFunction = dynamoPopout.attr('data-popout-validator-function');
-        dialogValidator = dynamoFormsetPopoutValidators[vaidatorFunction];
+        if ('' != dynamoPopout.attr('data-popout-validator-function')) {
+            var vaidatorFunction = dynamoPopout.attr('data-popout-validator-function');
+            dialogValidator = dynamoFormsetPopoutValidators[vaidatorFunction];
+        }
     }
 
     var buttonList = [{
