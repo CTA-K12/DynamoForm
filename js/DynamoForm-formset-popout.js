@@ -434,7 +434,7 @@ function processFromRow(dialogBody, dynamoFormRow) {
 			    selectizeElements[formField.attr('id')].optionList = JSON.parse(
 			        formsetInput.attr('data-selectize-options')
 			    );
-			} catch {}
+			} catch (e) {}
                     }
                 }
             }
