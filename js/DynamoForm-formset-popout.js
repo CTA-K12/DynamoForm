@@ -429,11 +429,12 @@ function processFromRow(dialogBody, dynamoFormRow) {
                     optionId:     formsetInput.val()
                 };
                 if (undefined !== formField.attr('data-popout-store-options')) {
-                    if ('true' === formField.attr('data-popout-store-options')) {
-                        var selectizeOptions = JSON.parse(
-                            formsetInput.attr('data-selectize-options')
-                        );
-                        selectizeElements[formField.attr('id')].optionList = selectizeOptions;
+                    if ('true' === formField.attr('data-popout-store-options')) { 
+		        try {
+			    selectizeElements[formField.attr('id')].optionList = JSON.parse(
+			        formsetInput.attr('data-selectize-options')
+			    );
+			} catch {}
                     }
                 }
             }
