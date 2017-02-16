@@ -393,15 +393,21 @@ function processFromRow(dialogBody, dynamoFormRow) {
         formsetInputName = getUnindexedAttribute(formsetInputName);
         var pattern = "input[name='" + formsetInputName + "'],select[name='" + formsetInputName + "']";
 
-        // Determine if checked attribute is set
-        var checkedAttribute = null;
-        if ('checked' == formsetInput.attr('checked')) {
-            checkedAttribute = true;
-        }
+	 // Determine if input is checkbox
+         var checkbox = null;
+         var checkedAttribute = null;
+         if ('checkbox' == formsetInput.attr('type') || undefined !== formsetInput.attr('data-checkbox-value')) {
+             checkbox = true;
+             console.log(formsetInput.attr('name'));
+             // Determine if checked attribute is set
+             if (true == formsetInput.prop('checked')) {
+                 checkedAttribute = true;
+             }
+         }
 
         // Determine if selected attribute is set
         var selectedAttribute = null;
-        if ('selected' == formsetInput.attr('selected')) {
+        if (true == formsetInput.prop('selected')) {
             selectedAttribute = true;
         }
 
@@ -443,12 +449,19 @@ function processFromRow(dialogBody, dynamoFormRow) {
             }
 
             // Set checked attribute if needed
-            if (true === checkedAttribute) {
-                formField.attr('checked', true);
+	    if (true === checkbox) {
+		if (undefined !== formsetInput.attr('data-checkbox-value')) {
+                    formField.val(formsetInput.attr('data-checkbox-value'));
+		}
+                if (true === checkedAttribute) {
+                    formField.prop('checked', true);
+                    formField.attr('checked', true);
+		}
             }
 
             // Set selected attribute if needed
             if (true === selectedAttribute) {
+                formField.prop('selected', true);
                 formField.attr('selected', true);
             }
 
@@ -505,15 +518,20 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
             }
          }
 
-         // Determine if checked attribute is set
+	 // Determine if input is checkbox
+         var checkbox = null;
          var checkedAttribute = null;
-         if ('checked' == formInput.attr('checked')) {
-            checkedAttribute = true;
+         if ('checkbox' == formInput.attr('type')) {
+             checkbox = true;
+             // Determine if checked attribute is set
+             if (true == formInput.prop('checked')) {
+                 checkedAttribute = true;
+             }
          }
 
          // Determine if selected attribute is set
          var selectedAttribute = null;
-         if ('selected' == formInput.attr('selected')) {
+         if (true == formInput.prop('selected')) {
             selectedAttribute = true;
          }
 
@@ -536,10 +554,17 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
             if (null !== selectizeOptions) {
                 baseField.attr('data-selectize-options', selectizeOptions);
             }
-            if (true === checkedAttribute) {
-                baseField.attr('checked', true);
+            if (true === checkbox) {
+		baseField.attr('data-checkbox-value', formInput.val());
+		if (true === checkedAttribute) {
+                    baseField.attr('checked', true);
+		}
+		else {
+		    baseField.val('');
+		}
             }
             if (true === selectedAttribute) {
+                baseField.prop('selected', true);
                 baseField.attr('selected', true);
             }
         }
@@ -551,10 +576,18 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
             if (null !== selectizeOptions) {
                 newField.attr('data-selectize-options', selectizeOptions);
             }
-            if (true === checkedAttribute) {
-                newField.attr('checked', true);
+	    if (true === checkbox) {
+                newField.attr('data-checkbox-value', formInput.val());
+                if (true === checkedAttribute) {
+                    newField.prop('checked', true);
+                    newField.attr('checked', true);
+                }
+                else {
+                    newField.val('');
+                }
             }
             if (true === selectedAttribute) {
+                newField.prop('selected', true);
                 newField.attr('selected', true);
             }
         }
@@ -657,10 +690,15 @@ function updateRow(dialogForm, dynamoForm) {
             }
          }
 
-         // Determine if checked attribute is set
+	 // Determine if input is checkbox
+         var checkbox = null;
          var checkedAttribute = null;
-         if ('checked' == formInput.attr('checked')) {
-            checkedAttribute = true;
+         if ('checkbox' == formInput.attr('type')) {
+             checkbox = true;
+             // Determine if checked attribute is set
+             if (true == formInput.prop('checked')) {
+                 checkedAttribute = true;
+             }
          }
 
          // Determine if selected attribute is set
@@ -721,12 +759,18 @@ function updateRow(dialogForm, dynamoForm) {
         }
 
         // Set checked attribute if needed
-        if (true === checkedAttribute) {
-            formsetRowField.attr('checked', true);
-        }
-        else if (formsetRowField.attr('checked')) {
-            formsetRowField.attr('checked', false);
-        }
+	if (true === checkbox) {
+  	    baseField.attr('data-checkbox-value', formInput.val());
+            if (true === checkedAttribute) {
+                formsetRowField.prop('checked', true);
+                formsetRowField.attr('checked', true);
+            }
+            else {
+                formsetRowField.prop('checked', false);
+                formsetRowField.attr('checked', false);
+		formsetRowField.val('');
+            }
+	}
 
         // Set selected attribute if needed
         if (true === selectedAttribute) {
