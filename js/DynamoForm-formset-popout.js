@@ -398,7 +398,6 @@ function processFromRow(dialogBody, dynamoFormRow) {
          var checkedAttribute = null;
          if ('checkbox' == formsetInput.attr('type') || undefined !== formsetInput.attr('data-checkbox-value')) {
              checkbox = true;
-             console.log(formsetInput.attr('name'));
              // Determine if checked attribute is set
              if (true == formsetInput.prop('checked')) {
                  checkedAttribute = true;
