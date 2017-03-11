@@ -243,6 +243,12 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
             dialogValidator = dynamoFormsetPopoutValidators[vaidatorFunction];
         }
     }
+	
+    // Check for fields that should not be cleared with save and add another buttonList
+    var noClearElements = [];
+    popoutForm.find('input[data-popout-no-clear],select[data-popout-no-clear]').each(function() {
+        noClearElements.push($(this).attr('name'));
+    });
 
     var buttonList = [{
         label: 'Close',
@@ -306,7 +312,7 @@ function createDialog(dynamoPopout, rowCount, maxRows, editRow) {
                 if (true === valid) {
                     // Process to formset row
                     processToRow(dialogForm, dynamoPopout, rowCount, maxRows);
-                    clearPopoutForm(dialogForm);
+                    clearPopoutForm(dialogForm, noClearElements);
                 }
             }
         });
@@ -797,17 +803,20 @@ function validateForm(dialogForm) {
  * Clear dialog form data
  *
  */
-function clearPopoutForm(dialogForm) {
+function clearPopoutForm(dialogForm, noClearElements) {
 
     dialogForm.find('input,select').each(function(){
         var formField = $(this);
 
-        // Check for selectize
-        if(formField.hasClass('dynamo-selectize')) {
-            formField[0].selectize.clear();
-        }
-        else {
-            formField.val('');
+        // Determine if elment should be cleared
+        if(-1 === noClearElements.indexOf(formField.attr('name'))) {
+            // Check for selectize
+            if(formField.hasClass('dynamo-selectize')) {
+                formField[0].selectize.clear();
+            }
+            else {
+                formField.val('');
+            }
         }
     });
 }
