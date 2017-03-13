@@ -814,6 +814,9 @@ function clearPopoutForm(dialogForm, noClearElements) {
             if(formField.hasClass('dynamo-selectize')) {
                 formField[0].selectize.clear();
             }
+            if('checkbox' == formField.attr('type')) {
+                formField.attr('checked', false);
+            }
             else {
                 formField.val('');
             }
