@@ -405,7 +405,7 @@ function processFromRow(dialogBody, dynamoFormRow) {
          if ('checkbox' == formsetInput.attr('type') || undefined !== formsetInput.attr('data-checkbox-value')) {
              checkbox = true;
              // Determine if checked attribute is set
-             if (true == formsetInput.prop('checked')) {
+             if (true == formsetInput.prop('checked') || 'checked' == formsetInput.attr('checked')) {
                  checkedAttribute = true;
              }
          }
@@ -529,7 +529,7 @@ function processToRow(dialogForm, dynamoForm, rowCount, maxRows) {
          if ('checkbox' == formInput.attr('type')) {
              checkbox = true;
              // Determine if checked attribute is set
-             if (true == formInput.prop('checked')) {
+             if (true == formInput.prop('checked') || 'checked' == formInput.attr('checked')) {
                  checkedAttribute = true;
              }
          }
@@ -701,7 +701,7 @@ function updateRow(dialogForm, dynamoForm) {
          if ('checkbox' == formInput.attr('type')) {
              checkbox = true;
              // Determine if checked attribute is set
-             if (true == formInput.prop('checked')) {
+             if (true == formInput.prop('checked') || 'checked' == formInput.attr('checked')) {
                  checkedAttribute = true;
              }
          }
